@@ -1,56 +1,56 @@
+import random
 import unittest
-from scrabble import (
-    BagTiles,
-    Tile,
-)
+
+from scrabble import Tile, BagTiles
 from unittest.mock import patch
 
-
 class TestTiles(unittest.TestCase):
-    def test_tile(self):
-        tile = Tile('A', 1)
+    def test_tile_valueycantA(self):
+        tile = Tile('A',1, 12)
         self.assertEqual(tile.letter, 'A')
+        self.assertEqual(tile.cant, 12)
         self.assertEqual(tile.value, 1)
+    def test_tile_valueycantB(self):
+        tile = Tile('B',3, 2)
+        self.assertEqual(tile.letter, 'B')
+        self.assertEqual(tile.cant, 2)
+        self.assertEqual(tile.value, 3)
+    def test_tile_valueycantH(self):
+        tile = Tile('H',4, 2)
+        self.assertEqual(tile.letter, 'H')
+        self.assertEqual(tile.cant, 2)
+        self.assertEqual(tile.value, 4)
 
-
-class TestBagTiles(unittest.TestCase):
-    @patch('random.shuffle')
-    def test_bag_tiles(self, patch_shuffle):
+class TestBag(unittest.TestCase):
+    @patch("random.choice",return_value = "A")
+    def test_bag_tilesA(self, patch_choice):
         bag = BagTiles()
         self.assertEqual(
-            len(bag.tiles),
-            5,
+            bag.tiles["A"].cant,
+            12,
         )
+        bag.take()
         self.assertEqual(
-            patch_shuffle.call_count,
-            1,
-        )
-        self.assertEqual(
-            patch_shuffle.call_args[0][0],
-            bag.tiles,
+            bag.tiles["A"].cant,
+            11,
         )
 
 
-    def test_take(self):
+class TestBag2(unittest.TestCase):
+    @patch("random.choice",return_value = "C")
+    def test_bag_tilesC(self, patch_choice):
         bag = BagTiles()
-        tiles = bag.take(2)
         self.assertEqual(
-            len(bag.tiles),
+            bag.tiles["C"].cant,
+            4,
+        )
+        bag.take()
+        self.assertEqual(
+            bag.tiles["C"].cant,
             3,
         )
-        self.assertEqual(
-            len(tiles),
-            2,
-        )
 
-    def test_put(self):
-        bag = BagTiles()
-        put_tiles = [Tile('Z', 1), Tile('Y', 1)]
-        bag.put(put_tiles)
-        self.assertEqual(
-            len(bag.tiles),
-            7,
-        )
+
 
 
 if __name__ == '__main__':
