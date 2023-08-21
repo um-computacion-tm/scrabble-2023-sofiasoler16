@@ -4,6 +4,9 @@ import unittest
 from scrabble import Tile, BagTiles
 from unittest.mock import patch
 
+class YaHaySuficientes(Exception):
+    pass
+
 class TestTiles(unittest.TestCase):
     def test_tile_valueycantA(self):
         tile = Tile('A',1, 12)
@@ -31,9 +34,17 @@ class TestBag(unittest.TestCase):
         )
         bag.take()
         self.assertEqual(
-            bag.tiles["A"].cant,
+            bag.actualizado["A"].cant,
             11,
         )
+
+        bag.put("A")
+        self.assertEqual(
+            bag.actualizado["A"].cant, 12
+        )
+
+#Este test saca y despues agrega
+#Test para que pasaria si intento agregar algo que ya esta en maximo
 
 
 class TestBag2(unittest.TestCase):
@@ -46,11 +57,13 @@ class TestBag2(unittest.TestCase):
         )
         bag.take()
         self.assertEqual(
-            bag.tiles["C"].cant,
+            bag.actualizado["C"].cant,
             3,
         )
-
-
+        bag.put("C")
+        self.assertEqual(
+            bag.actualizado["C"].cant, 4
+        )
 
 
 if __name__ == '__main__':
