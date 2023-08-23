@@ -1,11 +1,9 @@
 import random
 import unittest
 
-from scrabble import Tile, BagTiles
+from scrabble import Tile, BagTiles, YaHaySuficientes, Player, ScrabbleGame, Cell, Board
 from unittest.mock import patch
 
-class YaHaySuficientes(Exception):
-    pass
 
 class TestTiles(unittest.TestCase):
     def test_tile_valueycantA(self):
@@ -60,9 +58,75 @@ class TestBag2(unittest.TestCase):
             bag.actualizado["C"].cant,
             3,
         )
+        bag.take()
+        bag.take()
+
         bag.put("C")
         self.assertEqual(
-            bag.actualizado["C"].cant, 4
+            bag.actualizado["C"].cant, 2
+        )
+    
+    class TestPlayer(unittest.TestCase):
+        def test_init(self):
+            player_1 = Player()
+            self.assertEqual(
+            len(player_1.tiles),0
+        )
+
+            
+class TestScrabble(unittest.TestCase):
+    Scrabble_game = ScrabbleGame(3)
+
+class TestBoard(unittest.TestCase):
+    def test_init(self):
+        board = Board()
+        self.assertEqual(
+            len(board.grid),
+            15,
+        )
+        self.assertEqual(
+            len(board.grid[0]),
+            15,
+        )
+
+
+class TestCell(unittest.TestCase):
+    def test_init(self):
+        cell = Cell(multiplayer=2, multiplayer_type="letter")
+        
+        self.assertEqual(
+            cell.multiplayer, 2
+        )
+        self.assertEqual(
+            cell.multiplayer_type, "letter"
+        )
+        self.assertIsNone(cell.letter)
+
+    def test_add_letter(self):
+        cell = Cell(multiplayer=1, multiplayer_type="")
+        letter = Tile(letter="A", value=1, cant=12)
+
+        cell.add_letter(letter=letter)
+        self.assertEqual(cell.letter, letter)
+
+    def test_cell_value(self):
+        cell = Cell(multiplayer=1, multiplayer_type="letter")
+        letter = Tile(letter="P", value=3, cant=2)
+
+        cell.add_letter(letter=letter)
+
+        self.assertEqual(
+            cell.calculate_value(),3
+        )
+
+    def test_cell_multiplier_word(self):
+        cell = Cell(multiplayer=2, multiplayer_type='word')
+        letter = Tile(letter='p', value=3, cant=2)
+        cell.add_letter(letter=letter)
+
+        self.assertEqual(
+            cell.calculate_value(),
+            3,
         )
 
 
