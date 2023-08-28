@@ -28,26 +28,29 @@ class BagTiles:
     def take(self):
         letras = list(self.tiles.keys())
         elec = random.choice(letras)
-        print(elec)
-        print(self.tiles[elec].cant)
         (self.actualizado[elec].cant) -= 1
-        print(self.actualizado[elec].cant)
         return(elec)
 
     def put(self, letra):
         if self.actualizado[letra].cant < self.tiles[letra].cant:
             (self.actualizado[letra].cant) += 1
-            print(self.actualizado[letra].cant)
+
 
 
 bag = BagTiles()
-print(bag.take())
+
 
 class Player():
     def __init__ (self):
-        self.tiles = []
-    def repartidas(self):
-        self.tiles.append(bag.take())
+        self.tilesp = []
+        self.tilesp.append(bag.take())
+        self.tilesp.append(bag.take())
+        self.tilesp.append(bag.take())
+        self.tilesp.append(bag.take())
+        self.tilesp.append(bag.take())
+    def tiles_cambiadas(self):
+        self.tilesp.pop(bag.put("R"))
+        self.tilesp.append(bag.take())
 
 
 player = Player()
@@ -94,4 +97,4 @@ class ScrabbleGame():
 
 #21 ago. Hacer funcion para agregar letras. Agregamos diccionario de actualizados
 
-#23 ago. 
+#23 ago. Creacion 
