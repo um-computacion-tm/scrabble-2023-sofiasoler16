@@ -70,13 +70,15 @@ class TestPlayer(unittest.TestCase):
     def test_init(self):
         player_1 = Player()
         self.assertEqual(
-        len(player_1.tiles),0
+        len(player_1.tilesp),5
         )
-        player_1.repartidas()
+    def test_cambiadas(self):
+        player_1 = Player()
+        player_1.tiles_cambiadas
         self.assertEqual(
-            len(player_1.tiles),1
+            len(player_1.tilesp),5
         )
-            
+
 
             
 class TestScrabble(unittest.TestCase):
