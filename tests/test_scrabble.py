@@ -72,13 +72,31 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(
         len(player_1.tilesp),5
         )
+        self.assertEqual(
+            player_1.score, 0 
+        )
+        self.assertEqual(
+            player_1.estado, "jugando"
+        )
     def test_cambiadas(self):
         player_1 = Player()
         player_1.tiles_cambiadas
         self.assertEqual(
             len(player_1.tilesp),5
         )
+    def test_cambio_estado_terminado(self):
+        player_1 = Player()
 
+        self.assertEqual(
+            player_1.estado, "jugando"
+            )  
+        player_1.tilesp = []  
+        player_1.cambio_estado(player_1)
+
+        self.assertEqual(
+            player_1.estado, "terminado"
+            )
+    
 
             
 class TestScrabble(unittest.TestCase):
