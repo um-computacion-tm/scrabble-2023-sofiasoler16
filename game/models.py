@@ -43,15 +43,24 @@ bag = BagTiles()
 class Player():
     def __init__ (self):
         self.tilesp = []
+        self.name = ""
+        self.score = 0
+        self.estado = "jugando"
         self.tilesp.append(bag.take())
         self.tilesp.append(bag.take())
         self.tilesp.append(bag.take())
         self.tilesp.append(bag.take())
         self.tilesp.append(bag.take())
     def tiles_cambiadas(self):
-        self.tilesp.pop(bag.put("R"))
+        letter = random.choice(list(self.tilesp))
+        self.tilesp.pop(bag.put(letter))
         self.tilesp.append(bag.take())
-
+    def cambio_estado(self, other_player):
+        player_1 = Player()
+        if len(self.tilesp) == 0:
+            self.estado = "terminado"
+        if self.score > player_1.score:
+            self.estado = "ganando"
 
 player = Player()
 
@@ -81,6 +90,7 @@ class Cell:
             return self.letter.value * self.multiplayer
         else:
             return self.letter.value
+
     
 
 board = Board()
