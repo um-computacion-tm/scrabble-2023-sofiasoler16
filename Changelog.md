@@ -10,3 +10,5 @@ Add a dictionary for the updated tiles during the game
 23/8/23
 Created classes Player, Board and Cell
 Added a function to add letters to a player
+28/8/23
+Added a function thats gives the player the possibility to change a tile for another
