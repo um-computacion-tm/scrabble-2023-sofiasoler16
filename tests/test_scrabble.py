@@ -70,7 +70,7 @@ class TestPlayer(unittest.TestCase):
     def test_init(self):
         player_1 = Player()
         self.assertEqual(
-        len(player_1.tilesp),5
+        len(player_1.tilesp),7
         )
         self.assertEqual(
             player_1.score, 0 
@@ -82,7 +82,7 @@ class TestPlayer(unittest.TestCase):
         player_1 = Player()
         player_1.tiles_cambiadas
         self.assertEqual(
-            len(player_1.tilesp),5
+            len(player_1.tilesp),7
         )
     def test_cambio_estado_terminado(self):
         player_1 = Player()
@@ -132,7 +132,7 @@ class TestCell(unittest.TestCase):
     def test_multi(self):
         cell = Cell(row=3, column=5)
         letter = Tile(letter="A", value=1, cant=12)
-        cell.multiplicator_value(letter)
+        cell.multiplier_value(letter)
         self.assertEqual(
             cell.value, 2
         )
@@ -141,7 +141,21 @@ class TestCell(unittest.TestCase):
         cell = Cell(row=4, column=7)
         letter = Tile(letter="Q", value=5, cant=1)
 
-        cell.multiplicator_value(letter)
+        cell.multiplier_value(letter)
+        self.assertEqual(
+            cell.value,5
+        )
+
+    def test_value_segundavez(self):
+        cell = Cell(row=3, column=5)
+        letter = Tile("Q",5,1)
+
+        cell.multiplier_value(letter)
+        self.assertEqual(
+            cell.value,10
+        )
+        cell.state = "usado"
+        cell.multiplier_value(letter)
         self.assertEqual(
             cell.value,5
         )
