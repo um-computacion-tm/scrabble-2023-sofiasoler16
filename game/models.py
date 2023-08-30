@@ -52,7 +52,7 @@ class Player():
         self.tilesp.append(bag.take())
         self.tilesp.append(bag.take())
     def tiles_cambiadas(self):
-        letter = random.choice(list(self.tilesp))
+        letter = random.choice(list(self.tilesp)) #Que no sea random choice, que sea una letra elegida por usuario
         self.tilesp.pop(bag.put(letter))
         self.tilesp.append(bag.take())
     def cambio_estado(self, other_player):
@@ -75,21 +75,21 @@ class Board:
         
 #Celda en especifico, como agregarle un multiplicador a 1 celda en especifico
 class Cell:
-    def __init__(self, multiplayer, multiplayer_type):
-        self.multiplayer = multiplayer
-        self.multiplayer_type = multiplayer_type
+    def __init__(self, row, column):
+        self.row = row
+        self.column = column
         self.letter = None
+        self.value = 1
 
     def add_letter(self, letter:Tile):
         self.letter = letter
 
-    def calculate_value(self):
-        if self.letter is None:
-            return 0
-        if self.multiplayer_type == 'letter':
-            return self.letter.value * self.multiplayer
+    def multiplicator_value(self, letter:Tile):
+        if self.row == 3:
+            if self.column == 5:
+                self.value = 2*letter.value
         else:
-            return self.letter.value
+            self.value = letter.value
 
     
 
