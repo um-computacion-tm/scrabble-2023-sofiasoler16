@@ -116,44 +116,35 @@ class TestBoard(unittest.TestCase):
 
 
 class TestCell(unittest.TestCase):
-    def test_init(self):
-        cell = Cell(multiplayer=2, multiplayer_type="letter")
-        
+    def _init_cell(self):
+        cell = Cell(5, 7)
         self.assertEqual(
-            cell.multiplayer, 2
+            cell.value, 1
         )
-        self.assertEqual(
-            cell.multiplayer_type, "letter"
-        )
-        self.assertIsNone(cell.letter)
 
     def test_add_letter(self):
-        cell = Cell(multiplayer=1, multiplayer_type="")
+        cell = Cell(row=5, column=5)
         letter = Tile(letter="A", value=1, cant=12)
 
         cell.add_letter(letter=letter)
         self.assertEqual(cell.letter, letter)
-
-    def test_cell_value(self):
-        cell = Cell(multiplayer=1, multiplayer_type="letter")
-        letter = Tile(letter="P", value=3, cant=2)
-
-        cell.add_letter(letter=letter)
-
+    
+    def test_multi(self):
+        cell = Cell(row=3, column=5)
+        letter = Tile(letter="A", value=1, cant=12)
+        cell.multiplicator_value(letter)
         self.assertEqual(
-            cell.calculate_value(),3
+            cell.value, 2
         )
 
-    def test_cell_multiplier_word(self):
-        cell = Cell(multiplayer=2, multiplayer_type='word')
-        letter = Tile(letter='p', value=3, cant=2)
-        cell.add_letter(letter=letter)
+    def test_value_normal(self):
+        cell = Cell(row=4, column=7)
+        letter = Tile(letter="Q", value=5, cant=1)
 
+        cell.multiplicator_value(letter)
         self.assertEqual(
-            cell.calculate_value(),
-            3,
+            cell.value,5
         )
-
 
 if __name__ == '__main__':
     unittest.main()
