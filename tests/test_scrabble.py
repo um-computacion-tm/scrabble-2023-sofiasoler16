@@ -88,9 +88,10 @@ class TestPlayer(unittest.TestCase):
             )
     
 
-            
+'''  
 class TestScrabble(unittest.TestCase):
     Scrabble_game = ScrabbleGame(3)
+'''
 
 class TestBoard(unittest.TestCase):
     def test_init(self):

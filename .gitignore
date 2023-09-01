@@ -3,9 +3,3 @@
 __pycache__/
 *.py[cod]
 *$py.class
-.coverage
-coverage.xml
-env/
-game/__init__.py
-tests/__init__.py
-pruebas/
