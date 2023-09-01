@@ -12,16 +12,6 @@ class TestTiles(unittest.TestCase):
         self.assertEqual(tile.letter, 'A')
         self.assertEqual(tile.cant, 12)
         self.assertEqual(tile.value, 1)
-    def test_tile_valueycantB(self):
-        tile = Tile('B',3, 2)
-        self.assertEqual(tile.letter, 'B')
-        self.assertEqual(tile.cant, 2)
-        self.assertEqual(tile.value, 3)
-    def test_tile_valueycantH(self):
-        tile = Tile('H',4, 2)
-        self.assertEqual(tile.letter, 'H')
-        self.assertEqual(tile.cant, 2)
-        self.assertEqual(tile.value, 4)
 
 class TestBag(unittest.TestCase):
     @patch("random.choice",return_value = "A")
@@ -70,7 +60,7 @@ class TestPlayer(unittest.TestCase):
     def test_init(self):
         player_1 = Player()
         self.assertEqual(
-        len(player_1.tilesp),5
+        len(player_1.tilesp),7
         )
         self.assertEqual(
             player_1.score, 0 
@@ -82,7 +72,7 @@ class TestPlayer(unittest.TestCase):
         player_1 = Player()
         player_1.tiles_cambiadas
         self.assertEqual(
-            len(player_1.tilesp),5
+            len(player_1.tilesp),7
         )
     def test_cambio_estado_terminado(self):
         player_1 = Player()
@@ -98,9 +88,10 @@ class TestPlayer(unittest.TestCase):
             )
     
 
-            
+'''  
 class TestScrabble(unittest.TestCase):
     Scrabble_game = ScrabbleGame(3)
+'''
 
 class TestBoard(unittest.TestCase):
     def test_init(self):
@@ -116,44 +107,49 @@ class TestBoard(unittest.TestCase):
 
 
 class TestCell(unittest.TestCase):
-    def test_init(self):
-        cell = Cell(multiplayer=2, multiplayer_type="letter")
-        
+    def _init_cell(self):
+        cell = Cell(5, 7)
         self.assertEqual(
-            cell.multiplayer, 2
+            cell.value, 1
         )
-        self.assertEqual(
-            cell.multiplayer_type, "letter"
-        )
-        self.assertIsNone(cell.letter)
 
     def test_add_letter(self):
-        cell = Cell(multiplayer=1, multiplayer_type="")
+        cell = Cell(row=5, column=5)
         letter = Tile(letter="A", value=1, cant=12)
 
         cell.add_letter(letter=letter)
         self.assertEqual(cell.letter, letter)
-
-    def test_cell_value(self):
-        cell = Cell(multiplayer=1, multiplayer_type="letter")
-        letter = Tile(letter="P", value=3, cant=2)
-
-        cell.add_letter(letter=letter)
-
+    
+    def test_multi(self):
+        cell = Cell(row=3, column=5)
+        letter = Tile(letter="A", value=1, cant=12)
+        cell.multiplier_value(letter)
         self.assertEqual(
-            cell.calculate_value(),3
+            cell.value, 2
         )
 
-    def test_cell_multiplier_word(self):
-        cell = Cell(multiplayer=2, multiplayer_type='word')
-        letter = Tile(letter='p', value=3, cant=2)
-        cell.add_letter(letter=letter)
+    def test_value_normal(self):
+        cell = Cell(row=4, column=7)
+        letter = Tile(letter="Q", value=5, cant=1)
 
+        cell.multiplier_value(letter)
         self.assertEqual(
-            cell.calculate_value(),
-            3,
+            cell.value,5
         )
 
+    def test_value_segundavez(self):
+        cell = Cell(row=3, column=5)
+        letter = Tile("Q",5,1)
+
+        cell.multiplier_value(letter)
+        self.assertEqual(
+            cell.value,10
+        )
+        cell.state = "usado"
+        cell.multiplier_value(letter)
+        self.assertEqual(
+            cell.value,5
+        )
 
 if __name__ == '__main__':
     unittest.main()

@@ -13,3 +13,5 @@ Added a function to add letters to a player
 28/8/23
 Added a function thats gives the player the possibility to change a tile for another
 Created a function for the players that defines the states that the player can have 
+29/8/23
+Updated the Cell class, added a multiplier for each cell to calculate the value
