@@ -1,6 +1,7 @@
 [run]
 source = 
     game
+<<<<<<< HEAD
     test
 
 omit =
@@ -15,3 +16,4 @@ exclude_lines =
 
 if __name__ == "__main__":
     unittest.main()
+
