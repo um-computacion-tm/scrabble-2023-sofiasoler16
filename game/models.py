@@ -2,7 +2,7 @@ import random
 
 class YaHaySuficientes(Exception):
     pass
-
+print("hola")
 class Tile:
     def __init__(self, letter, value, cant):
         self.letter = letter
