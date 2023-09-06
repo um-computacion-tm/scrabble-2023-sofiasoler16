@@ -76,6 +76,7 @@ class Board:
         ]
         
 
+        
 #Celda en especifico, como agregarle un multiplicador a 1 celda en especifico
 class Cell:
     def __init__(self, row, column):
@@ -108,5 +109,5 @@ class ScrabbleGame():
         self.current_player = None
         for _ in range(players_count):
             self.players.append(Player(bag=self.bag))
-
+    
 
