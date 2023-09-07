@@ -16,3 +16,5 @@ Added a function thats gives the player the possibility to change a tile for ano
 Created a function for the players that defines the states that the player can have 
 # 29/8/23
 Updated the Cell class, added a multiplier for each cell to calculate the value
+# 6/7/23
+Created a function that change the current player 

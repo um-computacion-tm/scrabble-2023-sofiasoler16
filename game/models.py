@@ -35,6 +35,30 @@ class BagTiles:
         if self.actualizado[letra].cant < self.tiles[letra].cant:
             (self.actualizado[letra].cant) += 1
 
+
+class ScrabbleGame():
+    def __init__(self, players_count):
+        self.board = Board()
+        self.bag = BagTiles()
+        self.players = []
+        self.current_player = None
+        self.player_index = 0
+        for _ in range(players_count):
+            self.players.append(Player(bag=self.bag))
+    def next_turn(self):
+        if self.current_player == None:
+            self.current_player = self.players[self.player_index]
+            print(self.player_index)
+        elif self.current_player == self.players[-1]:
+            self.player_index = 0
+            self.current_player = self.players[self.player_index]
+        else:
+            self.player_index += 1
+            self.current_player = self.players[self.player_index]
+        
+        
+
+
 class Player():
     def __init__ (self,bag:BagTiles):
         self.tilesp = []
@@ -62,10 +86,9 @@ class Player():
         player_1 = Player(BagTiles())
         if len(self.tilesp) == 0:
             self.estado = "terminado"
+        
         if self.score > player_1.score: #Que compare con todos los otros jugadores, no uno
             self.estado = "ganando"
-
-
 
 
 class Board:
@@ -76,7 +99,6 @@ class Board:
         ]
         
 
-        
 #Celda en especifico, como agregarle un multiplicador a 1 celda en especifico
 class Cell:
     def __init__(self, row, column):
@@ -98,16 +120,3 @@ class Cell:
                 self.value = letter.value
         else:
             self.value = letter.value 
-
-board = Board()
-
-class ScrabbleGame():
-    def __init__(self, players_count):
-        self.board = Board()
-        self.bag = BagTiles()
-        self.players = []
-        self.current_player = None
-        for _ in range(players_count):
-            self.players.append(Player(bag=self.bag))
-    
-
