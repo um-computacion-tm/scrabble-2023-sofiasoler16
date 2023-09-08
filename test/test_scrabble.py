@@ -1,7 +1,7 @@
 import random
 import unittest
 
-from game.models import Tile, BagTiles, YaHaySuficientes, Player, ScrabbleGame, Cell, Board
+from game.models import Tile, BagTiles, YaHaySuficientes, Player, ScrabbleGame, Cell, Board, Main
 
 from unittest.mock import patch
 
@@ -182,6 +182,16 @@ class TestScrabbleGame(unittest.TestCase):
         scrabble_game.next_turn()
 
         assert scrabble_game.current_player == scrabble_game.players[0]
+
+class TestMain(unittest.TestCase):
+    def setUp(self):
+        self.main_instance = Main()
+
+    def test_input_valid_player_count(self):
+        main = Main()
+        main.main()
+        self.assertEqual(main.status_players, "valid")
+
 
 if __name__ == '__main__':
     unittest.main()

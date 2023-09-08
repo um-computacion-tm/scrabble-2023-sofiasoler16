@@ -2,7 +2,7 @@ import random
 
 class YaHaySuficientes(Exception):
     pass
-print("hola")
+
 class Tile:
     def __init__(self, letter, value, cant):
         self.letter = letter
@@ -34,6 +34,16 @@ class BagTiles:
     def put(self, letra):
         if self.actualizado[letra].cant < self.tiles[letra].cant:
             (self.actualizado[letra].cant) += 1
+
+class Main(): #Te deja entrar cantidad de jugadores y verifica que se bueno
+    def __init__(self):
+        self.status_players = "valid"
+        self.player_count = 0
+    def main(self):
+            if self.player_count <= 1 or self.player_count > 4:
+                self.status_players = "invalid"
+            
+            self.status_players = "valid"
 
 
 class ScrabbleGame():
@@ -75,8 +85,7 @@ class Player():
         self.tilesp.append(bag.take())
         self.current_player = None
 
-    def next_turn(self):
-        pass
+
 
     def tiles_cambiadas(self):
         letter = random.choice(list(self.tilesp)) #Que no sea random choice, que sea una letra elegida por usuario

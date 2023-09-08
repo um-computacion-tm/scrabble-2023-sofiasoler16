@@ -18,3 +18,6 @@ Created a function for the players that defines the states that the player can h
 Updated the Cell class, added a multiplier for each cell to calculate the value
 # 6/7/23
 Created a function that change the current player 
+# 7/7/23
+Created class Main
+Created a function that checks if the number of players that want to play is over the limit
