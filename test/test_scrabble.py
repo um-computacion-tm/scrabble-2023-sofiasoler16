@@ -1,7 +1,7 @@
 import random
 import unittest
 
-from game.models import Tile, BagTiles, YaHaySuficientes, Player, ScrabbleGame, Cell, Board
+from game.models import Tile, BagTiles, YaHaySuficientes, Player, ScrabbleGame, Cell, Board, Main
 
 from unittest.mock import patch
 
@@ -58,7 +58,8 @@ class TestBag2(unittest.TestCase):
         )
 class TestPlayer(unittest.TestCase):
     def test_init(self):
-        player_1 = Player()
+        bag = BagTiles()
+        player_1 = Player(bag)
         self.assertEqual(
         len(player_1.tilesp),7
         )
@@ -69,13 +70,15 @@ class TestPlayer(unittest.TestCase):
             player_1.estado, "jugando"
         )
     def test_cambiadas(self):
-        player_1 = Player()
+        bag = BagTiles()
+        player_1 = Player(bag)
         player_1.tiles_cambiadas
         self.assertEqual(
             len(player_1.tilesp),7
         )
     def test_cambio_estado_terminado(self):
-        player_1 = Player()
+        bag = BagTiles()
+        player_1 = Player(bag)
 
         self.assertEqual(
             player_1.estado, "jugando"
@@ -86,12 +89,8 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(
             player_1.estado, "terminado"
             )
-    
 
-'''  
-class TestScrabble(unittest.TestCase):
-    Scrabble_game = ScrabbleGame(3)
-'''
+
 
 class TestBoard(unittest.TestCase):
     def test_init(self):
@@ -150,6 +149,49 @@ class TestCell(unittest.TestCase):
         self.assertEqual(
             cell.value,5
         )
+
+class TestScrabbleGame(unittest.TestCase):
+    def test_init(self):
+        scrabble_game = ScrabbleGame(players_count=3)
+        self.assertIsNotNone(scrabble_game.board)
+        self.assertEqual(
+            len(scrabble_game.players),
+            3,
+        )
+        self.assertIsNotNone(scrabble_game.bag)
+    def test_next_turn_when_game_is_starting(self):
+        scrabble_game = ScrabbleGame(players_count=3)
+
+        scrabble_game.next_turn()
+
+        assert scrabble_game.current_player == scrabble_game.players[0]
+    def test_next_turn_when_player_is_not_the_first(self):
+        scrabble_game = ScrabbleGame(players_count=3)
+
+        scrabble_game.current_player = scrabble_game.players[0]
+
+        scrabble_game.next_turn()
+        scrabble_game.next_turn()
+        assert scrabble_game.current_player == scrabble_game.players[2]
+
+    def test_next_turn_when_player_is_last(self):
+        #Suponiendo que tenemos 3 jugadores, luego del jugador 3, le toca al jugador 1
+        scrabble_game = ScrabbleGame(players_count=3)
+        scrabble_game.current_player = scrabble_game.players[2]
+
+        scrabble_game.next_turn()
+
+        assert scrabble_game.current_player == scrabble_game.players[0]
+
+class TestMain(unittest.TestCase):
+    def setUp(self):
+        self.main_instance = Main()
+
+    def test_input_valid_player_count(self):
+        main = Main()
+        main.main()
+        self.assertEqual(main.status_players, "valid")
+
 
 if __name__ == '__main__':
     unittest.main()

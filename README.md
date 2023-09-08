@@ -1,8 +1,13 @@
-# scrabble-2023-sofiasoler16
+# # scrabble-2023-sofiasoler16
+
+# main
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/sofiasoler16/clase_2023-23-ago/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/sofiasoler16/clase_2023-23-ago/tree/main)
+
+# develop
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/sofiasoler16/clase_2023-23-ago/tree/develop.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/sofiasoler16/clase_2023-23-ago/tree/develop)
 
 # coverage
-[![Test Coverage](https://api.codeclimate.com/v1/badges/0de86d3fd303e2156820/test_coverage)](https://codeclimate.com/github/um-computacion-tm/scrabble-2023-sofiasoler16/test_coverage)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/cca1f4b69e1cf5212778/test_coverage)](https://codeclimate.com/github/sofiasoler16/clase_2023-23-ago/test_coverage)
 
-# maintenability
-[![Maintainability](https://api.codeclimate.com/v1/badges/0de86d3fd303e2156820/maintainability)](https://codeclimate.com/github/um-computacion-tm/scrabble-2023-sofiasoler16/maintainability)
-scrabble-2023-sofiasoler16 created by GitHub Classroom
+# Maintenability
+[![Maintainability](https://api.codeclimate.com/v1/badges/cca1f4b69e1cf5212778/maintainability)](https://codeclimate.com/github/sofiasoler16/clase_2023-23-ago/maintainability)
