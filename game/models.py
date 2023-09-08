@@ -35,17 +35,26 @@ class BagTiles:
         if self.actualizado[letra].cant < self.tiles[letra].cant:
             (self.actualizado[letra].cant) += 1
 
-class Main(): #Te deja entrar cantidad de jugadores y verifica que se bueno
+class Main(): #Te deja entrar cantidad de jugadores y verifica que sea bueno
     def __init__(self):
         self.status_players = "valid"
         self.player_count = 0
+        self.status_word = None
     def main(self):
-            if self.player_count <= 1 or self.player_count > 4:
-                self.status_players = "invalid"
-            
-            self.status_players = "valid"
-
-
+        if self.player_count <= 1 or self.player_count > 4:
+            self.status_players = "invalid"  
+        self.status_players = "valid"
+    def valid_word(self):
+        player = Player()
+        word = input("Ingrese palabras: ")
+        location_x = input("Ingrse posicion en x :")
+        location_y = input("Ingrese posicion en y: ")
+        location = (location_x, location_y)
+        orientation = ""
+        """
+        if word in dictionary.txt:
+            self.status_word = "valid"
+"""
 class ScrabbleGame():
     def __init__(self, players_count):
         self.board = Board()
@@ -86,7 +95,6 @@ class Player():
         self.current_player = None
 
 
-
     def tiles_cambiadas(self):
         letter = random.choice(list(self.tilesp)) #Que no sea random choice, que sea una letra elegida por usuario
         self.tilesp.pop(self.bag.put(letter))
@@ -95,18 +103,17 @@ class Player():
         player_1 = Player(BagTiles())
         if len(self.tilesp) == 0:
             self.estado = "terminado"
-        
+"""     
         if self.score > player_1.score: #Que compare con todos los otros jugadores, no uno
             self.estado = "ganando"
-
+"""
 
 class Board:
     def __init__(self):
         self.grid = [
-            [ Cell(1, '') for _ in range(15) ]
+            [ Cell(1, 0) for _ in range(15) ]
             for _ in range(15)
         ]
-        
 
 #Celda en especifico, como agregarle un multiplicador a 1 celda en especifico
 class Cell:
