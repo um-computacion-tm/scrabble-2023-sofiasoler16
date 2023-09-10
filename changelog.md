@@ -23,3 +23,5 @@ Created class Main
 Created a function that checks if the number of players that want to play is over the limit
 # 8/7/23
 Created a funcion in Main that checks if the word is valid
+# 9/7/23
+Added a dictionary and created a function that returns if the word is valid

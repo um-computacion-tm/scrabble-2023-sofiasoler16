@@ -1,7 +1,7 @@
 import random
 import unittest
 
-from game.models import Tile, BagTiles, YaHaySuficientes, Player, ScrabbleGame, Cell, Board, Main
+from game.models import *
 
 from unittest.mock import patch
 
@@ -56,6 +56,9 @@ class TestBag2(unittest.TestCase):
         self.assertEqual(
             bag.actualizado["C"].cant, 2
         )
+
+
+
 class TestPlayer(unittest.TestCase):
     def test_init(self):
         bag = BagTiles()
@@ -76,6 +79,8 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(
             len(player_1.tilesp),7
         )
+
+
     def test_cambio_estado_terminado(self):
         bag = BagTiles()
         player_1 = Player(bag)
@@ -144,7 +149,7 @@ class TestCell(unittest.TestCase):
         self.assertEqual(
             cell.value,10
         )
-        cell.state = "usado"
+        cell.state = "usado" #arreglar test
         cell.multiplier_value(letter)
         self.assertEqual(
             cell.value,5
@@ -191,6 +196,14 @@ class TestMain(unittest.TestCase):
         main = Main()
         main.main()
         self.assertEqual(main.status_players, "valid")
+
+class TestDictionary(unittest.TestCase):
+    def test_word_in_dictionary(self):
+        dictionary = Dictionary("/home/sofia16044/Documentos/computacion/scrabble-2023-sofiasoler16/dictionaries/dictionary .txt")
+        self.assertEqual(dictionary.valid_word('arbol'), True)
+    def test_word_not_dictionary(self):
+        dictionary = Dictionary("/home/sofia16044/Documentos/computacion/scrabble-2023-sofiasoler16/dictionaries/dictionary .txt")
+        self.assertEqual(dictionary.valid_word('schmolicnsd'), False)    
 
 
 if __name__ == '__main__':
