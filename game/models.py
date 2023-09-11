@@ -55,21 +55,28 @@ class Main(): #Te deja entrar cantidad de jugadores y verifica que sea bueno
         self.status_players = "valid"
         self.player_count = 0
         self.status_word = None
+        self.board = Board()
+        self.cell = Cell(None, None)
     def main(self):
         if self.player_count <= 1 or self.player_count > 4:
             self.status_players = "invalid"  
         self.status_players = "valid"
-    def valid_word(self): # Faltan los test de esto
-        player = Player()
-        word = input("Ingrese palabras: ")
-        location_x = input("Ingrse posicion en x :")
-        location_y = input("Ingrese posicion en y: ")
-        location = (location_x, location_y) 
-        orientation = ""
-        """ 
-        if word in dictionary.txt:
-            self.status_word = "valid"
-"""
+
+class Word():
+    def __init__(self):
+        self.wordvalue = 0
+
+    def calculate_word_value(self):
+        cell = Cell(None, None)
+        wordcell = []
+        if cell.value != 0:
+            wordcell.append(cell.letter)
+            cell.column += 1
+            self.wordvalue = sum(wordcell)
+            return self.wordvalue #la variable self.wordvalue siempre es 0. aunque ponga self.wordvalue = 4, es 0
+        else:
+            return self.wordvalue
+
 
 class ScrabbleGame():
     def __init__(self, players_count):
@@ -149,4 +156,5 @@ class Cell:
             else:
                 self.value = letter.value
         else:
-            self.value = letter.value 
+            self.value = letter.value
+        return self.value

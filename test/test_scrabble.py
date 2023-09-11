@@ -190,13 +190,29 @@ class TestScrabbleGame(unittest.TestCase):
 
 class TestMain(unittest.TestCase):
     def setUp(self):
-        self.main_instance = Main()
+        self.main = Main()
 
     def test_input_valid_player_count(self):
         main = Main()
         main.main()
         self.assertEqual(main.status_players, "valid")
 
+    def test_empty_word(self):
+        word = Word()
+
+        word.calculate_word_value
+        self.assertEqual(word.wordvalue, 0)
+
+"""
+    cell1 = Cell(row=2, column=5)
+    cell1.add_letter("C")
+    cell2 = Cell(row=2, column=6)
+    cell2.add_letter("A")
+    cell3 = Cell(row=2, column=7)
+    cell3.add_letter("S")
+    cell4 = Cell(row=2, column=8)
+    cell4.add_letter("A")
+"""
 class TestDictionary(unittest.TestCase):
     def test_word_in_dictionary(self):
         dictionary = Dictionary("/home/sofia16044/Documentos/computacion/scrabble-2023-sofiasoler16/dictionaries/dictionary .txt")
