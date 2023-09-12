@@ -17,11 +17,16 @@ Created a function for the players that defines the states that the player can h
 # 29/8/23
 Updated the Cell class, added a multiplier for each cell to calculate the value
 # 6/7/23
-Created a function that change the current player 
-# 7/7/23
+Created the function next_turn that change the current player 
+# 7/7/23 afternoon
 Created class Main
 Created a function that checks if the number of players that want to play is over the limit
 # 8/7/23
 Created a funcion in Main that checks if the word is valid
 # 9/7/23
 Added a dictionary and created a function that returns if the word is valid
+# 11/7/23 afternoon
+Created a word class and added a function that calculate the word value
+# 11/7/23
+Fixed the multiplier_value function
+Made a function to calculate the value of a word

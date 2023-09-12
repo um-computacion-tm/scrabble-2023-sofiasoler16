@@ -62,21 +62,6 @@ class Main(): #Te deja entrar cantidad de jugadores y verifica que sea bueno
             self.status_players = "invalid"  
         self.status_players = "valid"
 
-class Word():
-    def __init__(self):
-        self.wordvalue = 0
-
-    def calculate_word_value(self):
-        cell = Cell(None, None)
-        wordcell = []
-        if cell.value != 0:
-            wordcell.append(cell.letter)
-            cell.column += 1
-            self.wordvalue = sum(wordcell)
-            return self.wordvalue #la variable self.wordvalue siempre es 0. aunque ponga self.wordvalue = 4, es 0
-        else:
-            return self.wordvalue
-
 
 class ScrabbleGame():
     def __init__(self, players_count):
@@ -148,13 +133,36 @@ class Cell:
     def add_letter(self, letter:Tile):
         self.letter = letter
 
-    def multiplier_value(self, letter: Tile):
-        if self.used == False:
-            if self.row == 3 and self.column == 5:
-                self.value = 2 * letter.value
-                self.used = True  
+    def multiplier_value(self):
+        if self.letter != None:
+            if self.used == False:
+                if self.row == 3 and self.column == 5:
+                    self.value = 2 * self.letter.value
+                    self.used = True  
+                else:
+                    self.value = self.letter.value
             else:
-                self.value = letter.value
-        else:
-            self.value = letter.value
-        return self.value
+                self.value = self.letter.value
+            return self.value
+
+
+class Word():
+    def __init__(self, cell:Cell):
+        self.wordvalue = 0
+        self.cell = cell
+
+    def calculate_word_value(self):
+        wordcell = []
+
+        while self.cell.value != 0:
+            print(self.cell.value)
+            wordcell.append(self.cell.value)
+            self.cell.column += 1
+            print(self.cell.column)
+            print(wordcell)
+            if len(wordcell) > 0:
+                self.wordvalue = sum(wordcell)
+                return self.wordvalue 
+            else: 
+                return self.wordvalue
+        

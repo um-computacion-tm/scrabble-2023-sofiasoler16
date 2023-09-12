@@ -127,7 +127,8 @@ class TestCell(unittest.TestCase):
     def test_multi(self):
         cell = Cell(row=3, column=5)
         letter = Tile(letter="A", value=1, cant=12)
-        cell.multiplier_value(letter)
+        cell.add_letter(letter)
+        cell.multiplier_value()
         self.assertEqual(
             cell.value, 2
         )
@@ -135,8 +136,8 @@ class TestCell(unittest.TestCase):
     def test_value_normal(self):
         cell = Cell(row=4, column=7)
         letter = Tile(letter="Q", value=5, cant=1)
-
-        cell.multiplier_value(letter)
+        cell.add_letter(letter)
+        cell.multiplier_value()
         self.assertEqual(
             cell.value,5
         )
@@ -144,13 +145,14 @@ class TestCell(unittest.TestCase):
     def test_value_segundavez(self):
         cell = Cell(row=3, column=5)
         letter = Tile("Q",5,1)
+        cell.add_letter(letter)
 
-        cell.multiplier_value(letter)
+        cell.multiplier_value()
         self.assertEqual(
             cell.value,10
         )
-        cell.state = "usado" #arreglar test
-        cell.multiplier_value(letter)
+        cell.used = True  
+        cell.multiplier_value()
         self.assertEqual(
             cell.value,5
         )
@@ -197,11 +199,23 @@ class TestMain(unittest.TestCase):
         main.main()
         self.assertEqual(main.status_players, "valid")
 
-    def test_empty_word(self):
-        word = Word()
+    def test_1letter_word(self):
+        """
+        word2 = Cell(2,6)
 
-        word.calculate_word_value
-        self.assertEqual(word.wordvalue, 0)
+        letter = Tile(letter="C", value=1, cant=4)
+        word2.add_letter(letter)
+        word2.multiplier_value()
+        """
+        #Como agrego valores a las celdas de al lado y que se queden ahi
+        word = Word(Cell(2,5))
+
+        letter = Tile(letter="C", value=1, cant=4)
+        word.cell.add_letter(letter)
+        word.cell.multiplier_value()
+
+        word.calculate_word_value()
+        self.assertEqual(word.wordvalue, 1)
 
 """
     cell1 = Cell(row=2, column=5)
