@@ -35,15 +35,33 @@ class BagTiles:
         if self.actualizado[letra].cant < self.tiles[letra].cant:
             (self.actualizado[letra].cant) += 1
 
-class Main(): #Te deja entrar cantidad de jugadores y verifica que se bueno
+class Dictionary:
+    def __init__(self, file_path):
+        self.words = self.load_words(file_path)
+
+    def load_words(self, file_path):
+        with open(file_path, 'r', encoding='utf-8') as file:
+            return set(word.strip() for word in file)
+
+    def valid_word(self, word):
+        if word in self.words:
+            return True
+        else:
+            return False
+
+
+class Main(): #Te deja entrar cantidad de jugadores y verifica que sea bueno
     def __init__(self):
         self.status_players = "valid"
         self.player_count = 0
+        self.status_word = None
+        self.board = Board()
+        self.cell = Cell(None, None)
+    
     def main(self):
-            if self.player_count <= 1 or self.player_count > 4:
-                self.status_players = "invalid"
-            
-            self.status_players = "valid"
+        if self.player_count <= 1 or self.player_count > 4:
+            self.status_players = "invalid"  
+        self.status_players = "valid"
 
 
 class ScrabbleGame():
@@ -65,9 +83,6 @@ class ScrabbleGame():
         else:
             self.player_index += 1
             self.current_player = self.players[self.player_index]
-        
-        
-
 
 class Player():
     def __init__ (self,bag:BagTiles):
@@ -86,27 +101,19 @@ class Player():
         self.current_player = None
 
 
-
-    def tiles_cambiadas(self):
-        letter = random.choice(list(self.tilesp)) #Que no sea random choice, que sea una letra elegida por usuario
+    def tiles_cambiadas(self, letterchoice):
+        letter = letterchoice #Que no sea random choice, que sea una letra elegida por usuario
         self.tilesp.pop(self.bag.put(letter))
         self.tilesp.append(self.bag.take())
     def cambio_estado(self, other_player):
         player_1 = Player(BagTiles())
         if len(self.tilesp) == 0:
             self.estado = "terminado"
-        
+"""     
         if self.score > player_1.score: #Que compare con todos los otros jugadores, no uno
             self.estado = "ganando"
+"""
 
-
-class Board:
-    def __init__(self):
-        self.grid = [
-            [ Cell(1, '') for _ in range(15) ]
-            for _ in range(15)
-        ]
-        
 
 #Celda en especifico, como agregarle un multiplicador a 1 celda en especifico
 class Cell:
@@ -120,12 +127,59 @@ class Cell:
     def add_letter(self, letter:Tile):
         self.letter = letter
 
-    def multiplier_value(self, letter: Tile):
-        if self.used == False:
-            if self.row == 3 and self.column == 5:
-                self.value = 2 * letter.value
-                self.used = True  
+    def multiplier_value(self):
+        if self.letter != None:
+            if self.used == False:
+                if self.row == 3 and self.column == 5:
+                    self.value = 2 * self.letter.value
+                    self.used = True  
+                else:
+                    self.value = self.letter.value
             else:
-                self.value = letter.value
-        else:
-            self.value = letter.value 
+                self.value = self.letter.value
+            return self.value
+
+class Board:
+    def __init__(self):
+
+        self.grid = [
+            [ Cell("", "") for _ in range(15) ]
+            for _ in range(15)
+        ]
+
+    def validate_word_inside_board(self, word, location, orientation):
+        position_x = location[0]
+        position_y = location[1]
+        len_word = len(word)
+        if orientation == "H":
+            if position_x + len_word > 15:
+                return False
+            else:
+                return True
+        elif orientation == "V":
+            if position_y + len_word > 15:
+                return False
+            else:
+                return True
+
+class Word():
+    def __init__(self, cell:Cell):
+        self.wordvalue = 0
+        self.cell = cell
+
+    def calculate_word_value(self):
+        wordcell = []
+
+        while self.cell.value != 0:
+            print(self.cell.value)
+            wordcell.append(self.cell.value)
+            self.cell.column += 1
+            print(self.cell.column)
+            print(wordcell)
+            if len(wordcell) > 0:
+                self.wordvalue = sum(wordcell)
+                return self.wordvalue 
+            else: 
+                return self.wordvalue
+
+

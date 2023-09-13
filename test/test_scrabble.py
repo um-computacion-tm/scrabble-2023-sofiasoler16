@@ -1,7 +1,7 @@
 import random
 import unittest
 
-from game.models import Tile, BagTiles, YaHaySuficientes, Player, ScrabbleGame, Cell, Board, Main
+from game.models import *
 
 from unittest.mock import patch
 
@@ -56,6 +56,9 @@ class TestBag2(unittest.TestCase):
         self.assertEqual(
             bag.actualizado["C"].cant, 2
         )
+
+
+
 class TestPlayer(unittest.TestCase):
     def test_init(self):
         bag = BagTiles()
@@ -76,6 +79,8 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(
             len(player_1.tilesp),7
         )
+
+
     def test_cambio_estado_terminado(self):
         bag = BagTiles()
         player_1 = Player(bag)
@@ -103,6 +108,45 @@ class TestBoard(unittest.TestCase):
             len(board.grid[0]),
             15,
         )
+    def test_out_of_board(self):
+        board = Board()
+        word = "FACULTAD"
+        location = (14,4)
+        orientation = "H"
+
+        word_is_valid = board.validate_word_inside_board(word, location, orientation)
+
+        assert word_is_valid == False
+
+    def test_place_word_empty_board_horizontal_fine(self):
+        board = Board()
+        word = "FACULTAD"
+        location = (7,4)
+        orientation = "H"
+
+        word_is_valid = board.validate_word_inside_board(word, location, orientation)
+
+        assert word_is_valid == True
+
+    def test_place_word_empty_board_vertical_wrong(self):
+        board = Board()
+        word = "FACULTAD"
+        location = (8,9)
+        orientation ="V"
+
+        word_is_valid = board.validate_word_inside_board(word, location, orientation)
+
+        assert word_is_valid == False
+
+    def test_place_word_empty_board_vertical_fine(self):
+        board = Board()
+        word = "FACULTAD"
+        location = (7,4)
+        orientation = "V"
+
+        word_is_valid = board.validate_word_inside_board(word, location, orientation)
+
+        assert word_is_valid == True
 
 
 class TestCell(unittest.TestCase):
@@ -122,7 +166,8 @@ class TestCell(unittest.TestCase):
     def test_multi(self):
         cell = Cell(row=3, column=5)
         letter = Tile(letter="A", value=1, cant=12)
-        cell.multiplier_value(letter)
+        cell.add_letter(letter)
+        cell.multiplier_value()
         self.assertEqual(
             cell.value, 2
         )
@@ -130,24 +175,25 @@ class TestCell(unittest.TestCase):
     def test_value_normal(self):
         cell = Cell(row=4, column=7)
         letter = Tile(letter="Q", value=5, cant=1)
-
-        cell.multiplier_value(letter)
+        cell.add_letter(letter)
+        cell.multiplier_value()
         self.assertEqual(
             cell.value,5
         )
 
     def test_value_segundavez(self):
         cell = Cell(row=3, column=5)
-        letter = Tile("Q",5,1)
+        letter = Tile("A",1,12)
+        cell.add_letter(letter)
 
-        cell.multiplier_value(letter)
+        cell.multiplier_value()
         self.assertEqual(
-            cell.value,10
+            cell.value,2
         )
-        cell.state = "usado"
-        cell.multiplier_value(letter)
+        cell.used = True  
+        cell.multiplier_value()
         self.assertEqual(
-            cell.value,5
+            cell.value,1
         )
 
 class TestScrabbleGame(unittest.TestCase):
@@ -185,12 +231,53 @@ class TestScrabbleGame(unittest.TestCase):
 
 class TestMain(unittest.TestCase):
     def setUp(self):
-        self.main_instance = Main()
+        self.main = Main()
 
     def test_input_valid_player_count(self):
         main = Main()
         main.main()
         self.assertEqual(main.status_players, "valid")
+
+class TestWord(unittest.TestCase):
+    
+    def test_1letter_word(self):
+        """
+        word2 = Cell(2,6)
+
+        letter = Tile(letter="C", value=1, cant=4)
+        word2.add_letter(letter)
+        word2.multiplier_value()
+        """
+        #Como agrego valores a las celdas de al lado y que se queden ahi
+        word = Word(Cell(2,5))
+
+        letter = Tile(letter="C", value=1, cant=4)
+        word.cell.add_letter(letter)
+        word.cell.multiplier_value()
+
+        word.calculate_word_value()
+        self.assertEqual(word.wordvalue, 1)
+
+
+"""
+    cell1 = Cell(row=2, column=5)
+    cell1.add_letter("C")
+    cell2 = Cell(row=2, column=6)
+    cell2.add_letter("A")
+    cell3 = Cell(row=2, column=7)
+    cell3.add_letter("S")
+    cell4 = Cell(row=2, column=8)
+    cell4.add_letter("A")
+"""
+
+
+class TestDictionary(unittest.TestCase):
+    def test_word_in_dictionary(self):
+        dictionary = Dictionary("dictionaries/dictionary .txt")
+        self.assertEqual(dictionary.valid_word('arbol'), True)
+    def test_word_not_dictionary(self):
+        dictionary = Dictionary("dictionaries/dictionary .txt")
+        self.assertEqual(dictionary.valid_word('schmolicnsd'), False)    
 
 
 if __name__ == '__main__':
