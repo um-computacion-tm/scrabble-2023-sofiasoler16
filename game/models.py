@@ -57,6 +57,7 @@ class Main(): #Te deja entrar cantidad de jugadores y verifica que sea bueno
         self.status_word = None
         self.board = Board()
         self.cell = Cell(None, None)
+    
     def main(self):
         if self.player_count <= 1 or self.player_count > 4:
             self.status_players = "invalid"  
@@ -114,13 +115,6 @@ class Player():
 """
 
 
-class Board:
-    def __init__(self):
-        self.grid = [
-            [ Cell(1, 0) for _ in range(15) ]
-            for _ in range(15)
-        ]
-
 #Celda en especifico, como agregarle un multiplicador a 1 celda en especifico
 class Cell:
     def __init__(self, row, column):
@@ -145,6 +139,28 @@ class Cell:
                 self.value = self.letter.value
             return self.value
 
+class Board:
+    def __init__(self):
+
+        self.grid = [
+            [ Cell("", "") for _ in range(15) ]
+            for _ in range(15)
+        ]
+
+    def validate_word_inside_board(self, word, location, orientation):
+        position_x = location[0]
+        position_y = location[1]
+        len_word = len(word)
+        if orientation == "H":
+            if position_x + len_word > 15:
+                return False
+            else:
+                return True
+        elif orientation == "V":
+            if position_y + len_word > 15:
+                return False
+            else:
+                return True
 
 class Word():
     def __init__(self, cell:Cell):
@@ -165,4 +181,5 @@ class Word():
                 return self.wordvalue 
             else: 
                 return self.wordvalue
-        
+
+

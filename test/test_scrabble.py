@@ -108,6 +108,45 @@ class TestBoard(unittest.TestCase):
             len(board.grid[0]),
             15,
         )
+    def test_out_of_board(self):
+        board = Board()
+        word = "FACULTAD"
+        location = (14,4)
+        orientation = "H"
+
+        word_is_valid = board.validate_word_inside_board(word, location, orientation)
+
+        assert word_is_valid == False
+
+    def test_place_word_empty_board_horizontal_fine(self):
+        board = Board()
+        word = "FACULTAD"
+        location = (7,4)
+        orientation = "H"
+
+        word_is_valid = board.validate_word_inside_board(word, location, orientation)
+
+        assert word_is_valid == True
+
+    def test_place_word_empty_board_vertical_wrong(self):
+        board = Board()
+        word = "FACULTAD"
+        location = (8,9)
+        orientation ="V"
+
+        word_is_valid = board.validate_word_inside_board(word, location, orientation)
+
+        assert word_is_valid == False
+
+    def test_place_word_empty_board_vertical_fine(self):
+        board = Board()
+        word = "FACULTAD"
+        location = (7,4)
+        orientation = "V"
+
+        word_is_valid = board.validate_word_inside_board(word, location, orientation)
+
+        assert word_is_valid == True
 
 
 class TestCell(unittest.TestCase):
@@ -144,17 +183,17 @@ class TestCell(unittest.TestCase):
 
     def test_value_segundavez(self):
         cell = Cell(row=3, column=5)
-        letter = Tile("Q",5,1)
+        letter = Tile("A",1,12)
         cell.add_letter(letter)
 
         cell.multiplier_value()
         self.assertEqual(
-            cell.value,10
+            cell.value,2
         )
         cell.used = True  
         cell.multiplier_value()
         self.assertEqual(
-            cell.value,5
+            cell.value,1
         )
 
 class TestScrabbleGame(unittest.TestCase):
@@ -199,6 +238,8 @@ class TestMain(unittest.TestCase):
         main.main()
         self.assertEqual(main.status_players, "valid")
 
+class TestWord(unittest.TestCase):
+    
     def test_1letter_word(self):
         """
         word2 = Cell(2,6)
@@ -217,19 +258,6 @@ class TestMain(unittest.TestCase):
         word.calculate_word_value()
         self.assertEqual(word.wordvalue, 1)
 
-    def word_calculate_value(self): #No toma el test
-        cell1 = Cell(row=2, column=5) #No se como setear una celda para siempre con un valor para testear con ese valor
-        cell1.add_letter("C")
-        cell2 = Cell(row=2, column=6)
-        cell2.add_letter("A")
-        cell3 = Cell(row=2, column=7)
-        cell3.add_letter("S")
-        cell4 = Cell(row=2, column=8)
-        cell4.add_letter("A")
-
-        word = Word(Cell(2,5))
-        word.calculate_word_value()
-        self.assertEqual(word.wordvalue,4)
 
 """
     cell1 = Cell(row=2, column=5)
@@ -241,6 +269,8 @@ class TestMain(unittest.TestCase):
     cell4 = Cell(row=2, column=8)
     cell4.add_letter("A")
 """
+
+
 class TestDictionary(unittest.TestCase):
     def test_word_in_dictionary(self):
         dictionary = Dictionary("dictionaries/dictionary .txt")
