@@ -217,6 +217,20 @@ class TestMain(unittest.TestCase):
         word.calculate_word_value()
         self.assertEqual(word.wordvalue, 1)
 
+    def word_calculate_value(self): #No toma el test
+        cell1 = Cell(row=2, column=5) #No se como setear una celda para siempre con un valor para testear con ese valor
+        cell1.add_letter("C")
+        cell2 = Cell(row=2, column=6)
+        cell2.add_letter("A")
+        cell3 = Cell(row=2, column=7)
+        cell3.add_letter("S")
+        cell4 = Cell(row=2, column=8)
+        cell4.add_letter("A")
+
+        word = Word(Cell(2,5))
+        word.calculate_word_value()
+        self.assertEqual(word.wordvalue,4)
+
 """
     cell1 = Cell(row=2, column=5)
     cell1.add_letter("C")
