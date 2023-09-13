@@ -243,10 +243,10 @@ class TestMain(unittest.TestCase):
 """
 class TestDictionary(unittest.TestCase):
     def test_word_in_dictionary(self):
-        dictionary = Dictionary("/home/sofia16044/Documentos/computacion/scrabble-2023-sofiasoler16/dictionaries/dictionary .txt")
+        dictionary = Dictionary("dictionaries/dictionary .txt")
         self.assertEqual(dictionary.valid_word('arbol'), True)
     def test_word_not_dictionary(self):
-        dictionary = Dictionary("/home/sofia16044/Documentos/computacion/scrabble-2023-sofiasoler16/dictionaries/dictionary .txt")
+        dictionary = Dictionary("dictionaries/dictionary .txt")
         self.assertEqual(dictionary.valid_word('schmolicnsd'), False)    
 
 
