@@ -96,7 +96,6 @@ class TestPlayer(unittest.TestCase):
             )
 
 
-
 class TestBoard(unittest.TestCase):
     def test_init(self):
         board = Board()
@@ -177,8 +176,15 @@ class TestCell(unittest.TestCase):
         letter = Tile(letter="Q", value=5, cant=1)
         cell.add_letter(letter)
         cell.multiplier_value()
+
+        cell1 = Cell(row=4, column=8)
+        cell1.multiplier_value
+
         self.assertEqual(
             cell.value,5
+        )
+        self.assertEqual(
+            cell1.value, 0
         )
 
     def test_value_segundavez(self):
@@ -237,11 +243,27 @@ class TestMain(unittest.TestCase):
         main = Main()
         main.main()
         self.assertEqual(main.status_players, "valid")
-
+"""
 class TestWord(unittest.TestCase):
     
     def test_1letter_word(self):
-        """
+       
+        cell = Cell(2,5)
+
+        letter = Tile(letter="C", value=1, cant=4)
+        cell.add_letter(letter)
+        cell.multiplier_value()
+
+        cell1 = Cell(2,6)
+        cell.multiplier_value()
+
+        word = Word()
+
+        word.calculate_word_value(cell)
+        self.assertEqual(word.wordvalue, 1)
+"""
+        
+"""
         word2 = Cell(2,6)
 
         letter = Tile(letter="C", value=1, cant=4)
@@ -249,16 +271,6 @@ class TestWord(unittest.TestCase):
         word2.multiplier_value()
         """
         #Como agrego valores a las celdas de al lado y que se queden ahi
-        word = Word(Cell(2,5))
-
-        letter = Tile(letter="C", value=1, cant=4)
-        word.cell.add_letter(letter)
-        word.cell.multiplier_value()
-
-        word.calculate_word_value()
-        self.assertEqual(word.wordvalue, 1)
-
-
 """
     cell1 = Cell(row=2, column=5)
     cell1.add_letter("C")

@@ -121,7 +121,7 @@ class Cell:
         self.row = row
         self.column = column
         self.letter = None
-        self.value = None
+        self.value = 0
         self.used = False
 
     def add_letter(self, letter:Tile):
@@ -137,7 +137,9 @@ class Cell:
                     self.value = self.letter.value
             else:
                 self.value = self.letter.value
-            return self.value
+        else:
+            self.value = 0
+            
 
 class Board:
     def __init__(self):
@@ -162,24 +164,41 @@ class Board:
             else:
                 return True
 
+    def calculate_word_score(self, word, location, orientation):
+        position_x, position_y = location
+        cell = Cell(location)
+        len_word = len(word)
+        word_score = 0
+
+        if orientation == "H":
+            for i in range(len_word):
+                cell = self.grid[position_x][position_y + i]
+                word_score += cell.multiplier_value()
+
+        return word_score
+
+"""
 class Word():
-    def __init__(self, cell:Cell):
+    def __init__(self):
         self.wordvalue = 0
-        self.cell = cell
 
-    def calculate_word_value(self):
+    def calculate_word_value(self, cell:Cell):
         wordcell = []
+        
+        while cell.value != 0:
+            print(cell.value)
+            wordcell.append(cell.value)
+            print(cell.column)
+            cell.column = (cell.column + 1)
+            print(cell.column)
+            print(cell.row, cell.column)
+            print(cell.value)
+            if cell.value == 0:
+                break
+        if len(wordcell) > 0:
+            self.wordvalue = sum(wordcell)
+            return self.wordvalue 
+        else: 
+            return self.wordvalue
 
-        while self.cell.value != 0:
-            print(self.cell.value)
-            wordcell.append(self.cell.value)
-            self.cell.column += 1
-            print(self.cell.column)
-            print(wordcell)
-            if len(wordcell) > 0:
-                self.wordvalue = sum(wordcell)
-                return self.wordvalue 
-            else: 
-                return self.wordvalue
-
-
+"""      
