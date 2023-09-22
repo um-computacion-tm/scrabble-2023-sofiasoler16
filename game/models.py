@@ -137,8 +137,7 @@ class Cell:
                     self.value = self.letter.value
             else:
                 self.value = self.letter.value
-        else:
-            self.value = 0
+
             
 
 class Board:
@@ -164,24 +163,24 @@ class Board:
             else:
                 return True
 
-    def calculate_word_score(self, word, location, orientation):
-        position_x, position_y = location
-        cell = Cell(location)
-        len_word = len(word)
-        word_score = 0
 
-        if orientation == "H":
-            for i in range(len_word):
-                cell = self.grid[position_x][position_y + i]
-                word_score += cell.multiplier_value()
 
-        return word_score
-
-"""
 class Word():
     def __init__(self):
         self.wordvalue = 0
+        
+    def calculate_word_value(self, cell:Cell):
+    
+        print(cell.column)
+        print(cell.row, cell.column)
+        print(cell.value) 
 
+        cell.column += 1
+        print(cell.column)
+        print(cell.value)
+
+
+"""
     def calculate_word_value(self, cell:Cell):
         wordcell = []
         
@@ -200,5 +199,6 @@ class Word():
             return self.wordvalue 
         else: 
             return self.wordvalue
-
-"""      
+"""
+    
+      

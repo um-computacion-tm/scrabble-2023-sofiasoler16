@@ -243,33 +243,24 @@ class TestMain(unittest.TestCase):
         main = Main()
         main.main()
         self.assertEqual(main.status_players, "valid")
-"""
+
 class TestWord(unittest.TestCase):
     
     def test_1letter_word(self):
-       
         cell = Cell(2,5)
-
         letter = Tile(letter="C", value=1, cant=4)
         cell.add_letter(letter)
         cell.multiplier_value()
 
         cell1 = Cell(2,6)
-        cell.multiplier_value()
+        cell1.multiplier_value()
 
         word = Word()
-
         word.calculate_word_value(cell)
-        self.assertEqual(word.wordvalue, 1)
-"""
         
-"""
-        word2 = Cell(2,6)
+        self.assertEqual(word.wordvalue, 1)
 
-        letter = Tile(letter="C", value=1, cant=4)
-        word2.add_letter(letter)
-        word2.multiplier_value()
-        """
+        
         #Como agrego valores a las celdas de al lado y que se queden ahi
 """
     cell1 = Cell(row=2, column=5)

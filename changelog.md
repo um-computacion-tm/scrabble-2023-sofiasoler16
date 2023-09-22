@@ -37,4 +37,6 @@ Made a function to calculate the value of a word
 ## TERCER SPRINT
 # 13/9/23
 Created function to check if the words are inside the board 
-
+# 22/9/23  1ro
+Add the posibility to the cell of not having any value
+(Try to fix the calculate_word_value funcion)
