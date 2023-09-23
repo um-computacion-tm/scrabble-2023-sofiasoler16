@@ -80,7 +80,6 @@ class TestPlayer(unittest.TestCase):
             len(player_1.tilesp),7
         )
 
-
     def test_cambio_estado_terminado(self):
         bag = BagTiles()
         player_1 = Player(bag)
@@ -146,6 +145,15 @@ class TestBoard(unittest.TestCase):
         word_is_valid = board.validate_word_inside_board(word, location, orientation)
 
         assert word_is_valid == True
+    
+    def test_empty_board(self):
+        board = Board()
+        center_cell = Cell(7,7)
+        center_cell.add_letter(Tile("Q",5,1))
+        
+        board.validate_empty_board(center_cell) #Como hago para que la center cell sea solo la 7,7?
+
+        self.assertEqual(board.status, "not empty")
 
 
 class TestCell(unittest.TestCase):

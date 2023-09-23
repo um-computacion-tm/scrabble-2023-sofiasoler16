@@ -84,31 +84,7 @@ class ScrabbleGame():
             self.player_index += 1
             self.current_player = self.players[self.player_index]
 
-class Player():
-    def __init__ (self,bag:BagTiles):
-        self.tilesp = []
-        self.bag = BagTiles
-        self.name = ""
-        self.score = 0
-        self.estado = "jugando"
-        self.tilesp.append(bag.take())
-        self.tilesp.append(bag.take())
-        self.tilesp.append(bag.take())
-        self.tilesp.append(bag.take())
-        self.tilesp.append(bag.take())
-        self.tilesp.append(bag.take())
-        self.tilesp.append(bag.take())
-        self.current_player = None
 
-
-    def tiles_cambiadas(self, letterchoice):
-        letter = letterchoice #Que no sea random choice, que sea una letra elegida por usuario
-        self.tilesp.pop(self.bag.put(letter))
-        self.tilesp.append(self.bag.take())
-    def cambio_estado(self, other_player):
-        player_1 = Player(BagTiles())
-        if len(self.tilesp) == 0:
-            self.estado = "terminado"
 """     
         if self.score > player_1.score: #Que compare con todos los otros jugadores, no uno
             self.estado = "ganando"
@@ -138,30 +114,6 @@ class Cell:
             else:
                 self.value = self.letter.value
 
-            
-
-class Board:
-    def __init__(self):
-
-        self.grid = [
-            [ Cell("", "") for _ in range(15) ]
-            for _ in range(15)
-        ]
-
-    def validate_word_inside_board(self, word, location, orientation):
-        position_x = location[0]
-        position_y = location[1]
-        len_word = len(word)
-        if orientation == "H":
-            if position_x + len_word > 15:
-                return False
-            else:
-                return True
-        elif orientation == "V":
-            if position_y + len_word > 15:
-                return False
-            else:
-                return True
 
 class Word():
     def __init__(self):
@@ -170,12 +122,9 @@ class Word():
     def calculate_word_value(self, word: list[Cell]):
         wordcell = []
         for cell in word:
-            print(cell.value)
             wordcell.append(cell.value)
 
         self.wordvalue = sum(wordcell)
-
-
 #Intentar arreglar la vieja para poder automatizar el proceso
 """
     def calculate_word_value(self, cell:Cell):
@@ -197,5 +146,61 @@ class Word():
         else: 
             return self.wordvalue
 """
+        
+
+class Board:
+    def __init__(self):
+        self.status = "empty"
+        self.grid = [
+            [ Cell("", "") for _ in range(15) ]
+            for _ in range(15)
+        ]
+
+    def validate_word_inside_board(self, word, location, orientation):
+        position_x = location[0]
+        position_y = location[1]
+        len_word = len(word)
+        if orientation == "H":
+            if position_x + len_word > 15:
+                return False
+            else:
+                return True
+        elif orientation == "V":
+            if position_y + len_word > 15:
+                return False
+            else:
+                return True
     
+    def validate_empty_board(self, center_cell:Cell):
+        #if center_cell == Cell(7,7):
+
+        if center_cell.letter != None:
+            self.status = "not empty"
+
+class Player():
+    def __init__ (self,bag:BagTiles):
+        self.tilesp = []
+        self.bag = BagTiles
+        self.name = ""
+        self.score = 0
+        self.estado = "jugando"
+        self.tilesp.append(bag.take())
+        self.tilesp.append(bag.take())
+        self.tilesp.append(bag.take())
+        self.tilesp.append(bag.take())
+        self.tilesp.append(bag.take())
+        self.tilesp.append(bag.take())
+        self.tilesp.append(bag.take())
+        self.current_player = None
+
+    def tiles_cambiadas(self, letterchoice:Tile):
+        letter = letterchoice #Que no sea random choice, que sea una letra elegida por usuario
+        self.tilesp.pop(self.bag.put(letter))
+        self.tilesp.append(self.bag.take())
+        
+    def cambio_estado(self, other_player):
+        player_1 = Player(BagTiles())
+        if len(self.tilesp) == 0:
+            self.estado = "terminado"
+
       
