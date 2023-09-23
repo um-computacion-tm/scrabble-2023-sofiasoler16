@@ -163,23 +163,20 @@ class Board:
             else:
                 return True
 
-
-
 class Word():
     def __init__(self):
         self.wordvalue = 0
-        
-    def calculate_word_value(self, cell:Cell):
     
-        print(cell.column)
-        print(cell.row, cell.column)
-        print(cell.value) 
+    def calculate_word_value(self, word: list[Cell]):
+        wordcell = []
+        for cell in word:
+            print(cell.value)
+            wordcell.append(cell.value)
 
-        cell.column += 1
-        print(cell.column)
-        print(cell.value)
+        self.wordvalue = sum(wordcell)
 
 
+#Intentar arreglar la vieja para poder automatizar el proceso
 """
     def calculate_word_value(self, cell:Cell):
         wordcell = []

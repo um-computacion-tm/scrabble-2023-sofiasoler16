@@ -40,3 +40,5 @@ Created function to check if the words are inside the board
 # 22/9/23  1ro
 Add the posibility to the cell of not having any value
 (Try to fix the calculate_word_value funcion)
+ # 22/9/23 2do
+Made a new function to calculate the value of a word to fix the old one
