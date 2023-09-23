@@ -121,7 +121,7 @@ class Cell:
         self.row = row
         self.column = column
         self.letter = None
-        self.value = None
+        self.value = 0
         self.used = False
 
     def add_letter(self, letter:Tile):
@@ -137,7 +137,8 @@ class Cell:
                     self.value = self.letter.value
             else:
                 self.value = self.letter.value
-            return self.value
+
+            
 
 class Board:
     def __init__(self):
@@ -163,23 +164,38 @@ class Board:
                 return True
 
 class Word():
-    def __init__(self, cell:Cell):
+    def __init__(self):
         self.wordvalue = 0
-        self.cell = cell
-
-    def calculate_word_value(self):
+    
+    def calculate_word_value(self, word: list[Cell]):
         wordcell = []
+        for cell in word:
+            print(cell.value)
+            wordcell.append(cell.value)
 
-        while self.cell.value != 0:
-            print(self.cell.value)
-            wordcell.append(self.cell.value)
-            self.cell.column += 1
-            print(self.cell.column)
-            print(wordcell)
-            if len(wordcell) > 0:
-                self.wordvalue = sum(wordcell)
-                return self.wordvalue 
-            else: 
-                return self.wordvalue
+        self.wordvalue = sum(wordcell)
 
 
+#Intentar arreglar la vieja para poder automatizar el proceso
+"""
+    def calculate_word_value(self, cell:Cell):
+        wordcell = []
+        
+        while cell.value != 0:
+            print(cell.value)
+            wordcell.append(cell.value)
+            print(cell.column)
+            cell.column = (cell.column + 1)
+            print(cell.column)
+            print(cell.row, cell.column)
+            print(cell.value)
+            if cell.value == 0:
+                break
+        if len(wordcell) > 0:
+            self.wordvalue = sum(wordcell)
+            return self.wordvalue 
+        else: 
+            return self.wordvalue
+"""
+    
+      
