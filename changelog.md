@@ -44,3 +44,5 @@ Add the posibility to the cell of not having any value
 Made a new function to calculate the value of a word to fix the old one
 # 23/9/23
 Made a function to check if the board is empty
+# 24/9/23
+Add a function to calculate the player score

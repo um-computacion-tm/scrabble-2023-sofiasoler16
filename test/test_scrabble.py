@@ -93,6 +93,28 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(
             player_1.estado, "terminado"
             )
+    def test_score_player(self):
+        bag = BagTiles()
+        player = Player(bag)
+
+        cell = Cell(2,5)
+        letter = Tile(letter="C", value=1, cant=4)
+        cell.add_letter(letter)
+        cell.multiplier_value()
+
+        cell1 = Cell(2,6)
+        letter = Tile(letter="A", value=1, cant=12)
+        cell1.add_letter(letter)
+        cell1.multiplier_value()
+
+        word = Word()
+        word.calculate_word_value([cell, cell1])
+
+        wordvalue = word.wordvalue
+
+        player.score_player(wordvalue)
+
+        self.assertEqual(player.score, 2)
 
 
 class TestBoard(unittest.TestCase):

@@ -197,10 +197,17 @@ class Player():
         letter = letterchoice #Que no sea random choice, que sea una letra elegida por usuario
         self.tilesp.pop(self.bag.put(letter))
         self.tilesp.append(self.bag.take())
-        
+
     def cambio_estado(self, other_player):
         player_1 = Player(BagTiles())
         if len(self.tilesp) == 0:
             self.estado = "terminado"
 
-      
+    def score_player(self, wordvalue): #Que pueda agregar mas de 1 solo score de palabra
+        player_word = []
+
+        player_word.append(wordvalue)
+        self.score = sum(player_word)
+
+
+
