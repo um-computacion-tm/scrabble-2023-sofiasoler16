@@ -49,21 +49,6 @@ class Dictionary:
         else:
             return False
 
-
-class Main(): #Te deja entrar cantidad de jugadores y verifica que sea bueno
-    def __init__(self):
-        self.status_players = "valid"
-        self.player_count = 0
-        self.status_word = None
-        self.board = Board()
-        self.cell = Cell(None, None)
-    
-    def main(self):
-        if self.player_count <= 1 or self.player_count > 4:
-            self.status_players = "invalid"  
-        self.status_players = "valid"
-
-
 class ScrabbleGame():
     def __init__(self, players_count):
         self.board = Board()
@@ -97,11 +82,13 @@ class Cell:
         self.row = row
         self.column = column
         self.letter = None
+        self.valueletter = None
         self.value = 0
         self.used = False
 
     def add_letter(self, letter:Tile):
         self.letter = letter
+        self.valueletter = letter.letter
 
     def multiplier_value(self):
         if self.letter != None:
@@ -114,14 +101,33 @@ class Cell:
             else:
                 self.value = self.letter.value
 
+class Main(): #Te deja entrar cantidad de jugadores y verifica que sea bueno
+    def __init__(self):
+        self.status_players = "valid"
+        self.player_count = 0
+        self.status_word = None
+        self.board = Board()
+        self.cell = Cell(None, None)
+    
+    def main(self):
+        if self.player_count <= 1 or self.player_count > 4:
+            self.status_players = "invalid"  
+        self.status_players = "valid"
+
 
 class Word():
     def __init__(self):
         self.wordvalue = 0
     
-    def calculate_word_value(self, word: list[Cell]):
+    def calculate_word_value(self, wordplace: list[Cell]):
         wordcell = []
-        for cell in word:
+        palabra = []
+        for cell in wordplace:
+            print(cell.valueletter)
+            palabra.append(cell.valueletter) #Dice que no existe el atibuto valueletter pero si lo imprime
+        dictionary = Dictionary
+
+        for cell in wordplace:
             wordcell.append(cell.value)
 
         self.wordvalue = sum(wordcell)
@@ -204,10 +210,11 @@ class Player():
             self.estado = "terminado"
 
     def score_player(self, wordvalue): #Que pueda agregar mas de 1 solo score de palabra
-        player_word = []
+        player_word_score = []
+        self.words = []
 
-        player_word.append(wordvalue)
-        self.score = sum(player_word)
+        player_word_score.append(wordvalue)
+        self.score = sum(player_word_score)
 
 
 

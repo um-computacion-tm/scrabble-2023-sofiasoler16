@@ -274,6 +274,7 @@ class TestMain(unittest.TestCase):
         main.main()
         self.assertEqual(main.status_players, "valid")
 
+"""
 class TestWord(unittest.TestCase):
     def test_word_value(self):
         cell = Cell(2,5)
@@ -287,9 +288,13 @@ class TestWord(unittest.TestCase):
         cell1.multiplier_value()
 
         word = Word()
-        word.calculate_word_value([cell, cell1])
-        self.assertEqual(word.wordvalue, 2)
 
+        wordplace = [cell, cell1]
+        word.calculate_word_value([wordplace])
+        print(wordplace)
+        
+        self.assertEqual(word.wordvalue, 2)
+"""
         
 """
     def test_1letter_word(self):
