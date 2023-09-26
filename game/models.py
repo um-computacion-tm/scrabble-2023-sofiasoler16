@@ -121,14 +121,17 @@ class Word():
     
     def calculate_word_value(self, wordplace: list[Cell]):
         wordcell = []
-        palabra = []
+        listpalabra = []
         for cell in wordplace:
             print(cell.valueletter)
-            palabra.append(cell.valueletter) #Dice que no existe el atibuto valueletter pero si lo imprime
-        dictionary = Dictionary
-
-        for cell in wordplace:
-            wordcell.append(cell.value)
+            listpalabra.append(cell.valueletter)
+        palabramayus = "".join(listpalabra)
+        palabraminus = palabramayus.lower()
+        dictionary = Dictionary("dictionaries/dictionary .txt")
+        print (palabramayus)
+        if palabraminus in dictionary.words:
+            for cell in wordplace:
+                wordcell.append(cell.value)
 
         self.wordvalue = sum(wordcell)
 #Intentar arreglar la vieja para poder automatizar el proceso

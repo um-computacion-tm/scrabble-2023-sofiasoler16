@@ -46,5 +46,7 @@ Made a new function to calculate the value of a word to fix the old one
 Made a function to check if the board is empty
 # 24/9/23
 Add a function to calculate the player score
-# 25/9/23
+# 25/9/23 1ro
 Try to make a function to check if the calculated word is in the dictionary
+# 25/9/23 2do
+Fixed function that calculate the word value just if it is in the dictionary

@@ -98,23 +98,28 @@ class TestPlayer(unittest.TestCase):
         player = Player(bag)
 
         cell = Cell(2,5)
-        letter = Tile(letter="C", value=1, cant=4)
+        letter = Tile(letter="a", value=1, cant=12)
         cell.add_letter(letter)
         cell.multiplier_value()
 
         cell1 = Cell(2,6)
-        letter = Tile(letter="A", value=1, cant=12)
+        letter = Tile(letter="b", value=3, cant=2)
         cell1.add_letter(letter)
         cell1.multiplier_value()
 
+        cell2 = Cell(2,6)
+        letter = Tile(letter="a", value=1, cant=12)
+        cell2.add_letter(letter)
+        cell2.multiplier_value()
+
         word = Word()
-        word.calculate_word_value([cell, cell1])
+        word.calculate_word_value([cell, cell1, cell2])
 
         wordvalue = word.wordvalue
 
         player.score_player(wordvalue)
 
-        self.assertEqual(player.score, 2)
+        self.assertEqual(player.score, 5)
 
 
 class TestBoard(unittest.TestCase):
@@ -274,27 +279,27 @@ class TestMain(unittest.TestCase):
         main.main()
         self.assertEqual(main.status_players, "valid")
 
-"""
+
 class TestWord(unittest.TestCase):
     def test_word_value(self):
         cell = Cell(2,5)
-        letter = Tile(letter="C", value=1, cant=4)
+        letter = Tile(letter="A", value=1, cant=12)
         cell.add_letter(letter)
         cell.multiplier_value()
 
         cell1 = Cell(2,6)
-        letter = Tile(letter="A", value=1, cant=12)
+        letter = Tile(letter="B", value=3, cant=2)
         cell1.add_letter(letter)
         cell1.multiplier_value()
 
-        word = Word()
+        cell2 = Cell(2,6)
+        letter = Tile(letter="A", value=1, cant=12)
+        cell2.add_letter(letter)
+        cell2.multiplier_value()
 
-        wordplace = [cell, cell1]
-        word.calculate_word_value([wordplace])
-        print(wordplace)
-        
-        self.assertEqual(word.wordvalue, 2)
-"""
+        word = Word()
+        word.calculate_word_value([cell, cell1, cell2])
+        self.assertEqual(word.wordvalue, 5)
         
 """
     def test_1letter_word(self):
