@@ -66,6 +66,7 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(
         len(player_1.tilesp),7
         )
+
         self.assertEqual(
             player_1.score, 0 
         )
@@ -93,22 +94,22 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(
             player_1.estado, "terminado"
             )
-    def test_score_player(self):
+    def test_score_player_2_words(self):
         bag = BagTiles()
         player = Player(bag)
-
+#Primera palabra
         cell = Cell(2,5)
-        letter = Tile(letter="a", value=1, cant=12)
+        letter = Tile(letter="A", value=1, cant=12)
         cell.add_letter(letter)
         cell.multiplier_value()
 
         cell1 = Cell(2,6)
-        letter = Tile(letter="b", value=3, cant=2)
+        letter = Tile(letter="B", value=3, cant=2)
         cell1.add_letter(letter)
         cell1.multiplier_value()
 
         cell2 = Cell(2,6)
-        letter = Tile(letter="a", value=1, cant=12)
+        letter = Tile(letter="A", value=1, cant=12)
         cell2.add_letter(letter)
         cell2.multiplier_value()
 
@@ -118,8 +119,53 @@ class TestPlayer(unittest.TestCase):
         wordvalue = word.wordvalue
 
         player.score_player(wordvalue)
+#Segunda palabra
+        cell3 = Cell(7,6)
+        letter = Tile(letter="A", value=1, cant=12)
+        cell3.add_letter(letter)
+        cell3.multiplier_value()
 
-        self.assertEqual(player.score, 5)
+        cell4 = Cell(8,6)
+        letter = Tile(letter="B", value=3, cant=2)
+        cell4.add_letter(letter)
+        cell4.multiplier_value()
+
+        cell5 = Cell(9,6)
+        letter = Tile(letter="A", value=1, cant=12)
+        cell5.add_letter(letter)
+        cell5.multiplier_value()
+
+        word = Word()
+        word.calculate_word_value([cell3, cell4, cell5])
+
+        wordvalue = word.wordvalue
+
+        player.score_player(wordvalue)
+
+        self.assertEqual(player.score, 10)
+        
+    def test_validate_letter(self):
+        bag = BagTiles()
+        player1 = Player(bag)
+        player1.tilesp = [
+            "H",
+            "O",
+            "L",
+            "A",
+            "S",
+            "B",
+            "C",
+        ]
+        tiles = [
+            Tile("H", 1, 3),
+            Tile("O", 2, 3),
+            Tile("L", 1, 5),
+            Tile("A", 1, 12),
+        ]
+        player1.has_letters(tiles)
+        self.assertEqual(player1.valid, True)
+
+
 
 
 class TestBoard(unittest.TestCase):

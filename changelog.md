@@ -50,3 +50,7 @@ Add a function to calculate the player score
 Try to make a function to check if the calculated word is in the dictionary
 # 25/9/23 2do
 Fixed function that calculate the word value just if it is in the dictionary
+## CUARTO SPRINT
+# 27/9/23
+Added a function to validate if the player has the letters that use to play
+Fixed the score_player function to check the score of more than 1 word

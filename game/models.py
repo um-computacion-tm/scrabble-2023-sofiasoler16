@@ -61,7 +61,6 @@ class ScrabbleGame():
     def next_turn(self):
         if self.current_player == None:
             self.current_player = self.players[self.player_index]
-            print(self.player_index)
         elif self.current_player == self.players[-1]:
             self.player_index = 0
             self.current_player = self.players[self.player_index]
@@ -119,16 +118,15 @@ class Word():
     def __init__(self):
         self.wordvalue = 0
     
-    def calculate_word_value(self, wordplace: list[Cell]):
+    def calculate_word_value(self, wordplace: list[Cell]): #Suma el puntaje de una palabra
         wordcell = []
         listpalabra = []
-        for cell in wordplace:
-            print(cell.valueletter)
+        for cell in wordplace: #Se fija si la palabra existe antes de sumar puntaje
             listpalabra.append(cell.valueletter)
         palabramayus = "".join(listpalabra)
         palabraminus = palabramayus.lower()
         dictionary = Dictionary("dictionaries/dictionary .txt")
-        print (palabramayus)
+
         if palabraminus in dictionary.words:
             for cell in wordplace:
                 wordcell.append(cell.value)
@@ -179,7 +177,7 @@ class Board:
                 return False
             else:
                 return True
-    
+            
     def validate_empty_board(self, center_cell:Cell):
         #if center_cell == Cell(7,7):
 
@@ -189,17 +187,13 @@ class Board:
 class Player():
     def __init__ (self,bag:BagTiles):
         self.tilesp = []
-        self.bag = BagTiles
+        self.bag = bag
         self.name = ""
         self.score = 0
         self.estado = "jugando"
-        self.tilesp.append(bag.take())
-        self.tilesp.append(bag.take())
-        self.tilesp.append(bag.take())
-        self.tilesp.append(bag.take())
-        self.tilesp.append(bag.take())
-        self.tilesp.append(bag.take())
-        self.tilesp.append(bag.take())
+        for _ in range(7):
+            self.tilesp.append(self.bag.take())
+
         self.current_player = None
 
     def tiles_cambiadas(self, letterchoice:Tile):
@@ -213,11 +207,23 @@ class Player():
             self.estado = "terminado"
 
     def score_player(self, wordvalue): #Que pueda agregar mas de 1 solo score de palabra
-        player_word_score = []
+        player_word_score = 0
         self.words = []
 
-        player_word_score.append(wordvalue)
-        self.score = sum(player_word_score)
+        player_word_score += (wordvalue)
+        self.score += (player_word_score)
+    
+    def has_letters(self, tiles:list[Tile]):
+        self.valid = True
+        
+        for letter in tiles:
+            if letter.letter in self.tilesp:
+                self.valid = True
+            else:
+                self.valid = False
+                break
+                
+
 
 
 
