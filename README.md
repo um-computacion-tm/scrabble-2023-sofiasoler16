@@ -1,4 +1,5 @@
 # # scrabble-2023-sofiasoler16
+Sofia Soler
 
 # main
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/sofiasoler16/clase_2023-23-ago/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/sofiasoler16/clase_2023-23-ago/tree/main)

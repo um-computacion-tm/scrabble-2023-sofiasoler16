@@ -49,6 +49,56 @@ class Dictionary:
         else:
             return False
 
+class ScrabbleGame():
+    def __init__(self, players_count):
+        self.board = Board()
+        self.bag = BagTiles()
+        self.players = []
+        self.current_player = None
+        self.player_index = 0
+        for _ in range(players_count):
+            self.players.append(Player(bag=self.bag))
+    def next_turn(self):
+        if self.current_player == None:
+            self.current_player = self.players[self.player_index]
+        elif self.current_player == self.players[-1]:
+            self.player_index = 0
+            self.current_player = self.players[self.player_index]
+        else:
+            self.player_index += 1
+            self.current_player = self.players[self.player_index]
+
+
+"""     
+        if self.score > player_1.score: #Que compare con todos los otros jugadores, no uno
+            self.estado = "ganando"
+"""
+
+
+#Celda en especifico, como agregarle un multiplicador a 1 celda en especifico
+class Cell:
+    def __init__(self, row, column):
+        self.row = row
+        self.column = column
+        self.letter = None
+        self.valueletter = None
+        self.value = 0
+        self.used = False
+
+    def add_letter(self, letter:Tile):
+        self.letter = letter
+        self.valueletter = letter.letter
+
+    def multiplier_value(self):
+        if self.letter != None:
+            if self.used == False:
+                if self.row == 3 and self.column == 5:
+                    self.value = 2 * self.letter.value
+                    self.used = True  
+                else:
+                    self.value = self.letter.value
+            else:
+                self.value = self.letter.value
 
 class Main(): #Te deja entrar cantidad de jugadores y verifica que sea bueno
     def __init__(self):
@@ -64,118 +114,24 @@ class Main(): #Te deja entrar cantidad de jugadores y verifica que sea bueno
         self.status_players = "valid"
 
 
-class ScrabbleGame():
-    def __init__(self, players_count):
-        self.board = Board()
-        self.bag = BagTiles()
-        self.players = []
-        self.current_player = None
-        self.player_index = 0
-        for _ in range(players_count):
-            self.players.append(Player(bag=self.bag))
-    def next_turn(self):
-        if self.current_player == None:
-            self.current_player = self.players[self.player_index]
-            print(self.player_index)
-        elif self.current_player == self.players[-1]:
-            self.player_index = 0
-            self.current_player = self.players[self.player_index]
-        else:
-            self.player_index += 1
-            self.current_player = self.players[self.player_index]
-
-class Player():
-    def __init__ (self,bag:BagTiles):
-        self.tilesp = []
-        self.bag = BagTiles
-        self.name = ""
-        self.score = 0
-        self.estado = "jugando"
-        self.tilesp.append(bag.take())
-        self.tilesp.append(bag.take())
-        self.tilesp.append(bag.take())
-        self.tilesp.append(bag.take())
-        self.tilesp.append(bag.take())
-        self.tilesp.append(bag.take())
-        self.tilesp.append(bag.take())
-        self.current_player = None
-
-
-    def tiles_cambiadas(self, letterchoice):
-        letter = letterchoice #Que no sea random choice, que sea una letra elegida por usuario
-        self.tilesp.pop(self.bag.put(letter))
-        self.tilesp.append(self.bag.take())
-    def cambio_estado(self, other_player):
-        player_1 = Player(BagTiles())
-        if len(self.tilesp) == 0:
-            self.estado = "terminado"
-"""     
-        if self.score > player_1.score: #Que compare con todos los otros jugadores, no uno
-            self.estado = "ganando"
-"""
-
-
-#Celda en especifico, como agregarle un multiplicador a 1 celda en especifico
-class Cell:
-    def __init__(self, row, column):
-        self.row = row
-        self.column = column
-        self.letter = None
-        self.value = 0
-        self.used = False
-
-    def add_letter(self, letter:Tile):
-        self.letter = letter
-
-    def multiplier_value(self):
-        if self.letter != None:
-            if self.used == False:
-                if self.row == 3 and self.column == 5:
-                    self.value = 2 * self.letter.value
-                    self.used = True  
-                else:
-                    self.value = self.letter.value
-            else:
-                self.value = self.letter.value
-
-            
-
-class Board:
-    def __init__(self):
-
-        self.grid = [
-            [ Cell("", "") for _ in range(15) ]
-            for _ in range(15)
-        ]
-
-    def validate_word_inside_board(self, word, location, orientation):
-        position_x = location[0]
-        position_y = location[1]
-        len_word = len(word)
-        if orientation == "H":
-            if position_x + len_word > 15:
-                return False
-            else:
-                return True
-        elif orientation == "V":
-            if position_y + len_word > 15:
-                return False
-            else:
-                return True
-
 class Word():
     def __init__(self):
         self.wordvalue = 0
     
-    def calculate_word_value(self, word: list[Cell]):
+    def calculate_word_value(self, wordplace: list[Cell]): #Suma el puntaje de una palabra
         wordcell = []
-        for cell in word:
-            print(cell.value)
-            wordcell.append(cell.value)
+        listpalabra = []
+        for cell in wordplace: #Se fija si la palabra existe antes de sumar puntaje
+            listpalabra.append(cell.valueletter)
+        palabramayus = "".join(listpalabra)
+        palabraminus = palabramayus.lower()
+        dictionary = Dictionary("dictionaries/dictionary .txt")
+
+        if palabraminus in dictionary.words:
+            for cell in wordplace:
+                wordcell.append(cell.value)
 
         self.wordvalue = sum(wordcell)
-
-
 #Intentar arreglar la vieja para poder automatizar el proceso
 """
     def calculate_word_value(self, cell:Cell):
@@ -197,5 +153,77 @@ class Word():
         else: 
             return self.wordvalue
 """
+        
+
+class Board:
+    def __init__(self):
+        self.status = "empty"
+        self.grid = [
+            [ Cell("", "") for _ in range(15) ]
+            for _ in range(15)
+        ]
+
+    def validate_word_inside_board(self, word, location, orientation):
+        position_x = location[0]
+        position_y = location[1]
+        len_word = len(word)
+        if orientation == "H":
+            if position_x + len_word > 15:
+                return False
+            else:
+                return True
+        elif orientation == "V":
+            if position_y + len_word > 15:
+                return False
+            else:
+                return True
+            
+    def validate_empty_board(self, center_cell:Cell):
+        #if center_cell == Cell(7,7):
+
+        if center_cell.letter != None:
+            self.status = "not empty"
+
+class Player():
+    def __init__ (self,bag:BagTiles):
+        self.tilesp = []
+        self.bag = bag
+        self.name = ""
+        self.score = 0
+        self.estado = "jugando"
+        for _ in range(7):
+            self.tilesp.append(self.bag.take())
+
+        self.current_player = None
+
+    def tiles_cambiadas(self, letterchoice:Tile):
+        letter = letterchoice #Que no sea random choice, que sea una letra elegida por usuario
+        self.tilesp.pop(self.bag.put(letter))
+        self.tilesp.append(self.bag.take())
+
+    def cambio_estado(self, other_player):
+        player_1 = Player(BagTiles())
+        if len(self.tilesp) == 0:
+            self.estado = "terminado"
+
+    def score_player(self, wordvalue): #Que pueda agregar mas de 1 solo score de palabra
+        player_word_score = 0
+        self.words = []
+
+        player_word_score += (wordvalue)
+        self.score += (player_word_score)
     
-      
+    def has_letters(self, tiles:list[Tile]):
+        self.valid = True
+        
+        for letter in tiles:
+            if letter.letter in self.tilesp:
+                self.valid = True
+            else:
+                self.valid = False
+                break
+                
+
+
+
+

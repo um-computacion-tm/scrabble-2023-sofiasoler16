@@ -66,6 +66,7 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(
         len(player_1.tilesp),7
         )
+
         self.assertEqual(
             player_1.score, 0 
         )
@@ -80,7 +81,6 @@ class TestPlayer(unittest.TestCase):
             len(player_1.tilesp),7
         )
 
-
     def test_cambio_estado_terminado(self):
         bag = BagTiles()
         player_1 = Player(bag)
@@ -94,6 +94,78 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(
             player_1.estado, "terminado"
             )
+    def test_score_player_2_words(self):
+        bag = BagTiles()
+        player = Player(bag)
+#Primera palabra
+        cell = Cell(2,5)
+        letter = Tile(letter="A", value=1, cant=12)
+        cell.add_letter(letter)
+        cell.multiplier_value()
+
+        cell1 = Cell(2,6)
+        letter = Tile(letter="B", value=3, cant=2)
+        cell1.add_letter(letter)
+        cell1.multiplier_value()
+
+        cell2 = Cell(2,6)
+        letter = Tile(letter="A", value=1, cant=12)
+        cell2.add_letter(letter)
+        cell2.multiplier_value()
+
+        word = Word()
+        word.calculate_word_value([cell, cell1, cell2])
+
+        wordvalue = word.wordvalue
+
+        player.score_player(wordvalue)
+#Segunda palabra
+        cell3 = Cell(7,6)
+        letter = Tile(letter="A", value=1, cant=12)
+        cell3.add_letter(letter)
+        cell3.multiplier_value()
+
+        cell4 = Cell(8,6)
+        letter = Tile(letter="B", value=3, cant=2)
+        cell4.add_letter(letter)
+        cell4.multiplier_value()
+
+        cell5 = Cell(9,6)
+        letter = Tile(letter="A", value=1, cant=12)
+        cell5.add_letter(letter)
+        cell5.multiplier_value()
+
+        word = Word()
+        word.calculate_word_value([cell3, cell4, cell5])
+
+        wordvalue = word.wordvalue
+
+        player.score_player(wordvalue)
+
+        self.assertEqual(player.score, 10)
+        
+    def test_validate_letter(self):
+        bag = BagTiles()
+        player1 = Player(bag)
+        player1.tilesp = [
+            "H",
+            "O",
+            "L",
+            "A",
+            "S",
+            "B",
+            "C",
+        ]
+        tiles = [
+            Tile("H", 1, 3),
+            Tile("O", 2, 3),
+            Tile("L", 1, 5),
+            Tile("A", 1, 12),
+        ]
+        player1.has_letters(tiles)
+        self.assertEqual(player1.valid, True)
+
+
 
 
 class TestBoard(unittest.TestCase):
@@ -146,6 +218,15 @@ class TestBoard(unittest.TestCase):
         word_is_valid = board.validate_word_inside_board(word, location, orientation)
 
         assert word_is_valid == True
+    
+    def test_empty_board(self):
+        board = Board()
+        center_cell = Cell(7,7)
+        center_cell.add_letter(Tile("Q",5,1))
+        
+        board.validate_empty_board(center_cell) #Como hago para que la center cell sea solo la 7,7?
+
+        self.assertEqual(board.status, "not empty")
 
 
 class TestCell(unittest.TestCase):
@@ -244,22 +325,27 @@ class TestMain(unittest.TestCase):
         main.main()
         self.assertEqual(main.status_players, "valid")
 
+
 class TestWord(unittest.TestCase):
     def test_word_value(self):
         cell = Cell(2,5)
-        letter = Tile(letter="C", value=1, cant=4)
+        letter = Tile(letter="A", value=1, cant=12)
         cell.add_letter(letter)
         cell.multiplier_value()
 
         cell1 = Cell(2,6)
-        letter = Tile(letter="A", value=1, cant=12)
+        letter = Tile(letter="B", value=3, cant=2)
         cell1.add_letter(letter)
         cell1.multiplier_value()
 
-        word = Word()
-        word.calculate_word_value([cell, cell1])
-        self.assertEqual(word.wordvalue, 2)
+        cell2 = Cell(2,6)
+        letter = Tile(letter="A", value=1, cant=12)
+        cell2.add_letter(letter)
+        cell2.multiplier_value()
 
+        word = Word()
+        word.calculate_word_value([cell, cell1, cell2])
+        self.assertEqual(word.wordvalue, 5)
         
 """
     def test_1letter_word(self):
