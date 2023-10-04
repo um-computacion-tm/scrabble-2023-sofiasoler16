@@ -244,10 +244,10 @@ class TestCell(unittest.TestCase):
         self.assertEqual(cell.letter, letter)
     
     def test_multi(self):
-        cell = Cell(row=3, column=5)
+        cell = Cell(4,1)
         letter = Tile(letter="A", value=1, cant=12)
         cell.add_letter(letter)
-        cell.multiplier_value()
+        cell.multiplier_value(cell)
         self.assertEqual(
             cell.value, 2
         )
@@ -269,7 +269,7 @@ class TestCell(unittest.TestCase):
         )
 
     def test_value_segundavez(self):
-        cell = Cell(row=3, column=5)
+        cell = Cell(row=4, column=1)
         letter = Tile("A",1,12)
         cell.add_letter(letter)
 

@@ -89,16 +89,22 @@ class Cell:
         self.letter = letter
         self.valueletter = letter.letter
 
-    def multiplier_value(self):
-        if self.letter != None:
+    def multiplier_value(self, usecell):
+ #Mismo problema que player, no puedo llamar a un atributo que sea otra celda dentro de Cell?
+        celldoble = [Cell(4,1), Cell(12,1)]
+        if self.letter != None: #No puedo hacer una lista de lugares para usarlos en las posibles casillas?
             if self.used == False:
-                if self.row == 3 and self.column == 5:
-                    self.value = 2 * self.letter.value
-                    self.used = True  
+                #Casillas de doble letra
+                for liscell in celldoble:
+                    print(liscell.row, liscell.column)
+                    print(usecell) #compara con el lugar de usecell, no con la celda que esta en usecell
+                    if liscell == usecell:
+                        self.value = 2 * self.letter.value
+                        self.used = True
+                    else:
+                        self.value = self.letter.value
                 else:
                     self.value = self.letter.value
-            else:
-                self.value = self.letter.value
 
 class Main(): #Te deja entrar cantidad de jugadores y verifica que sea bueno
     def __init__(self):
@@ -202,11 +208,11 @@ class Player():
         self.tilesp.append(self.bag.take())
 
     def cambio_estado(self, other_player):
-        player_1 = Player(BagTiles())
+        other_player = Player(BagTiles())
         if len(self.tilesp) == 0:
             self.estado = "terminado"
 
-    def score_player(self, wordvalue): #Que pueda agregar mas de 1 solo score de palabra
+    def score_player(self, wordvalue): 
         player_word_score = 0
         self.words = []
 

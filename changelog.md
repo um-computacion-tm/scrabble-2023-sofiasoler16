@@ -18,7 +18,7 @@ Created a function for the players that defines the states that the player can h
 # 29/8/23
 Updated the Cell class, added a multiplier for each cell to calculate the value
 ## SEGUNDO SPRINT
-# 30/9/23
+# 30/8/23
 Added the posibility to the celll multiplier to be use just one time adding the atribute used
 # 6/9/23
 Created the function next_turn that change the current player 
@@ -54,3 +54,5 @@ Fixed function that calculate the word value just if it is in the dictionary
 # 27/9/23
 Added a function to validate if the player has the letters that use to play
 Fixed the score_player function to check the score of more than 1 word
+# 3/10/23
+Try to add all the possible cells that can contain a multiplier
