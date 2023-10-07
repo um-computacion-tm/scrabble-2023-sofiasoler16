@@ -193,20 +193,28 @@ class Board:
 
     def multiplier_value(self, usecell:Cell):
  #Mismo problema que player, no puedo llamar a un atributo que sea otra celda dentro de Cell?
-        celldoble = [Cell(4,1), Cell(12,1), Cell(1, 4),Cell(8, 4),Cell(15, 4),Cell(3, 7), Cell(7, 7), Cell(9, 7), 
+        celldouble = [Cell(4,1), Cell(12,1), Cell(1, 4),Cell(8, 4),Cell(15, 4),Cell(3, 7), Cell(7, 7), Cell(9, 7), 
                      Cell(13, 7),Cell(4, 10),Cell(12, 10), Cell(0, 12), Cell(7, 12), Cell(14, 12), Cell(3, 15), Cell(11, 15)]
-        celltriple = [Cell(6,2),Cell(10,2) ]
+        celltriple = [Cell(6,2),Cell(10,2), Cell(2, 6), Cell(6, 6), Cell(10, 6), Cell(14, 6), Cell(1, 8), Cell(5, 8), 
+                      Cell(9, 8), Cell(13, 8), Cell(2, 10), Cell(6, 10), Cell(10, 10), Cell(14, 10), Cell(6, 14), Cell(10, 14)]
         if usecell.letter != None: #No puedo hacer una lista de lugares para usarlos en las posibles casillas?
             if usecell.used == False:
                 #Casillas de doble letra
-                for liscell in celldoble:
+                for liscell in celldouble:
                     if liscell.row == usecell.row and liscell.column == usecell.column:
                         usecell.value = 2 * usecell.letter.value
                         usecell.used = True
                         if usecell.used == True:
                             break
                     else:
-                        usecell.value = usecell.letter.value
+                        for cell in celltriple:
+                            if cell.row == usecell.row and cell.column == usecell.column:
+                                usecell.value = 3 * usecell.letter.value
+                                usecell.used = True
+                                if usecell.used == True:
+                                    break  
+                        else:
+                            usecell.value = usecell.letter.value
             else:
                 usecell.value = usecell.letter.value
 

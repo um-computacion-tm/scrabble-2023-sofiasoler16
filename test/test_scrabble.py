@@ -143,7 +143,7 @@ class TestPlayer(unittest.TestCase):
 
         player.score_player(wordvalue)
 
-        self.assertEqual(player.score, 10)
+        self.assertEqual(player.score, 16)
         
     def test_validate_letter(self):
         bag = BagTiles()
@@ -229,6 +229,57 @@ class TestBoard(unittest.TestCase):
 
         self.assertEqual(board.status, "not empty")
 
+    def test_multiplier_dobleletter(self):
+        board = Board()
+        cell = Cell(12,1)
+        letter = Tile(letter="A", value=1, cant=12)
+        cell.add_letter(letter)
+        board.multiplier_value(cell)
+        self.assertEqual(
+            cell.value, 2
+        )
+
+    def test_multiplier_triplletter(self):
+        board = Board()
+        cell = Cell(10,2)
+        letter = Tile(letter="A", value=1, cant=12)
+        cell.add_letter(letter)
+        board.multiplier_value(cell)
+        self.assertEqual(
+            cell.value, 3
+        )
+
+    def test_value_segundavez_double(self):
+        board = Board()
+        cell = Cell(row=4, column=1)
+        letter = Tile("A",1,12)
+        cell.add_letter(letter)
+
+        board.multiplier_value(cell)
+        self.assertEqual(
+            cell.value,2
+        )
+        cell.used = True  
+        board.multiplier_value(cell)
+        self.assertEqual(
+            cell.value,1
+        )
+    def test_value_segundavez_triple(self):
+        board = Board()
+        cell = Cell(row=10, column=2)
+        letter = Tile("A",1,12)
+        cell.add_letter(letter)
+
+        board.multiplier_value(cell)
+        self.assertEqual(
+            cell.value,3
+        )
+        cell.used = True  
+        board.multiplier_value(cell)
+        self.assertEqual(
+            cell.value,1
+        )
+
 
 class TestCell(unittest.TestCase):
     def _init_cell(self):
@@ -243,16 +294,6 @@ class TestCell(unittest.TestCase):
 
         cell.add_letter(letter=letter)
         self.assertEqual(cell.letter, letter)
-    
-    def test_multi(self):
-        board = Board()
-        cell = Cell(12,1)
-        letter = Tile(letter="A", value=1, cant=12)
-        cell.add_letter(letter)
-        board.multiplier_value(cell)
-        self.assertEqual(
-            cell.value, 2
-        )
 
     def test_value_normal(self):
         board = Board()
@@ -271,21 +312,6 @@ class TestCell(unittest.TestCase):
             cell1.value, 0
         )
 
-    def test_value_segundavez(self):
-        board = Board()
-        cell = Cell(row=4, column=1)
-        letter = Tile("A",1,12)
-        cell.add_letter(letter)
-
-        board.multiplier_value(cell)
-        self.assertEqual(
-            cell.value,2
-        )
-        cell.used = True  
-        board.multiplier_value(cell)
-        self.assertEqual(
-            cell.value,1
-        )
 
 class TestScrabbleGame(unittest.TestCase):
     def test_init(self):
@@ -331,7 +357,7 @@ class TestMain(unittest.TestCase):
 
 
 class TestWord(unittest.TestCase):
-    def test_word_value(self):
+    def test_word_value_con_multiplier(self):
         board = Board()
         cell = Cell(2,5)
         letter = Tile(letter="A", value=1, cant=12)
@@ -350,7 +376,7 @@ class TestWord(unittest.TestCase):
 
         word = Word()
         word.calculate_word_value([cell, cell1, cell2])
-        self.assertEqual(word.wordvalue, 5)
+        self.assertEqual(word.wordvalue, 11)
         
 """
     def test_1letter_word(self):

@@ -59,3 +59,5 @@ Try to add all the possible cells that can contain a multiplier
 # 4/10/23
 Change the multiplier_value function to Board and fix it
 Add all the possible cells that can contain a doble Multiplier
+# 7/10/23
+Added a  triple cell multiplier function
