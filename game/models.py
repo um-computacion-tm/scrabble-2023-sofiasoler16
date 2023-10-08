@@ -1,5 +1,4 @@
 import random
-
 class YaHaySuficientes(Exception):
     pass
 
@@ -48,7 +47,7 @@ class Dictionary:
             return True
         else:
             return False
-
+    
 class ScrabbleGame():
     def __init__(self, players_count):
         self.board = Board()
@@ -58,6 +57,7 @@ class ScrabbleGame():
         self.player_index = 0
         for _ in range(players_count):
             self.players.append(Player(bag=self.bag))
+
     def next_turn(self):
         if self.current_player == None:
             self.current_player = self.players[self.player_index]
@@ -84,10 +84,23 @@ class Cell:
         self.valueletter = None
         self.value = 0
         self.used = False
+        self.show = " "
 
+    def get_value_for_board(self):
+        celldouble = [Cell(4,1), Cell(12,1), Cell(1, 4),Cell(8, 4),Cell(15, 4),Cell(3, 7), Cell(7, 7), Cell(9, 7), 
+                     Cell(13, 7),Cell(4, 10),Cell(12, 10), Cell(0, 12), Cell(7, 12), Cell(14, 12), Cell(3, 15), Cell(11, 15)]
+        celltriple = [Cell(6,2),Cell(10,2), Cell(2, 6), Cell(6, 6), Cell(10, 6), Cell(14, 6), Cell(1, 8), Cell(5, 8), 
+                      Cell(9, 8), Cell(13, 8), Cell(2, 10), Cell(6, 10), Cell(10, 10), Cell(14, 10), Cell(6, 14), Cell(10, 14)]
+        
+        for cell in celldouble:
+            if cell in celldouble:
+                self.show = "Multi x2"
+        
     def add_letter(self, letter:Tile):
         self.letter = letter
+        self.show = letter.letter
         self.valueletter = letter.letter
+    
 
     # def multiplier_value(self):
     #     if self.letter != None:
@@ -169,6 +182,12 @@ class Board:
             [ Cell("", "") for _ in range(15) ]
             for _ in range(15)
         ]
+    def show_board(board):
+        print('\n  |' + ''.join([f' {str(row_index).rjust(2)} ' for row_index in range(15)]))
+        for row_index, row in enumerate(board.grid):
+            print( str(row_index).rjust(2) + " | " + 
+                  " ".join([repr(cell.show) for cell in row])
+                  )
 
     def validate_word_inside_board(self, word, location, orientation):
         position_x = location[0]

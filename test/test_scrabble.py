@@ -279,6 +279,14 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(
             cell.value,1
         )
+    
+    def test_show_board(self):
+        #Crear un tablero con sus letras ubicadas
+        board = Board()
+        board.grid[3][1].add_letter(Tile('A',1,12))
+        board.grid[3][2].add_letter(Tile('B',3,2))
+        board.grid[3][3].add_letter(Tile('A',1,12))
+        board.show_board()
 
 
 class TestCell(unittest.TestCase):
@@ -322,6 +330,7 @@ class TestScrabbleGame(unittest.TestCase):
             3,
         )
         self.assertIsNotNone(scrabble_game.bag)
+
     def test_next_turn_when_game_is_starting(self):
         scrabble_game = ScrabbleGame(players_count=3)
 
@@ -345,6 +354,9 @@ class TestScrabbleGame(unittest.TestCase):
         scrabble_game.next_turn()
 
         assert scrabble_game.current_player == scrabble_game.players[0]
+    
+
+
 
 class TestMain(unittest.TestCase):
     def setUp(self):
@@ -393,18 +405,8 @@ class TestWord(unittest.TestCase):
         
         self.assertEqual(word.wordvalue, 1)
 """
-        
-        #Como agrego valores a las celdas de al lado y que se queden ahi
-"""
-    cell1 = Cell(row=2, column=5)
-    cell1.add_letter("C")
-    cell2 = Cell(row=2, column=6)
-    cell2.add_letter("A")
-    cell3 = Cell(row=2, column=7)
-    cell3.add_letter("S")
-    cell4 = Cell(row=2, column=8)
-    cell4.add_letter("A")
-"""
+
+
 
 
 class TestDictionary(unittest.TestCase):
