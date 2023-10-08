@@ -355,7 +355,33 @@ class TestScrabbleGame(unittest.TestCase):
 
         assert scrabble_game.current_player == scrabble_game.players[0]
     
+class TestCLI(unittest.TestCase):
 
+    @patch('builtins.input', return_value='3')
+    def test_get_player_count(self, input_patched):
+        cli = Cli()
+        self.assertEqual(
+            cli.ask_player_count(),
+            3,
+        )
+
+    @patch('builtins.print')
+    @patch('builtins.input', side_effect=['A', '3'])
+    def test_get_player_count_wrong_input(self, input_patched, print_patched):
+        cli = Cli()
+        self.assertEqual(
+            cli.ask_player_count(),
+            3,
+        )
+
+    @patch('builtins.print')
+    @patch('builtins.input', side_effect=['10', '1'])
+    def test_get_player_count_control_max(self, input_patched, print_patched):
+        cli = Cli()
+        self.assertEqual(
+            cli.ask_player_count(),
+            1,
+        )
 
 
 class TestMain(unittest.TestCase):
