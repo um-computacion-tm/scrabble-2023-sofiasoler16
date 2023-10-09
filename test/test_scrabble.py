@@ -102,17 +102,17 @@ class TestPlayer(unittest.TestCase):
         cell = Cell(2,5)
         letter = Tile(letter="A", value=1, cant=12)
         cell.add_letter(letter)
-        board.multiplier_value(cell)
+        board.calculate_cell_value(cell)
 
         cell1 = Cell(2,6)
         letter = Tile(letter="B", value=3, cant=2)
         cell1.add_letter(letter)
-        board.multiplier_value(cell1)
+        board.calculate_cell_value(cell1)
 
         cell2 = Cell(2,7)
         letter = Tile(letter="A", value=1, cant=12)
         cell2.add_letter(letter)
-        board.multiplier_value(cell2)
+        board.calculate_cell_value(cell2)
 
         word = Word()
         word.calculate_word_value([cell, cell1, cell2])
@@ -124,17 +124,17 @@ class TestPlayer(unittest.TestCase):
         cell3 = Cell(7,6)
         letter = Tile(letter="A", value=1, cant=12)
         cell3.add_letter(letter)
-        board.multiplier_value(cell3)
+        board.calculate_cell_value(cell3)
 
         cell4 = Cell(8,6)
         letter = Tile(letter="B", value=3, cant=2)
         cell4.add_letter(letter)
-        board.multiplier_value(cell4)
+        board.calculate_cell_value(cell4)
 
         cell5 = Cell(9,6)
         letter = Tile(letter="A", value=1, cant=12)
         cell5.add_letter(letter)
-        board.multiplier_value(cell5)
+        board.calculate_cell_value(cell5)
 
         word = Word()
         word.calculate_word_value([cell3, cell4, cell5])
@@ -234,7 +234,7 @@ class TestBoard(unittest.TestCase):
         cell = Cell(12,1)
         letter = Tile(letter="A", value=1, cant=12)
         cell.add_letter(letter)
-        board.multiplier_value(cell)
+        board.calculate_cell_value(cell)
         self.assertEqual(
             cell.value, 2
         )
@@ -244,7 +244,7 @@ class TestBoard(unittest.TestCase):
         cell = Cell(10,2)
         letter = Tile(letter="A", value=1, cant=12)
         cell.add_letter(letter)
-        board.multiplier_value(cell)
+        board.calculate_cell_value(cell)
         self.assertEqual(
             cell.value, 3
         )
@@ -255,12 +255,12 @@ class TestBoard(unittest.TestCase):
         letter = Tile("A",1,12)
         cell.add_letter(letter)
 
-        board.multiplier_value(cell)
+        board.calculate_cell_value(cell)
         self.assertEqual(
             cell.value,2
         )
         cell.used = True  
-        board.multiplier_value(cell)
+        board.calculate_cell_value(cell)
         self.assertEqual(
             cell.value,1
         )
@@ -270,12 +270,12 @@ class TestBoard(unittest.TestCase):
         letter = Tile("A",1,12)
         cell.add_letter(letter)
 
-        board.multiplier_value(cell)
+        board.calculate_cell_value(cell)
         self.assertEqual(
             cell.value,3
         )
         cell.used = True  
-        board.multiplier_value(cell)
+        board.calculate_cell_value(cell)
         self.assertEqual(
             cell.value,1
         )
@@ -308,10 +308,10 @@ class TestCell(unittest.TestCase):
         cell = Cell(row=4, column=7)
         letter = Tile(letter="Q", value=5, cant=1)
         cell.add_letter(letter)
-        board.multiplier_value(cell)
+        board.calculate_cell_value(cell)
 
         cell1 = Cell(row=4, column=8)
-        board.multiplier_value(cell1)
+        board.calculate_cell_value(cell1)
 
         self.assertEqual(
             cell.value,5
@@ -355,7 +355,7 @@ class TestScrabbleGame(unittest.TestCase):
 
         assert scrabble_game.current_player == scrabble_game.players[0]
     
-class TestCLI(unittest.TestCase):
+class TestClI(unittest.TestCase):
 
     @patch('builtins.input', return_value='3')
     def test_get_player_count(self, input_patched):
@@ -395,26 +395,47 @@ class TestMain(unittest.TestCase):
 
 
 class TestWord(unittest.TestCase):
-    def test_word_value_con_multiplier(self):
+    def test_word_value_con_multiplier_letter(self):
         board = Board()
         cell = Cell(2,5)
         letter = Tile(letter="A", value=1, cant=12)
         cell.add_letter(letter)
-        board.multiplier_value(cell)
+        board.calculate_cell_value(cell)
 
         cell1 = Cell(2,6)
         letter = Tile(letter="B", value=3, cant=2)
         cell1.add_letter(letter)
-        board.multiplier_value(cell1)
+        board.calculate_cell_value(cell1)
 
         cell2 = Cell(2,7)
         letter = Tile(letter="A", value=1, cant=12)
         cell2.add_letter(letter)
-        board.multiplier_value(cell2)
+        board.calculate_cell_value(cell2)
 
         word = Word()
         word.calculate_word_value([cell, cell1, cell2])
         self.assertEqual(word.wordvalue, 11)
+    
+    def test_word_value_con_word_multiplier(self):
+        board = Board()
+        cell = Cell(2,2)
+        letter = Tile(letter="A", value=1, cant=12)
+        cell.add_letter(letter)
+        board.calculate_cell_value(cell)
+
+        cell1 = Cell(2,3)
+        letter = Tile(letter="B", value=3, cant=2)
+        cell1.add_letter(letter)
+        board.calculate_cell_value(cell1)
+
+        cell2 = Cell(2,4)
+        letter = Tile(letter="A", value=1, cant=12)
+        cell2.add_letter(letter)
+        board.calculate_cell_value(cell2)
+
+        word = Word()
+        word.calculate_word_value([cell, cell1, cell2])
+        self.assertEqual(word.wordvalue, 10)
         
 """
     def test_1letter_word(self):

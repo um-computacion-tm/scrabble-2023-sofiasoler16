@@ -149,21 +149,31 @@ class Main(): #Te deja entrar cantidad de jugadores y verifica que sea bueno
 class Word():
     def __init__(self):
         self.wordvalue = 0
+        self.multiplier = 1
+        self.multiplier_used = False
     
     def calculate_word_value(self, wordplace: list[Cell]): #Suma el puntaje de una palabra
         wordcell = []
         listpalabra = []
-        for cell in wordplace: #Se fija si la palabra existe antes de sumar puntaje
+        doubleword = [Cell(1, 1), Cell(8, 1), Cell(15, 1), Cell(2, 2), Cell(14, 2), Cell(3, 3), Cell(13, 3), Cell(4, 4), 
+                      Cell(12, 4), Cell(7, 7), Cell(11, 7), Cell(4, 12), Cell(12, 12), Cell(1, 15), Cell(8, 15), Cell(15, 15)]
+        for cell in wordplace: 
             listpalabra.append(cell.valueletter)
-        palabramayus = "".join(listpalabra)
+            for doublecell in doubleword:
+                if cell.row == doublecell.row and cell.column == doublecell.column:
+                    self.multiplier = 2
+
+
+        palabramayus = "".join(listpalabra) #Se fija si la palabra existe antes de sumar puntaje
         palabraminus = palabramayus.lower()
-        dictionary = Dictionary("dictionaries/dictionary .txt")
+        dictionary = Dictionary("dictionaries/dictionary .txt") #Hasta aca verifica
 
         if palabraminus in dictionary.words:
             for cell in wordplace:
                 wordcell.append(cell.value)
 
-        self.wordvalue = sum(wordcell)
+        self.wordvalue = (sum(wordcell))*self.multiplier
+
 #Intentar arreglar la vieja para poder automatizar el proceso
 """
     def calculate_word_value(self, cell:Cell):
@@ -222,7 +232,7 @@ class Board:
         if center_cell.letter != None:
             self.status = "not empty"
 
-    def multiplier_value(self, usecell:Cell):
+    def calculate_cell_value(self, usecell:Cell):
  #Mismo problema que player, no puedo llamar a un atributo que sea otra celda dentro de Cell?
         celldouble = [Cell(4,1), Cell(12,1), Cell(1, 4),Cell(8, 4),Cell(15, 4),Cell(3, 7), Cell(7, 7), Cell(9, 7), 
                      Cell(13, 7),Cell(4, 10),Cell(12, 10), Cell(0, 12), Cell(7, 12), Cell(14, 12), Cell(3, 15), Cell(11, 15)]
