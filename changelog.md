@@ -63,3 +63,6 @@ Add all the possible cells that can contain a doble Multiplier
 Added a  triple cell multiplier function
 # 8/10/23
 Added a function to show the board
+Added Cli class and a function to ask the player_count
+# 9/10/23
+Added a word multiplier
