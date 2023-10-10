@@ -416,7 +416,7 @@ class TestWord(unittest.TestCase):
         word.calculate_word_value([cell, cell1, cell2])
         self.assertEqual(word.wordvalue, 11)
     
-    def test_word_value_con_word_multiplier(self):
+    def test_word_value_con_word_multiplierx3(self):
         board = Board()
         cell = Cell(2,2)
         letter = Tile(letter="A", value=1, cant=12)
@@ -436,7 +436,52 @@ class TestWord(unittest.TestCase):
         word = Word()
         word.calculate_word_value([cell, cell1, cell2])
         self.assertEqual(word.wordvalue, 10)
-        
+
+    def test_word_value_con_word_multiplierx2(self):
+        board = Board()
+        cell = Cell(1,1)
+        letter = Tile(letter="A", value=1, cant=12)
+        cell.add_letter(letter)
+        board.calculate_cell_value(cell)
+
+        cell1 = Cell(1,2)
+        letter = Tile(letter="B", value=3, cant=2)
+        cell1.add_letter(letter)
+        board.calculate_cell_value(cell1)
+
+        cell2 = Cell(1,3)
+        letter = Tile(letter="A", value=1, cant=12)
+        cell2.add_letter(letter)
+        board.calculate_cell_value(cell2)
+
+        word = Word()
+        word.calculate_word_value([cell, cell1, cell2])
+        self.assertEqual(word.wordvalue, 15)
+
+    def test_remove_invalid_word(self):
+        board = Board()
+        cell = Cell(2,5)
+        letter = Tile(letter="A", value=1, cant=12)
+        cell.add_letter(letter)
+        board.calculate_cell_value(cell)
+
+        cell1 = Cell(2,6)
+        letter = Tile(letter="B", value=3, cant=2)
+        cell1.add_letter(letter)
+        board.calculate_cell_value(cell1)
+
+        cell2 = Cell(2,7)
+        letter = Tile(letter="C", value=1, cant=12)
+        cell2.add_letter(letter)
+        board.calculate_cell_value(cell2)
+
+        word = Word()
+        word.calculate_word_value([cell, cell1, cell2])
+        self.assertEqual(word.wordvalue, 0)
+
+        self.assertEqual(cell.letter, None)
+        self.assertEqual(cell1.letter, None)
+        self.assertEqual(cell2.letter, None)
 """
     def test_1letter_word(self):
         cell = Cell(2,5)

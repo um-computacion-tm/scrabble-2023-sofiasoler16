@@ -66,3 +66,6 @@ Added a function to show the board
 Added Cli class and a function to ask the player_count
 # 9/10/23
 Added a word multiplier
+# 10/10/20
+Added a function to remove the word if it is invalid
+Word triple multiplier 

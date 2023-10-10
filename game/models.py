@@ -113,6 +113,10 @@ class Cell:
         self.show = letter.letter
         self.valueletter = letter.letter
     
+    def remove_letter(self):
+        self.letter = None
+        self.valueletter = None
+    
 
     # def multiplier_value(self):
     #     if self.letter != None:
@@ -157,11 +161,18 @@ class Word():
         listpalabra = []
         doubleword = [Cell(1, 1), Cell(8, 1), Cell(15, 1), Cell(2, 2), Cell(14, 2), Cell(3, 3), Cell(13, 3), Cell(4, 4), 
                       Cell(12, 4), Cell(7, 7), Cell(11, 7), Cell(4, 12), Cell(12, 12), Cell(1, 15), Cell(8, 15), Cell(15, 15)]
+        tripleword = [Cell(1, 1), Cell(8, 1)]
+
         for cell in wordplace: 
             listpalabra.append(cell.valueletter)
             for doublecell in doubleword:
                 if cell.row == doublecell.row and cell.column == doublecell.column:
                     self.multiplier = 2
+                else:
+                    for triplecell in tripleword:
+                        if cell.row == triplecell.row and cell.column == triplecell.column:
+                            self.multiplier = 3
+
 
 
         palabramayus = "".join(listpalabra) #Se fija si la palabra existe antes de sumar puntaje
@@ -171,6 +182,9 @@ class Word():
         if palabraminus in dictionary.words:
             for cell in wordplace:
                 wordcell.append(cell.value)
+        else: #Si palabra no en diccionario, remueve la palabra
+            for cell in wordplace:
+                cell.remove_letter()
 
         self.wordvalue = (sum(wordcell))*self.multiplier
 
