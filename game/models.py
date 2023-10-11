@@ -215,15 +215,19 @@ class Board:
     def __init__(self):
         self.status = "empty"
         self.grid = [
-            [ Cell("", "") for _ in range(15) ]
-            for _ in range(15)
+            [ Cell(row=row, column=column) 
+            for row in range(15) ]
+            for column in range(15)
         ]
     def show_board(board):
         print('\n  |' + ''.join([f' {str(row_index).rjust(2)} ' for row_index in range(15)]))
+
+        
         for row_index, row in enumerate(board.grid):
             print( str(row_index).rjust(2) + " | " + 
                   " ".join([repr(cell.show) for cell in row])
                   )
+        
 
     def validate_word_inside_board(self, word, location, orientation):
         position_x = location[0]

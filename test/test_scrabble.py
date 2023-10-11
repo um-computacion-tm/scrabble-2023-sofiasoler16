@@ -280,13 +280,39 @@ class TestBoard(unittest.TestCase):
             cell.value,1
         )
     
-    def test_show_board(self):
+    def test_show_board_and_calculate_word_value(self):
         #Crear un tablero con sus letras ubicadas
+        #Como lo testeo?
         board = Board()
+        word = Word()
+
         board.grid[3][1].add_letter(Tile('A',1,12))
         board.grid[3][2].add_letter(Tile('B',3,2))
         board.grid[3][3].add_letter(Tile('A',1,12))
+
+        board.grid[4][3].add_letter(Tile('V',1,12))
+        board.grid[5][3].add_letter(Tile('I',3,2))
+        board.grid[6][3].add_letter(Tile('O',1,12))
+        board.grid[7][3].add_letter(Tile('N',1,12))
+
         board.show_board()
+
+        board.calculate_cell_value(board.grid[3][1])
+        board.calculate_cell_value(board.grid[3][2])      
+        board.calculate_cell_value(board.grid[3][3])
+
+        word.calculate_word_value([board.grid[3][1],board.grid[3][2],board.grid[3][3]])
+
+        board.calculate_cell_value(board.grid[3][3])
+        board.calculate_cell_value(board.grid[4][3])
+        board.calculate_cell_value(board.grid[5][3])      
+        board.calculate_cell_value(board.grid[6][3])
+        board.calculate_cell_value(board.grid[6][3])
+
+        word.calculate_word_value([board.grid[3][3],board.grid[4][3],board.grid[5][3],board.grid[6][3]])
+
+        self.assertEqual (word.wordvalue, 12)
+
 
 
 class TestCell(unittest.TestCase):
