@@ -94,24 +94,25 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(
             player_1.estado, "terminado"
             )
-    def test_score_player_2_words(self):
+    def test_score_player_2_words_con_multiplier(self):
         bag = BagTiles()
         player = Player(bag)
+        board = Board()
 #Primera palabra
         cell = Cell(2,5)
         letter = Tile(letter="A", value=1, cant=12)
         cell.add_letter(letter)
-        cell.multiplier_value()
+        board.calculate_cell_value(cell)
 
         cell1 = Cell(2,6)
         letter = Tile(letter="B", value=3, cant=2)
         cell1.add_letter(letter)
-        cell1.multiplier_value()
+        board.calculate_cell_value(cell1)
 
-        cell2 = Cell(2,6)
+        cell2 = Cell(2,7)
         letter = Tile(letter="A", value=1, cant=12)
         cell2.add_letter(letter)
-        cell2.multiplier_value()
+        board.calculate_cell_value(cell2)
 
         word = Word()
         word.calculate_word_value([cell, cell1, cell2])
@@ -123,17 +124,17 @@ class TestPlayer(unittest.TestCase):
         cell3 = Cell(7,6)
         letter = Tile(letter="A", value=1, cant=12)
         cell3.add_letter(letter)
-        cell3.multiplier_value()
+        board.calculate_cell_value(cell3)
 
         cell4 = Cell(8,6)
         letter = Tile(letter="B", value=3, cant=2)
         cell4.add_letter(letter)
-        cell4.multiplier_value()
+        board.calculate_cell_value(cell4)
 
         cell5 = Cell(9,6)
         letter = Tile(letter="A", value=1, cant=12)
         cell5.add_letter(letter)
-        cell5.multiplier_value()
+        board.calculate_cell_value(cell5)
 
         word = Word()
         word.calculate_word_value([cell3, cell4, cell5])
@@ -142,7 +143,7 @@ class TestPlayer(unittest.TestCase):
 
         player.score_player(wordvalue)
 
-        self.assertEqual(player.score, 10)
+        self.assertEqual(player.score, 16)
         
     def test_validate_letter(self):
         bag = BagTiles()
@@ -228,6 +229,65 @@ class TestBoard(unittest.TestCase):
 
         self.assertEqual(board.status, "not empty")
 
+    def test_multiplier_dobleletter(self):
+        board = Board()
+        cell = Cell(12,1)
+        letter = Tile(letter="A", value=1, cant=12)
+        cell.add_letter(letter)
+        board.calculate_cell_value(cell)
+        self.assertEqual(
+            cell.value, 2
+        )
+
+    def test_multiplier_triplletter(self):
+        board = Board()
+        cell = Cell(10,2)
+        letter = Tile(letter="A", value=1, cant=12)
+        cell.add_letter(letter)
+        board.calculate_cell_value(cell)
+        self.assertEqual(
+            cell.value, 3
+        )
+
+    def test_value_segundavez_double(self):
+        board = Board()
+        cell = Cell(row=4, column=1)
+        letter = Tile("A",1,12)
+        cell.add_letter(letter)
+
+        board.calculate_cell_value(cell)
+        self.assertEqual(
+            cell.value,2
+        )
+        cell.used = True  
+        board.calculate_cell_value(cell)
+        self.assertEqual(
+            cell.value,1
+        )
+    def test_value_segundavez_triple(self):
+        board = Board()
+        cell = Cell(row=10, column=2)
+        letter = Tile("A",1,12)
+        cell.add_letter(letter)
+
+        board.calculate_cell_value(cell)
+        self.assertEqual(
+            cell.value,3
+        )
+        cell.used = True  
+        board.calculate_cell_value(cell)
+        self.assertEqual(
+            cell.value,1
+        )
+    
+    def test_show_board(self):
+        #Crear un tablero con sus letras ubicadas
+        board = Board()
+        board.grid[3][1].add_letter(Tile('A',1,12))
+        board.grid[3][2].add_letter(Tile('B',3,2))
+        board.grid[3][3].add_letter(Tile('A',1,12))
+        board.show_board()
+
 
 class TestCell(unittest.TestCase):
     def _init_cell(self):
@@ -242,24 +302,16 @@ class TestCell(unittest.TestCase):
 
         cell.add_letter(letter=letter)
         self.assertEqual(cell.letter, letter)
-    
-    def test_multi(self):
-        cell = Cell(row=3, column=5)
-        letter = Tile(letter="A", value=1, cant=12)
-        cell.add_letter(letter)
-        cell.multiplier_value()
-        self.assertEqual(
-            cell.value, 2
-        )
 
     def test_value_normal(self):
+        board = Board()
         cell = Cell(row=4, column=7)
         letter = Tile(letter="Q", value=5, cant=1)
         cell.add_letter(letter)
-        cell.multiplier_value()
+        board.calculate_cell_value(cell)
 
         cell1 = Cell(row=4, column=8)
-        cell1.multiplier_value
+        board.calculate_cell_value(cell1)
 
         self.assertEqual(
             cell.value,5
@@ -268,20 +320,6 @@ class TestCell(unittest.TestCase):
             cell1.value, 0
         )
 
-    def test_value_segundavez(self):
-        cell = Cell(row=3, column=5)
-        letter = Tile("A",1,12)
-        cell.add_letter(letter)
-
-        cell.multiplier_value()
-        self.assertEqual(
-            cell.value,2
-        )
-        cell.used = True  
-        cell.multiplier_value()
-        self.assertEqual(
-            cell.value,1
-        )
 
 class TestScrabbleGame(unittest.TestCase):
     def test_init(self):
@@ -292,6 +330,7 @@ class TestScrabbleGame(unittest.TestCase):
             3,
         )
         self.assertIsNotNone(scrabble_game.bag)
+
     def test_next_turn_when_game_is_starting(self):
         scrabble_game = ScrabbleGame(players_count=3)
 
@@ -315,6 +354,35 @@ class TestScrabbleGame(unittest.TestCase):
         scrabble_game.next_turn()
 
         assert scrabble_game.current_player == scrabble_game.players[0]
+    
+class TestClI(unittest.TestCase):
+
+    @patch('builtins.input', return_value='3')
+    def test_get_player_count(self, input_patched):
+        cli = Cli()
+        self.assertEqual(
+            cli.ask_player_count(),
+            3,
+        )
+
+    @patch('builtins.print')
+    @patch('builtins.input', side_effect=['A', '3'])
+    def test_get_player_count_wrong_input(self, input_patched, print_patched):
+        cli = Cli()
+        self.assertEqual(
+            cli.ask_player_count(),
+            3,
+        )
+
+    @patch('builtins.print')
+    @patch('builtins.input', side_effect=['10', '1'])
+    def test_get_player_count_control_max(self, input_patched, print_patched):
+        cli = Cli()
+        self.assertEqual(
+            cli.ask_player_count(),
+            1,
+        )
+
 
 class TestMain(unittest.TestCase):
     def setUp(self):
@@ -327,26 +395,93 @@ class TestMain(unittest.TestCase):
 
 
 class TestWord(unittest.TestCase):
-    def test_word_value(self):
+    def test_word_value_con_multiplier_letter(self):
+        board = Board()
         cell = Cell(2,5)
         letter = Tile(letter="A", value=1, cant=12)
         cell.add_letter(letter)
-        cell.multiplier_value()
+        board.calculate_cell_value(cell)
 
         cell1 = Cell(2,6)
         letter = Tile(letter="B", value=3, cant=2)
         cell1.add_letter(letter)
-        cell1.multiplier_value()
+        board.calculate_cell_value(cell1)
 
-        cell2 = Cell(2,6)
+        cell2 = Cell(2,7)
         letter = Tile(letter="A", value=1, cant=12)
         cell2.add_letter(letter)
-        cell2.multiplier_value()
+        board.calculate_cell_value(cell2)
 
         word = Word()
         word.calculate_word_value([cell, cell1, cell2])
-        self.assertEqual(word.wordvalue, 5)
-        
+        self.assertEqual(word.wordvalue, 11)
+    
+    def test_word_value_con_word_multiplierx3(self):
+        board = Board()
+        cell = Cell(2,2)
+        letter = Tile(letter="A", value=1, cant=12)
+        cell.add_letter(letter)
+        board.calculate_cell_value(cell)
+
+        cell1 = Cell(2,3)
+        letter = Tile(letter="B", value=3, cant=2)
+        cell1.add_letter(letter)
+        board.calculate_cell_value(cell1)
+
+        cell2 = Cell(2,4)
+        letter = Tile(letter="A", value=1, cant=12)
+        cell2.add_letter(letter)
+        board.calculate_cell_value(cell2)
+
+        word = Word()
+        word.calculate_word_value([cell, cell1, cell2])
+        self.assertEqual(word.wordvalue, 10)
+
+    def test_word_value_con_word_multiplierx2(self):
+        board = Board()
+        cell = Cell(1,1)
+        letter = Tile(letter="A", value=1, cant=12)
+        cell.add_letter(letter)
+        board.calculate_cell_value(cell)
+
+        cell1 = Cell(1,2)
+        letter = Tile(letter="B", value=3, cant=2)
+        cell1.add_letter(letter)
+        board.calculate_cell_value(cell1)
+
+        cell2 = Cell(1,3)
+        letter = Tile(letter="A", value=1, cant=12)
+        cell2.add_letter(letter)
+        board.calculate_cell_value(cell2)
+
+        word = Word()
+        word.calculate_word_value([cell, cell1, cell2])
+        self.assertEqual(word.wordvalue, 15)
+
+    def test_remove_invalid_word(self):
+        board = Board()
+        cell = Cell(2,5)
+        letter = Tile(letter="A", value=1, cant=12)
+        cell.add_letter(letter)
+        board.calculate_cell_value(cell)
+
+        cell1 = Cell(2,6)
+        letter = Tile(letter="B", value=3, cant=2)
+        cell1.add_letter(letter)
+        board.calculate_cell_value(cell1)
+
+        cell2 = Cell(2,7)
+        letter = Tile(letter="C", value=1, cant=12)
+        cell2.add_letter(letter)
+        board.calculate_cell_value(cell2)
+
+        word = Word()
+        word.calculate_word_value([cell, cell1, cell2])
+        self.assertEqual(word.wordvalue, 0)
+
+        self.assertEqual(cell.letter, None)
+        self.assertEqual(cell1.letter, None)
+        self.assertEqual(cell2.letter, None)
 """
     def test_1letter_word(self):
         cell = Cell(2,5)
@@ -362,18 +497,8 @@ class TestWord(unittest.TestCase):
         
         self.assertEqual(word.wordvalue, 1)
 """
-        
-        #Como agrego valores a las celdas de al lado y que se queden ahi
-"""
-    cell1 = Cell(row=2, column=5)
-    cell1.add_letter("C")
-    cell2 = Cell(row=2, column=6)
-    cell2.add_letter("A")
-    cell3 = Cell(row=2, column=7)
-    cell3.add_letter("S")
-    cell4 = Cell(row=2, column=8)
-    cell4.add_letter("A")
-"""
+
+
 
 
 class TestDictionary(unittest.TestCase):
