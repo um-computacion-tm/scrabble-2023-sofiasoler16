@@ -69,5 +69,9 @@ Added a word multiplier
 # 10/10/23
 Added a function to remove the word if it is invalid
 Word triple multiplier 
+## QUINTO SPRINT
 # 11/10/23
 Fixed the board to be able to calculate the word value
+# 17/10/23
+Made a function to get the player acount
+

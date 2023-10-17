@@ -414,10 +414,21 @@ class TestMain(unittest.TestCase):
     def setUp(self):
         self.main = Main()
 
-    def test_input_valid_player_count(self):
+    def test_valid_player_count(self):
         main = Main()
-        main.main()
+        with patch('builtins.input', side_effect=["2"]):
+            main.get_player_acount()
+        main.valid_player_count()
+        self.assertEqual(main.player_count, 2)
         self.assertEqual(main.status_players, "valid")
+
+    def test_invalid_input(self):
+        main = Main()
+        with patch('builtins.input', side_effect=["5", "1", "0", "abc"]):
+            main.get_player_acount()
+        self.assertEqual(main.player_count, 1)
+
+
 
 
 class TestWord(unittest.TestCase):

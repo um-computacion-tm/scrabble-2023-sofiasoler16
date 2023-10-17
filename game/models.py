@@ -144,10 +144,21 @@ class Main(): #Te deja entrar cantidad de jugadores y verifica que sea bueno
         self.board = Board()
         self.cell = Cell(None, None)
     #Hacer una funcion que pida el player_count
-    def main(self):
+    def get_player_acount(self):
+        while True:
+            try:
+                self.player_count = int(input("Enter the number of players (max 3)"))
+                if self.player_count <= 3:
+                    print ("Good")
+                    break
+            except Exception as more_than_expected: #Porque no hace esta parte?
+                print ("Error, enter a valid number between 1 and 3")
+
+    def valid_player_count(self):
         if self.player_count <= 1 or self.player_count > 4:
             self.status_players = "invalid"  
         self.status_players = "valid"
+
 
 
 class Word():
@@ -210,7 +221,7 @@ class Word():
             return self.wordvalue
 """
         
-
+# Arreglar el Maintanbility
 class Board:
     def __init__(self):
         self.status = "empty"
