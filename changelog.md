@@ -74,4 +74,6 @@ Word triple multiplier
 Fixed the board to be able to calculate the word value
 # 17/10/23
 Made a function to get the player acount
+# 18/10/23
+Added the multipliers to the board
 

@@ -47,18 +47,11 @@ class Dictionary:
             return True
         else:
             return False
+        
 class Cli():
     def __init__(self):
         pass
-    def ask_player_count(self):
-        while True:
-            try:
-                player_count = int(input('cantidad de jugadores (1-3): '))
-                if player_count <= 3:
-                    break
-            except Exception as e:
-                print('ingrese un numero por favor')
-        return player_count
+
     
 class ScrabbleGame():
     def __init__(self, players_count):
@@ -96,17 +89,23 @@ class Cell:
         self.valueletter = None
         self.value = 0
         self.used = False
-        self.show = " "
+        
 
     def get_value_for_board(self):
-        celldouble = [Cell(4,1), Cell(12,1), Cell(1, 4),Cell(8, 4),Cell(15, 4),Cell(3, 7), Cell(7, 7), Cell(9, 7), 
-                     Cell(13, 7),Cell(4, 10),Cell(12, 10), Cell(0, 12), Cell(7, 12), Cell(14, 12), Cell(3, 15), Cell(11, 15)]
-        celltriple = [Cell(6,2),Cell(10,2), Cell(2, 6), Cell(6, 6), Cell(10, 6), Cell(14, 6), Cell(1, 8), Cell(5, 8), 
-                      Cell(9, 8), Cell(13, 8), Cell(2, 10), Cell(6, 10), Cell(10, 10), Cell(14, 10), Cell(6, 14), Cell(10, 14)]
+        celldouble = [(4,1), (12,1), (1, 4),(8, 4),(15, 4),(3, 7), (7, 7), (9, 7), 
+                     (13, 7),(4, 10),(12, 10), (0, 12), (7, 12), (14, 12), (3, 15), (11, 15)]
+        celltriple = [(6,2),(10,2), (6, 6), (10, 6), (14, 6), (1, 8), (5, 8), 
+                      (9, 8), (13, 8), (2, 10), (6, 10), (10, 10), (14, 10), (6, 14), (10, 14)]
         
-        for cell in celldouble:
-            if cell in celldouble:
-                self.show = "Multi x2"
+        if self.letter is not None:
+            return " " + self.letter.letter + " "
+
+        if (self.column, self.row) in celldouble:
+            return "Cx2"
+        
+        if (self.column, self.row) in celltriple:
+            return "Cx3"
+        return "   "
         
     def add_letter(self, letter:Tile):
         self.letter = letter
@@ -159,8 +158,6 @@ class Main(): #Te deja entrar cantidad de jugadores y verifica que sea bueno
             self.status_players = "invalid"  
         self.status_players = "valid"
 
-
-
 class Word():
     def __init__(self):
         self.wordvalue = 0
@@ -183,8 +180,6 @@ class Word():
                     for triplecell in tripleword:
                         if cell.row == triplecell.row and cell.column == triplecell.column:
                             self.multiplier = 3
-
-
 
         palabramayus = "".join(listpalabra) #Se fija si la palabra existe antes de sumar puntaje
         palabraminus = palabramayus.lower()
@@ -231,12 +226,12 @@ class Board:
             for column in range(15)
         ]
     def show_board(board):
-        print('\n  |' + ''.join([f' {str(row_index).rjust(2)} ' for row_index in range(15)]))
+        print('\n    |' + ''.join([f'   {str(row_index).rjust(2)} ' for row_index in range(15)]))
 
         
         for row_index, row in enumerate(board.grid):
-            print( str(row_index).rjust(2) + " | " + 
-                  " ".join([repr(cell.show) for cell in row])
+            print( str(row_index).rjust(2) + "  | " + 
+                " ".join([repr(cell.get_value_for_board()) for cell in row])
                   )
         
 
@@ -277,6 +272,7 @@ class Board:
                         if usecell.used == True:
                             break
                     else:
+                        #Casillas de triple letra
                         for cell in celltriple:
                             if cell.row == usecell.row and cell.column == usecell.column:
                                 usecell.value = 3 * usecell.letter.value
