@@ -76,4 +76,8 @@ Fixed the board to be able to calculate the word value
 Made a function to get the player acount
 # 18/10/23
 Added the multipliers to the board
+# 21/10/23
+Fixed function to change the state of a player
+Made a function to tell if the player is winning the game or not
+Made a function to end the game when a player has no tiles
 

@@ -2,6 +2,7 @@ import random
 import unittest
 
 from game.models import *
+from game.player import *
 
 from unittest.mock import patch
 
@@ -71,7 +72,7 @@ class TestPlayer(unittest.TestCase):
             player_1.score, 0 
         )
         self.assertEqual(
-            player_1.estado, "jugando"
+            player_1.player_estado, "jugando"
         )
     def test_cambiadas(self):
         bag = BagTiles()
@@ -81,19 +82,33 @@ class TestPlayer(unittest.TestCase):
             len(player_1.tilesp),7
         )
 
-    def test_cambio_estado_terminado(self):
+    def test_cambio_estado_tilesp_empty(self):
         bag = BagTiles()
         player_1 = Player(bag)
+        player_1.tilesp = []  # Simular que tilesp está vacío
+        player_1.cambio_estado()
+        self.assertEqual(player_1.player_estado, "terminado")
+
+    def test_winner(self):
+        bag = BagTiles()
+        player_1 = Player(bag)
+        player_2 = Player(bag)
+
+        player_1.score = 10
+        player_2.score = 20   
+
+        player_1.winning_player([player_1, player_2])
+        player_2.winning_player([player_1, player_2])
+        
+        print(player_1.score)
+        print(player_2.score)
+        print(player_1.player_estado)
+        print(player_2.player_estado)
 
         self.assertEqual(
-            player_1.estado, "jugando"
-            )  
-        player_1.tilesp = []  
-        player_1.cambio_estado(player_1)
-
-        self.assertEqual(
-            player_1.estado, "terminado"
+            player_2.player_estado, "ganando"
             )
+        
     def test_score_player_2_words_con_multiplier(self):
         bag = BagTiles()
         player = Player(bag)
