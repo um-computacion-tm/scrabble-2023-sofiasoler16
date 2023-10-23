@@ -3,6 +3,9 @@ import unittest
 
 from game.models import *
 from game.player import *
+from game.cell import *
+from game.board import *
+
 
 from unittest.mock import patch
 
@@ -99,7 +102,7 @@ class TestPlayer(unittest.TestCase):
 
         player_1.winning_player([player_1, player_2])
         player_2.winning_player([player_1, player_2])
-        
+
         print(player_1.score)
         print(player_2.score)
         print(player_1.player_estado)
@@ -327,6 +330,27 @@ class TestBoard(unittest.TestCase):
         word.calculate_word_value([board.grid[3][3],board.grid[4][3],board.grid[5][3],board.grid[6][3]])
 
         self.assertEqual (word.wordvalue, 12)
+
+    def test_adyacent_word(self):
+        board = Board()
+        word = Word()
+
+        board.grid[3][1].add_letter(Tile('A',1,12))
+        board.grid[3][2].add_letter(Tile('B',3,2))
+        board.grid[3][3].add_letter(Tile('A',1,12))
+
+        board.grid[4][3].add_letter(Tile('V',1,12))
+        board.grid[5][3].add_letter(Tile('I',3,2))
+        board.grid[6][3].add_letter(Tile('O',1,12))
+        board.grid[7][3].add_letter(Tile('N',1,12))
+
+        board.grid[4][3].row
+        print("la fila es: ", board.grid[4][3].row) #La fila es la columna y la columna es la fila
+        print("la columna es: ", board.grid[4][3].column)
+
+        print(board.validate_connected_word([board.grid[3][3],board.grid[4][3],board.grid[5][3],board.grid[6][3],board.grid[7][3]]))
+        self.assertEqual(board.validate_connected_word([board.grid[3][3],board.grid[4][3],board.grid[5][3],board.grid[6][3],board.grid[7][3]])
+                         , True)
 
 
 

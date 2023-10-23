@@ -42,6 +42,27 @@ class Board:
 
         if center_cell.letter != None:
             self.status = "not empty"
+    
+    def validate_connected_word(self, word:list[Cell]):
+        #Ver si una celda, que NO sea una de las celdas de word de al rededor de cada celda esta vacia
+        #Si no lo es, la palabra no se puede formar en el tablero
+        for cell in word:
+            adjacent_cells = [
+                (cell.row - 1, cell.column),  # Arriba
+                (cell.row + 1, cell.column),  # Abajo
+                (cell.row, cell.column - 1),  # Izquierda
+                (cell.row, cell.column + 1)   # Derecha
+            ]
+            for fila, columna in adjacent_cells:
+                if Cell(fila,columna).row != cell.row and Cell(fila,columna).column != cell.column:
+                    if (
+                        Cell(fila,columna).letter != None
+                    ):
+                        return False  # Al menos una celda adyacente está ocupada
+                    else:
+                        return True 
+            return True
+                    
 
     def calculate_cell_value(self, usecell:Cell):
  #Mismo problema que player, no puedo llamar a un atributo que sea otra celda dentro de Cell?
