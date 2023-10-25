@@ -8,7 +8,7 @@ class Board:
     def __init__(self):
         self.status = "empty"
         self.grid = [
-            [ Cell(row=row, column=column) 
+            [ Cell(column=row, row=column) #Esta al revez porque si no lo imprime al
             for row in range(15) ]
             for column in range(15)
         ]
@@ -47,6 +47,7 @@ class Board:
         #Ver si una celda, que NO sea una de las celdas de word de al rededor de cada celda esta vacia
         #Si no lo es, la palabra no se puede formar en el tablero
         for cell in word:
+            print("la fila en def ", cell.row)
             adjacent_cells = [
                 (cell.row - 1, cell.column),  # Arriba
                 (cell.row + 1, cell.column),  # Abajo
@@ -54,14 +55,18 @@ class Board:
                 (cell.row, cell.column + 1)   # Derecha
             ]
             for fila, columna in adjacent_cells:
-                if Cell(fila,columna).row != cell.row and Cell(fila,columna).column != cell.column:
-                    if (
-                        Cell(fila,columna).letter != None
-                    ):
-                        return False  # Al menos una celda adyacente está ocupada
+                print("ahora es ", cell.valueletter)
+                print("la celda adyacente es fila ", Cell(fila,columna).row)
+                print("la celda palabra fila: ", cell.row)
+                if Cell(fila,columna).row != cell.row or Cell(fila,columna).column != cell.column:
+                    print("finalmente es", cell.letter)
+                    if (cell.valueletter != None):
+                        return True  # Al menos una celda adyacente está ocupada
                     else:
-                        return True 
-            return True
+                        
+                        return False
+                    
+
                     
 
     def calculate_cell_value(self, usecell:Cell):

@@ -23,16 +23,16 @@ class Cell:
         if self.letter is not None:
             return " " + self.letter.letter + " "
 
-        if (self.column, self.row) in celldouble:
+        if (self.row, self.column) in celldouble:
             return "Cx2"
         
-        if (self.column, self.row) in celltriple:
+        if (self.row, self.column) in celltriple:
             return "Cx3"
         
-        if (self.column, self.row) in doubleword:
+        if (self.row, self.column) in doubleword:
             return "Px2"
         
-        if (self.column, self.row) in tripleword:
+        if (self.row, self.column) in tripleword:
             return "Px3"
         return "   "
         

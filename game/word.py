@@ -3,6 +3,7 @@ from game.cell import *
 from game.models import *
 from game.dictionary import *
 
+cell= Cell
 class Word():
     def __init__(self):
         self.wordvalue = 0

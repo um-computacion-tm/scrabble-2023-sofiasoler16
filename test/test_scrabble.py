@@ -304,6 +304,7 @@ class TestBoard(unittest.TestCase):
         board = Board()
         word = Word()
 
+
         board.grid[3][1].add_letter(Tile('A',1,12))
         board.grid[3][2].add_letter(Tile('B',3,2))
         board.grid[3][3].add_letter(Tile('A',1,12))
@@ -350,7 +351,7 @@ class TestBoard(unittest.TestCase):
 
         print(board.validate_connected_word([board.grid[3][3],board.grid[4][3],board.grid[5][3],board.grid[6][3],board.grid[7][3]]))
         self.assertEqual(board.validate_connected_word([board.grid[3][3],board.grid[4][3],board.grid[5][3],board.grid[6][3],board.grid[7][3]])
-                         , True)
+                        , True)
 
 
 

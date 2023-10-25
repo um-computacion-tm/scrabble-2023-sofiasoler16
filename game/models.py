@@ -38,6 +38,8 @@ class ScrabbleGame():
         else:
             self.player_index += 1
             self.current_player = self.players[self.player_index]
+
+    
     
     def end_game(self):
         if self.player.player_estado == "terminado":

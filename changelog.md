@@ -80,4 +80,8 @@ Added the multipliers to the board
 Fixed function to change the state of a player
 Made a function to tell if the player is winning the game or not
 Made a function to end the game when a player has no tiles
+# 23/10/23
+Added funcion to validate connected words
+# 24/10/23
+Fixed board problem of showing the board backwards
 
