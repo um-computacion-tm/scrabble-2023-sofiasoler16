@@ -4,11 +4,12 @@ from game.word import *
 from game.models import *
 from game.dictionary import *
 from game.tile import *
+
 class Board:
     def __init__(self):
         self.status = "empty"
         self.grid = [
-            [ Cell(column=row, row=column) #Esta al revez porque si no lo imprime al
+            [Cell(column=row, row=column) #Esta al revez porque si no lo imprime al revez
             for row in range(15) ]
             for column in range(15)
         ]
@@ -43,30 +44,31 @@ class Board:
         if center_cell.letter != None:
             self.status = "not empty"
     
-    def validate_connected_word(self, word:list[Cell]):
-        #Ver si una celda, que NO sea una de las celdas de word de al rededor de cada celda esta vacia
-        #Si no lo es, la palabra no se puede formar en el tablero
+    def validate_connected_word(self, word: list[Cell]):
+
         for cell in word:
-            print("la fila en def ", cell.row)
+            
+            print("la celda de la lista tiene: ", Cell(cell.row,cell.column).valueletter, "y es la celda ", (cell.row, cell.column))
             adjacent_cells = [
                 (cell.row - 1, cell.column),  # Arriba
                 (cell.row + 1, cell.column),  # Abajo
                 (cell.row, cell.column - 1),  # Izquierda
-                (cell.row, cell.column + 1)   # Derecha
+                (cell.row, cell.column + 1)  # Derecha
             ]
             for fila, columna in adjacent_cells:
-                print("ahora es ", cell.valueletter)
-                print("la celda adyacente es fila ", Cell(fila,columna).row)
-                print("la celda palabra fila: ", cell.row)
-                if Cell(fila,columna).row != cell.row or Cell(fila,columna).column != cell.column:
-                    print("finalmente es", cell.letter)
-                    if (cell.valueletter != None):
-                        return True  # Al menos una celda adyacente está ocupada
-                    else:
-                        
-                        return False
-                    
-
+                adjacent_cell = Cell(fila, columna)
+                print((adjacent_cell.row, adjacent_cell.column) )
+                print((cell.row, cell.column))
+                
+                print(Cell(adjacent_cell.row, adjacent_cell.column).valueletter)
+                print(adjacent_cell.valueletter)
+                if (adjacent_cell.row, adjacent_cell.column) != (cell.row, cell.column) and adjacent_cell.valueletter is not None:
+                    print(False)
+                    return True  # Al menos una celda adyacente está ocupada y no está en 'word'
+                else:
+                    continue
+        print(True)
+        return False
                     
 
     def calculate_cell_value(self, usecell:Cell):

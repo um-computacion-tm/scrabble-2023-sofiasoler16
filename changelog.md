@@ -84,4 +84,7 @@ Made a function to end the game when a player has no tiles
 Added funcion to validate connected words
 # 24/10/23
 Fixed board problem of showing the board backwards
+FIxed validate_connected_words
+# 30/10/23
+Change validate_conncected_word to validate if it is not near word
 
