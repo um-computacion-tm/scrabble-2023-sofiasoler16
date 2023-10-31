@@ -47,7 +47,8 @@ class Board:
     def validate_connected_word(self, word: list[Cell]):
 
         for cell in word:
-            
+            #Cell no es loo mismo que celda del test 
+            #Las clases dejan de funcionar de la nada
             print("la celda de la lista tiene: ", Cell(cell.row,cell.column).valueletter, "y es la celda ", (cell.row, cell.column))
             adjacent_cells = [
                 (cell.row - 1, cell.column),  # Arriba
