@@ -1,7 +1,14 @@
 import random
 import unittest
+from unittest.mock import patch, call
+from io import StringIO
 
 from game.models import *
+from game.player import *
+from game.cell import *
+from game.board import *
+from game.word import *
+
 
 from unittest.mock import patch
 
@@ -71,7 +78,7 @@ class TestPlayer(unittest.TestCase):
             player_1.score, 0 
         )
         self.assertEqual(
-            player_1.estado, "jugando"
+            player_1.player_estado, "jugando"
         )
     def test_cambiadas(self):
         bag = BagTiles()
@@ -81,19 +88,28 @@ class TestPlayer(unittest.TestCase):
             len(player_1.tilesp),7
         )
 
-    def test_cambio_estado_terminado(self):
+    def test_cambio_estado_tilesp_empty(self):
         bag = BagTiles()
         player_1 = Player(bag)
+        player_1.tilesp = []  # Simular que tilesp está vacío
+        player_1.cambio_estado()
+        self.assertEqual(player_1.player_estado, "terminado")
+
+    def test_winner(self):
+        bag = BagTiles()
+        player_1 = Player(bag)
+        player_2 = Player(bag)
+
+        player_1.score = 10
+        player_2.score = 20   
+
+        player_1.winning_player([player_1, player_2])
+        player_2.winning_player([player_1, player_2])
 
         self.assertEqual(
-            player_1.estado, "jugando"
-            )  
-        player_1.tilesp = []  
-        player_1.cambio_estado(player_1)
-
-        self.assertEqual(
-            player_1.estado, "terminado"
+            player_2.player_estado, "ganando"
             )
+        
     def test_score_player_2_words_con_multiplier(self):
         bag = BagTiles()
         player = Player(bag)
@@ -279,14 +295,107 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(
             cell.value,1
         )
-    
-    def test_show_board(self):
-        #Crear un tablero con sus letras ubicadas
+    @patch('sys.stdout', new_callable=StringIO)
+    def test_show_board(self, mock_output):
         board = Board()
+        board.show_board()
+
+    # @patch('sys.stdout', new_callable=StringIO)
+    # @patch('builtins.print')
+    # def test_show_board_and_calculate_word_value(self, patched_print, mock_output):
+    #     #Crear un tablero con sus letras ubicadas
+    #     #Como lo testeo?
+
+    #     board.show_board()
+    #     self.assertEqual(
+    #         patched_print.call_args_list,
+    #         [
+    #             call("    |    0     1     2     3     4     5     6     7     8     9    10    11    12    13    14 "),
+    #             call(" 0  | 'Px3' '   ' '   ' '   ' '   ' '   ' '   ' 'Px3' '   ' '   ' '   ' '   ' 'Cx2' '   ' 'Px3'"),
+    #             call(" 1  | '   ' 'Px2' '   ' '   ' 'Cx2' '   ' '   ' '   ' 'Cx3' '   ' '   ' '   ' '   ' '   ' '   '"),
+    #             call(" 2  | '   ' '   ' 'Px2' '   ' '   ' '   ' '   ' '   ' '   ' '   ' 'Cx3' '   ' '   ' '   ' '   '"),
+    #             call(" 3  | '   ' ' A ' ' B ' ' A ' '   ' '   ' '   ' 'Cx2' '   ' '   ' '   ' '   ' '   ' '   ' '   '"),
+    #             call(" 4  | '   ' 'Cx2' '   ' ' V ' 'Px2' '   ' '   ' '   ' '   ' '   ' 'Cx2' '   ' 'Px2' '   ' '   '"),
+    #             call(" 5  | '   ' '   ' '   ' ' I ' '   ' '   ' '   ' '   ' 'Cx3' '   ' '   ' '   ' '   ' '   ' '   '"),
+    #             call(" 6  | '   ' '   ' 'Cx3' ' O ' '   ' '   ' 'Cx3' '   ' '   ' '   ' 'Cx3' '   ' '   ' '   ' 'Cx3'"),
+    #             call(" 7  | 'Px3' '   ' '   ' ' N ' '   ' '   ' '   ' 'Cx2' '   ' '   ' '   ' '   ' 'Cx2' '   ' 'Px3'"),
+    #             call(" 8  | '   ' 'Px2' '   ' '   ' 'Cx2' '   ' '   ' '   ' '   ' '   ' '   ' '   ' '   ' '   ' '   '"),
+    #             call(" 9  | '   ' '   ' '   ' '   ' '   ' '   ' '   ' 'Cx2' 'Cx3' '   ' '   ' '   ' '   ' '   ' '   '"),
+    #             call("10  | '   ' '   ' 'Cx3' '   ' '   ' '   ' 'Cx3' '   ' '   ' '   ' 'Cx3' '   ' '   ' '   ' 'Cx3'"),
+    #             call("11  | '   ' '   ' '   ' '   ' '   ' '   ' '   ' 'Px2' '   ' '   ' '   ' '   ' '   ' '   ' '   '"),
+    #             call("12  | '   ' 'Cx2' '   ' '   ' 'Px2' '   ' '   ' '   ' '   ' '   ' 'Cx2' '   ' 'Px2' '   ' '   '"),
+    #             call("13  | '   ' '   ' '   ' 'Px2' '   ' '   ' '   ' 'Cx2' 'Cx3' '   ' '   ' '   ' '   ' '   ' '   '"),
+    #             call("14  | 'Px3' '   ' 'Px2' '   ' '   ' '   ' 'Cx3' 'Px3' '   ' '   ' 'Cx3' '   ' 'Cx2' '   ' 'Px3'")
+
+
+    #         ]
+    #     )
+
+
+    def test_calculate_word_value_board(self):
+        board = Board()
+        word = Word()
+
         board.grid[3][1].add_letter(Tile('A',1,12))
         board.grid[3][2].add_letter(Tile('B',3,2))
         board.grid[3][3].add_letter(Tile('A',1,12))
-        board.show_board()
+
+        board.grid[4][3].add_letter(Tile('V',1,12))
+        board.grid[5][3].add_letter(Tile('I',3,2))
+        board.grid[6][3].add_letter(Tile('O',1,12))
+        board.grid[7][3].add_letter(Tile('N',1,12))
+
+        board.calculate_cell_value(board.grid[3][1])
+        board.calculate_cell_value(board.grid[3][2])      
+        board.calculate_cell_value(board.grid[3][3])
+
+        word.calculate_word_value([board.grid[3][1],board.grid[3][2],board.grid[3][3]])
+
+        board.calculate_cell_value(board.grid[3][3])
+        board.calculate_cell_value(board.grid[4][3])
+        board.calculate_cell_value(board.grid[5][3])      
+        board.calculate_cell_value(board.grid[6][3])
+        board.calculate_cell_value(board.grid[6][3])
+
+        word.calculate_word_value([board.grid[3][3],board.grid[4][3],board.grid[5][3],board.grid[6][3]])
+        self.assertEqual (word.wordvalue, 12)
+
+
+    def test_adyacent_word(self):
+        board = Board()
+        word = Word()
+
+
+        board.grid[3][1].add_letter(Tile('A',1,12))
+        board.grid[3][2].add_letter(Tile('B',3,2))
+        board.grid[3][3].add_letter(Tile('A',1,12))
+
+        board.grid[4][3].add_letter(Tile('V',1,12))
+        board.grid[5][3].add_letter(Tile('I',3,2))
+        board.grid[6][3].add_letter(Tile('O',1,12))
+        board.grid[7][3].add_letter(Tile('N',1,12))
+
+        board.grid[4][3].row
+        print("la fila es: ", board.grid[4][3].row) #La fila es la columna y la columna es la fila
+        print("la columna es: ", board.grid[4][3].column)
+        print("la celda del test es: ",board.grid[3][3].valueletter, "y es la celda: ", (board.grid[3][3].row, board.grid[3][3].column))
+        self.assertEqual(board.validate_connected_word3([board.grid[3][3],board.grid[4][3],board.grid[5][3],board.grid[6][3],board.grid[7][3]])
+                        , True)
+        
+    def test_adyacent_word_false(self):
+        board = Board()
+
+        board.grid[3][1].add_letter(Tile('A',1,12))
+        board.grid[3][2].add_letter(Tile('B',3,2))
+        board.grid[3][3].add_letter(Tile('A',1,12))
+
+        board.grid[5][7].add_letter(Tile('A',1,12))
+        board.grid[6][7].add_letter(Tile('B',3,2))
+        board.grid[7][7].add_letter(Tile('A',1,12))
+
+        self.assertEqual(board.validate_connected_word3([board.grid[3][1],board.grid[3][2],board.grid[3][3]])
+                        , False)
+
 
 
 class TestCell(unittest.TestCase):
@@ -355,43 +464,54 @@ class TestScrabbleGame(unittest.TestCase):
 
         assert scrabble_game.current_player == scrabble_game.players[0]
     
-class TestClI(unittest.TestCase):
+# class TestClI(unittest.TestCase):
 
-    @patch('builtins.input', return_value='3')
-    def test_get_player_count(self, input_patched):
-        cli = Cli()
-        self.assertEqual(
-            cli.ask_player_count(),
-            3,
-        )
+    # @patch('builtins.input', return_value='3')
+    # def test_get_player_count(self, input_patched):
+    #     cli = Cli()
+    #     self.assertEqual(
+    #         cli.ask_player_count(),
+    #         3,
+    #     )
 
-    @patch('builtins.print')
-    @patch('builtins.input', side_effect=['A', '3'])
-    def test_get_player_count_wrong_input(self, input_patched, print_patched):
-        cli = Cli()
-        self.assertEqual(
-            cli.ask_player_count(),
-            3,
-        )
+    # @patch('builtins.print')
+    # @patch('builtins.input', side_effect=['A', '3'])
+    # def test_get_player_count_wrong_input(self, input_patched, print_patched):
+    #     cli = Cli()
+    #     self.assertEqual(
+    #         cli.ask_player_count(),
+    #         3,
+    #     )
 
-    @patch('builtins.print')
-    @patch('builtins.input', side_effect=['10', '1'])
-    def test_get_player_count_control_max(self, input_patched, print_patched):
-        cli = Cli()
-        self.assertEqual(
-            cli.ask_player_count(),
-            1,
-        )
+    # @patch('builtins.print')
+    # @patch('builtins.input', side_effect=['10', '1'])
+    # def test_get_player_count_control_max(self, input_patched, print_patched):
+    #     cli = Cli()
+    #     self.assertEqual(
+    #         cli.ask_player_count(),
+    #         1,
+    #     )
 
 
 class TestMain(unittest.TestCase):
     def setUp(self):
         self.main = Main()
 
-    def test_input_valid_player_count(self):
+    def test_valid_player_count(self):
         main = Main()
-        main.main()
+        with patch('builtins.input', side_effect=["2"]):
+            main.get_player_acount()
+        main.valid_player_count()
+        self.assertEqual(main.player_count, 2)
         self.assertEqual(main.status_players, "valid")
+
+    def test_invalid_input(self):
+        main = Main()
+        with patch('builtins.input', side_effect=["5", "1", "0", "abc"]):
+            main.get_player_acount()
+        self.assertEqual(main.player_count, 1)
+
+
 
 
 class TestWord(unittest.TestCase):

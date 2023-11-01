@@ -66,6 +66,27 @@ Added a function to show the board
 Added Cli class and a function to ask the player_count
 # 9/10/23
 Added a word multiplier
-# 10/10/20
+# 10/10/23
 Added a function to remove the word if it is invalid
 Word triple multiplier 
+## QUINTO SPRINT
+# 11/10/23
+Fixed the board to be able to calculate the word value
+# 17/10/23
+Made a function to get the player acount
+# 18/10/23
+Added the multipliers to the board
+# 21/10/23
+Fixed function to change the state of a player
+Made a function to tell if the player is winning the game or not
+Made a function to end the game when a player has no tiles
+# 23/10/23
+Added funcion to validate connected words
+# 24/10/23
+Fixed board problem of showing the board backwards
+FIxed validate_connected_words
+# 30/10/23
+Change validate_conncected_word to validate if it is not near word
+# 31/10/23
+FIxed validate_connected_word
+
