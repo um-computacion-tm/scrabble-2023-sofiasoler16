@@ -87,4 +87,6 @@ Fixed board problem of showing the board backwards
 FIxed validate_connected_words
 # 30/10/23
 Change validate_conncected_word to validate if it is not near word
+# 31/10/23
+FIxed validate_connected_word
 

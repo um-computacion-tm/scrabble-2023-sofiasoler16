@@ -1,9 +1,8 @@
 
-from game.cell import *
-from game.models import *
-from game.dictionary import *
-
-cell= Cell
+from game.cell import Cell
+from game.dictionary import Dictionary
+from game.board import Board
+#NO puedo hacer commit
 class Word():
     def __init__(self):
         self.wordvalue = 0
@@ -39,6 +38,7 @@ class Word():
                 cell.remove_letter()
 
         self.wordvalue = (sum(wordcell))*self.multiplier
+        
 
 #Intentar arreglar la vieja para poder automatizar el proceso
 """

@@ -1,5 +1,7 @@
 import random
 import unittest
+from unittest.mock import patch, call
+from io import StringIO
 
 from game.models import *
 from game.player import *
@@ -103,11 +105,6 @@ class TestPlayer(unittest.TestCase):
 
         player_1.winning_player([player_1, player_2])
         player_2.winning_player([player_1, player_2])
-
-        print(player_1.score)
-        print(player_2.score)
-        print(player_1.player_estado)
-        print(player_2.player_estado)
 
         self.assertEqual(
             player_2.player_estado, "ganando"
@@ -298,10 +295,44 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(
             cell.value,1
         )
-    
-    def test_show_board_and_calculate_word_value(self):
-        #Crear un tablero con sus letras ubicadas
-        #Como lo testeo?
+    @patch('sys.stdout', new_callable=StringIO)
+    def test_show_board(self, mock_output):
+        board = Board()
+        board.show_board()
+
+    # @patch('sys.stdout', new_callable=StringIO)
+    # @patch('builtins.print')
+    # def test_show_board_and_calculate_word_value(self, patched_print, mock_output):
+    #     #Crear un tablero con sus letras ubicadas
+    #     #Como lo testeo?
+
+    #     board.show_board()
+    #     self.assertEqual(
+    #         patched_print.call_args_list,
+    #         [
+    #             call("    |    0     1     2     3     4     5     6     7     8     9    10    11    12    13    14 "),
+    #             call(" 0  | 'Px3' '   ' '   ' '   ' '   ' '   ' '   ' 'Px3' '   ' '   ' '   ' '   ' 'Cx2' '   ' 'Px3'"),
+    #             call(" 1  | '   ' 'Px2' '   ' '   ' 'Cx2' '   ' '   ' '   ' 'Cx3' '   ' '   ' '   ' '   ' '   ' '   '"),
+    #             call(" 2  | '   ' '   ' 'Px2' '   ' '   ' '   ' '   ' '   ' '   ' '   ' 'Cx3' '   ' '   ' '   ' '   '"),
+    #             call(" 3  | '   ' ' A ' ' B ' ' A ' '   ' '   ' '   ' 'Cx2' '   ' '   ' '   ' '   ' '   ' '   ' '   '"),
+    #             call(" 4  | '   ' 'Cx2' '   ' ' V ' 'Px2' '   ' '   ' '   ' '   ' '   ' 'Cx2' '   ' 'Px2' '   ' '   '"),
+    #             call(" 5  | '   ' '   ' '   ' ' I ' '   ' '   ' '   ' '   ' 'Cx3' '   ' '   ' '   ' '   ' '   ' '   '"),
+    #             call(" 6  | '   ' '   ' 'Cx3' ' O ' '   ' '   ' 'Cx3' '   ' '   ' '   ' 'Cx3' '   ' '   ' '   ' 'Cx3'"),
+    #             call(" 7  | 'Px3' '   ' '   ' ' N ' '   ' '   ' '   ' 'Cx2' '   ' '   ' '   ' '   ' 'Cx2' '   ' 'Px3'"),
+    #             call(" 8  | '   ' 'Px2' '   ' '   ' 'Cx2' '   ' '   ' '   ' '   ' '   ' '   ' '   ' '   ' '   ' '   '"),
+    #             call(" 9  | '   ' '   ' '   ' '   ' '   ' '   ' '   ' 'Cx2' 'Cx3' '   ' '   ' '   ' '   ' '   ' '   '"),
+    #             call("10  | '   ' '   ' 'Cx3' '   ' '   ' '   ' 'Cx3' '   ' '   ' '   ' 'Cx3' '   ' '   ' '   ' 'Cx3'"),
+    #             call("11  | '   ' '   ' '   ' '   ' '   ' '   ' '   ' 'Px2' '   ' '   ' '   ' '   ' '   ' '   ' '   '"),
+    #             call("12  | '   ' 'Cx2' '   ' '   ' 'Px2' '   ' '   ' '   ' '   ' '   ' 'Cx2' '   ' 'Px2' '   ' '   '"),
+    #             call("13  | '   ' '   ' '   ' 'Px2' '   ' '   ' '   ' 'Cx2' 'Cx3' '   ' '   ' '   ' '   ' '   ' '   '"),
+    #             call("14  | 'Px3' '   ' 'Px2' '   ' '   ' '   ' 'Cx3' 'Px3' '   ' '   ' 'Cx3' '   ' 'Cx2' '   ' 'Px3'")
+
+
+    #         ]
+    #     )
+
+
+    def test_calculate_word_value_board(self):
         board = Board()
         word = Word()
 
@@ -313,8 +344,6 @@ class TestBoard(unittest.TestCase):
         board.grid[5][3].add_letter(Tile('I',3,2))
         board.grid[6][3].add_letter(Tile('O',1,12))
         board.grid[7][3].add_letter(Tile('N',1,12))
-
-        board.show_board()
 
         board.calculate_cell_value(board.grid[3][1])
         board.calculate_cell_value(board.grid[3][2])      
@@ -330,6 +359,7 @@ class TestBoard(unittest.TestCase):
 
         word.calculate_word_value([board.grid[3][3],board.grid[4][3],board.grid[5][3],board.grid[6][3]])
         self.assertEqual (word.wordvalue, 12)
+
 
     def test_adyacent_word(self):
         board = Board()
@@ -349,24 +379,22 @@ class TestBoard(unittest.TestCase):
         print("la fila es: ", board.grid[4][3].row) #La fila es la columna y la columna es la fila
         print("la columna es: ", board.grid[4][3].column)
         print("la celda del test es: ",board.grid[3][3].valueletter, "y es la celda: ", (board.grid[3][3].row, board.grid[3][3].column))
-        self.assertEqual(board.validate_connected_word([board.grid[3][3],board.grid[4][3],board.grid[5][3],board.grid[6][3],board.grid[7][3]])
+        self.assertEqual(board.validate_connected_word3([board.grid[3][3],board.grid[4][3],board.grid[5][3],board.grid[6][3],board.grid[7][3]])
                         , True)
         
-    # def test_adyacent_word_false(self):
-    #     board = Board()
-    #     word = Word()
+    def test_adyacent_word_false(self):
+        board = Board()
 
+        board.grid[3][1].add_letter(Tile('A',1,12))
+        board.grid[3][2].add_letter(Tile('B',3,2))
+        board.grid[3][3].add_letter(Tile('A',1,12))
 
-    #     board.grid[3][1].add_letter(Tile('A',1,12))
-    #     board.grid[3][2].add_letter(Tile('B',3,2))
-    #     board.grid[3][3].add_letter(Tile('A',1,12))
+        board.grid[5][7].add_letter(Tile('A',1,12))
+        board.grid[6][7].add_letter(Tile('B',3,2))
+        board.grid[7][7].add_letter(Tile('A',1,12))
 
-    #     board.grid[5][7].add_letter(Tile('A',1,12))
-    #     board.grid[6][7].add_letter(Tile('B',3,2))
-    #     board.grid[7][7].add_letter(Tile('A',1,12))
-
-    #     self.assertEqual(board.validate_connected_word([board.grid[3][1],board.grid[3][2],board.grid[3][3]])
-    #                     , False)
+        self.assertEqual(board.validate_connected_word3([board.grid[3][1],board.grid[3][2],board.grid[3][3]])
+                        , False)
 
 
 

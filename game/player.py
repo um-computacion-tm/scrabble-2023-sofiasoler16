@@ -1,5 +1,5 @@
 
-from game.tile import *
+from game.tile import BagTiles, Tile
 from game.models import *
 class Player():
     def __init__ (self,bag:BagTiles):

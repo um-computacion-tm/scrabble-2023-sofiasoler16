@@ -43,35 +43,26 @@ class Board:
 
         if center_cell.letter != None:
             self.status = "not empty"
-    
-    def validate_connected_word(self, word: list[Cell]):
 
+    def validate_connected_word3(board, word: list[Cell]):
+        
         for cell in word:
-            #Cell no es loo mismo que celda del test 
-            #Las clases dejan de funcionar de la nada
-            print("la celda de la lista tiene: ", Cell(cell.row,cell.column).valueletter, "y es la celda ", (cell.row, cell.column))
+
             adjacent_cells = [
                 (cell.row - 1, cell.column),  # Arriba
                 (cell.row + 1, cell.column),  # Abajo
                 (cell.row, cell.column - 1),  # Izquierda
-                (cell.row, cell.column + 1)  # Derecha
-            ]
-            for fila, columna in adjacent_cells:
-                adjacent_cell = Cell(fila, columna)
-                print((adjacent_cell.row, adjacent_cell.column) )
-                print((cell.row, cell.column))
-                
-                print(Cell(adjacent_cell.row, adjacent_cell.column).valueletter)
-                print(adjacent_cell.valueletter)
-                if (adjacent_cell.row, adjacent_cell.column) != (cell.row, cell.column) and adjacent_cell.valueletter is not None:
-                    print(False)
-                    return True  # Al menos una celda adyacente está ocupada y no está en 'word'
-                else:
-                    continue
-        print(True)
-        return False
-                    
+                (cell.row, cell.column + 1) 
+        ]
+            for pos in adjacent_cells:
+                J,K = pos
+                adj = board.grid[int(J)][int(K)]
 
+                if adj.valueletter != None and adj not in word :
+                    return True
+                
+        return False
+                
     def calculate_cell_value(self, usecell:Cell):
  #Mismo problema que player, no puedo llamar a un atributo que sea otra celda dentro de Cell?
         celldouble = [Cell(4,1), Cell(12,1), Cell(1, 4),Cell(8, 4),Cell(15, 4),Cell(3, 7), Cell(7, 7), Cell(9, 7), 
