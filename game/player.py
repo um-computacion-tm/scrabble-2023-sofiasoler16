@@ -1,6 +1,10 @@
 
 from game.tile import BagTiles, Tile
 from game.models import *
+
+class Not_Letters_Exception(Exception):
+    pass
+
 class Player():
     def __init__ (self,bag:BagTiles):
         self.tilesp = []
@@ -39,12 +43,10 @@ class Player():
         self.score += (player_word_score)
     
     def has_letters(self, tiles:list[Tile]):
-        self.valid = True
         
         for letter in tiles:
             if letter.letter in self.tilesp:
-                self.valid = True
+                return True
             else:
-                self.valid = False
-                break
+                raise Not_Letters_Exception('Error, no tiene las letras')
                 

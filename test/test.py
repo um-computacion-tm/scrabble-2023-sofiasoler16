@@ -1,7 +1,9 @@
 import random
 import unittest
+import io
 from unittest.mock import patch, call
 from io import StringIO
+
 
 from game.models import *
 from game.player import *
@@ -30,13 +32,13 @@ class TestBag(unittest.TestCase):
         )
         bag.take()
         self.assertEqual(
-            bag.actualizado["A"].cant,
+            bag.tiles["A"].cant,
             11,
         )
 
-        bag.put("A")
+        bag.put_in_bag("A")
         self.assertEqual(
-            bag.actualizado["A"].cant, 12
+            bag.tiles["A"].cant, 12
         )
 
 #Este test saca y despues agrega
@@ -53,15 +55,15 @@ class TestBag2(unittest.TestCase):
         )
         bag.take()
         self.assertEqual(
-            bag.actualizado["C"].cant,
+            bag.tiles["C"].cant,
             3,
         )
         bag.take()
         bag.take()
 
-        bag.put("C")
+        bag.put_in_bag("C")
         self.assertEqual(
-            bag.actualizado["C"].cant, 2
+            bag.tiles["C"].cant, 2
         )
 
 
@@ -179,8 +181,8 @@ class TestPlayer(unittest.TestCase):
             Tile("L", 1, 5),
             Tile("A", 1, 12),
         ]
-        player1.has_letters(tiles)
-        self.assertEqual(player1.valid, True)
+
+        self.assertEqual(player1.has_letters(tiles), True)
 
 
 
@@ -303,6 +305,7 @@ class TestBoard(unittest.TestCase):
     # @patch('sys.stdout', new_callable=StringIO)
     # @patch('builtins.print')
     # def test_show_board_and_calculate_word_value(self, patched_print, mock_output):
+    #     board = Board()
     #     #Crear un tablero con sus letras ubicadas
     #     #Como lo testeo?
 
@@ -330,7 +333,6 @@ class TestBoard(unittest.TestCase):
 
     #         ]
     #     )
-
 
     def test_calculate_word_value_board(self):
         board = Board()
@@ -376,9 +378,7 @@ class TestBoard(unittest.TestCase):
         board.grid[7][3].add_letter(Tile('N',1,12))
 
         board.grid[4][3].row
-        print("la fila es: ", board.grid[4][3].row) #La fila es la columna y la columna es la fila
-        print("la columna es: ", board.grid[4][3].column)
-        print("la celda del test es: ",board.grid[3][3].valueletter, "y es la celda: ", (board.grid[3][3].row, board.grid[3][3].column))
+
         self.assertEqual(board.validate_connected_word3([board.grid[3][3],board.grid[4][3],board.grid[5][3],board.grid[6][3],board.grid[7][3]])
                         , True)
         
@@ -463,7 +463,39 @@ class TestScrabbleGame(unittest.TestCase):
         scrabble_game.next_turn()
 
         assert scrabble_game.current_player == scrabble_game.players[0]
-    
+
+    @patch('builtins.input', return_value='2')
+    @patch('builtins.print')
+    def test_start(self, mock_output, patched_print):
+        #Testea que pregunte cant players, y empiece en el player 0
+        main = Main()
+
+        main.get_player_acount()
+        self.assertEqual(main.player_count, 2)
+
+        scrabble = ScrabbleGame(main.player_count)
+
+        scrabble.next_turn()
+        self.assertEqual(scrabble.current_player, scrabble.players[0])
+
+        scrabble.game_started()
+        self.assertEqual(scrabble.game_state, "ongoing")
+
+
+
+
+
+    # def test_play_word(self):
+    #         # Configura el juego y el jugador
+    #     scrabble_game = ScrabbleGame(players_count=1)
+    #     player = scrabble_game.players[0]
+    #     player.tilesp = [Tile('H', 1), Tile('O', 1), Tile('L', 1), Tile('A', 1)]
+    #     valid_word = "HOLA"
+    #     self.assertTrue(scrabble_game.play_word(valid_word, player.tiles))
+    #     invalid_word = "MALO"
+    #     with self.assertRaises(Not_Letters_Exception):
+    #         scrabble_game.play_word(invalid_word, player.tiles)
+
 # class TestClI(unittest.TestCase):
 
     # @patch('builtins.input', return_value='3')
@@ -497,19 +529,36 @@ class TestMain(unittest.TestCase):
     def setUp(self):
         self.main = Main()
 
-    def test_valid_player_count(self):
+    @patch('builtins.input', return_value='3')
+    @patch('builtins.print')
+    def test_get_player_account_with_3(self, patched_print, mock_output):
         main = Main()
-        with patch('builtins.input', side_effect=["2"]):
-            main.get_player_acount()
+        main.get_player_acount()
+        self.assertEqual(patched_print.call_args_list, [call("Good")])
+
+    @patch('builtins.input', return_value='2')
+    @patch('builtins.print')
+    def test_valid_player_count(self, mock_output, patched_print):
+        main = Main()
+
+        main.get_player_acount()
         main.valid_player_count()
         self.assertEqual(main.player_count, 2)
         self.assertEqual(main.status_players, "valid")
 
-    def test_invalid_input(self):
-        main = Main()
-        with patch('builtins.input', side_effect=["5", "1", "0", "abc"]):
-            main.get_player_acount()
-        self.assertEqual(main.player_count, 1)
+    # @patch('builtins.input', return_value='4')  # Ingresamos un valor fuera del rango
+    # @patch('sys.stdout', new_callable=io.StringIO)
+    # def test_get_player_account_with_invalid_input(self, mock_stdout, mock_input):
+    #     main = Main()
+    #     main.get_player_acount()
+    #     printed_output = mock_stdout.getvalue()
+    #     self.assertEqual("Error, enter a valid number between 1 and 3", printed_output)
+
+    # def test_invalid_input(self):
+    #     main = Main()
+    #     with patch('builtins.input', side_effect=["5", "1", "0", "abc"]):
+    #         main.get_player_acount()
+    #     self.assertEqual(main.player_count, 1)
 
 
 

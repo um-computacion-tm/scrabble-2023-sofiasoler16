@@ -39,7 +39,8 @@ class ScrabbleGame():
             self.player_index += 1
             self.current_player = self.players[self.player_index]
 
-    
+    def game_started(self):
+        self.game_state = 'ongoing'
     
     def end_game(self):
         if self.player.player_estado == "terminado":
@@ -58,12 +59,14 @@ class Main(): #Te deja entrar cantidad de jugadores y verifica que sea bueno
     def get_player_acount(self):
         while True:
             try:
-                self.player_count = int(input("Enter the number of players (max 3)"))
-                if self.player_count <= 3:
-                    print ("Good")
+                self.player_count = int(input("Enter the number of players (max 4)"))
+                if 1 <= self.player_count <= 4:
+                    print("Good")
                     break
-            except Exception as more_than_expected: #Porque no hace esta parte?
-                print ("Error, enter a valid number between 1 and 3")
+                else:
+                    raise ValueError("Number must be between 1 and 4")
+            except ValueError as error:
+                print("Error, enter a valid number between 1 and 4")
 
     def valid_player_count(self):
         if self.player_count <= 1 or self.player_count > 4:
