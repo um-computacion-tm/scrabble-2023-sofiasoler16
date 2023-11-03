@@ -15,6 +15,15 @@ from game.word import *
 from unittest.mock import patch
 
 
+# class Game(unittest.TestCase):
+
+    # @patch('builtins.input', side_effect=["Y", "2", "3", "A", "N"])
+    # def test_put_word(self, mock_output):
+    #     board = Board()
+
+    #     board.put_word()
+    #     self.assertEqual(board.grid[2][3].valueletter, "A")
+
 class TestTiles(unittest.TestCase):
     def test_tile_valueycantA(self):
         tile = Tile('A',1, 12)
@@ -116,6 +125,7 @@ class TestPlayer(unittest.TestCase):
         bag = BagTiles()
         player = Player(bag)
         board = Board()
+
 #Primera palabra
         cell = Cell(2,5)
         letter = Tile(letter="A", value=1, cant=12)
@@ -166,28 +176,39 @@ class TestPlayer(unittest.TestCase):
     def test_validate_letter(self):
         bag = BagTiles()
         player1 = Player(bag)
+        board = Board()
         player1.tilesp = [
             "H",
             "O",
-            "L",
+            "A",
             "A",
             "S",
             "B",
             "C",
         ]
-        tiles = [
-            Tile("H", 1, 3),
-            Tile("O", 2, 3),
-            Tile("L", 1, 5),
-            Tile("A", 1, 12),
-        ]
 
-        self.assertEqual(player1.has_letters(tiles), True)
+        cell3 = Cell(7,6)
+        letter1 = Tile(letter="A", value=1, cant=12)
+        cell3.add_letter(letter1)
+        board.calculate_cell_value(cell3)
+
+        cell4 = Cell(8,6)
+        letter2 = Tile(letter="B", value=3, cant=2)
+        cell4.add_letter(letter2)
+        board.calculate_cell_value(cell4)
+
+        cell5 = Cell(9,6)
+        letter3 = Tile(letter="A", value=1, cant=12)
+        cell5.add_letter(letter3)
+        board.calculate_cell_value(cell5)
 
 
+        self.assertEqual(player1.has_letters([letter1, letter2, letter3]), True)
+        self.assertEqual(len(player1.tilesp), 4)
 
 
 class TestBoard(unittest.TestCase):
+
     def test_init(self):
         board = Board()
         self.assertEqual(
@@ -240,12 +261,17 @@ class TestBoard(unittest.TestCase):
     
     def test_empty_board(self):
         board = Board()
-        center_cell = Cell(7,7)
-        center_cell.add_letter(Tile("Q",5,1))
-        
-        board.validate_empty_board(center_cell) #Como hago para que la center cell sea solo la 7,7?
 
-        self.assertEqual(board.status, "not empty")
+        board.grid[7][7].add_letter(Tile("Q",5,1))
+
+        self.assertEqual(board.validate_empty_board(board.grid[7][7]), False)
+
+    def test_not_empty_board(self):
+        board = Board()
+
+        board.grid[6][7].add_letter(Tile("Q",5,1))
+
+        self.assertEqual(board.validate_empty_board(board.grid[7][7]), True)
 
     def test_multiplier_dobleletter(self):
         board = Board()
@@ -302,38 +328,6 @@ class TestBoard(unittest.TestCase):
         board = Board()
         board.show_board()
 
-    # @patch('sys.stdout', new_callable=StringIO)
-    # @patch('builtins.print')
-    # def test_show_board_and_calculate_word_value(self, patched_print, mock_output):
-    #     board = Board()
-    #     #Crear un tablero con sus letras ubicadas
-    #     #Como lo testeo?
-
-    #     board.show_board()
-    #     self.assertEqual(
-    #         patched_print.call_args_list,
-    #         [
-    #             call("    |    0     1     2     3     4     5     6     7     8     9    10    11    12    13    14 "),
-    #             call(" 0  | 'Px3' '   ' '   ' '   ' '   ' '   ' '   ' 'Px3' '   ' '   ' '   ' '   ' 'Cx2' '   ' 'Px3'"),
-    #             call(" 1  | '   ' 'Px2' '   ' '   ' 'Cx2' '   ' '   ' '   ' 'Cx3' '   ' '   ' '   ' '   ' '   ' '   '"),
-    #             call(" 2  | '   ' '   ' 'Px2' '   ' '   ' '   ' '   ' '   ' '   ' '   ' 'Cx3' '   ' '   ' '   ' '   '"),
-    #             call(" 3  | '   ' ' A ' ' B ' ' A ' '   ' '   ' '   ' 'Cx2' '   ' '   ' '   ' '   ' '   ' '   ' '   '"),
-    #             call(" 4  | '   ' 'Cx2' '   ' ' V ' 'Px2' '   ' '   ' '   ' '   ' '   ' 'Cx2' '   ' 'Px2' '   ' '   '"),
-    #             call(" 5  | '   ' '   ' '   ' ' I ' '   ' '   ' '   ' '   ' 'Cx3' '   ' '   ' '   ' '   ' '   ' '   '"),
-    #             call(" 6  | '   ' '   ' 'Cx3' ' O ' '   ' '   ' 'Cx3' '   ' '   ' '   ' 'Cx3' '   ' '   ' '   ' 'Cx3'"),
-    #             call(" 7  | 'Px3' '   ' '   ' ' N ' '   ' '   ' '   ' 'Cx2' '   ' '   ' '   ' '   ' 'Cx2' '   ' 'Px3'"),
-    #             call(" 8  | '   ' 'Px2' '   ' '   ' 'Cx2' '   ' '   ' '   ' '   ' '   ' '   ' '   ' '   ' '   ' '   '"),
-    #             call(" 9  | '   ' '   ' '   ' '   ' '   ' '   ' '   ' 'Cx2' 'Cx3' '   ' '   ' '   ' '   ' '   ' '   '"),
-    #             call("10  | '   ' '   ' 'Cx3' '   ' '   ' '   ' 'Cx3' '   ' '   ' '   ' 'Cx3' '   ' '   ' '   ' 'Cx3'"),
-    #             call("11  | '   ' '   ' '   ' '   ' '   ' '   ' '   ' 'Px2' '   ' '   ' '   ' '   ' '   ' '   ' '   '"),
-    #             call("12  | '   ' 'Cx2' '   ' '   ' 'Px2' '   ' '   ' '   ' '   ' '   ' 'Cx2' '   ' 'Px2' '   ' '   '"),
-    #             call("13  | '   ' '   ' '   ' 'Px2' '   ' '   ' '   ' 'Cx2' 'Cx3' '   ' '   ' '   ' '   ' '   ' '   '"),
-    #             call("14  | 'Px3' '   ' 'Px2' '   ' '   ' '   ' 'Cx3' 'Px3' '   ' '   ' 'Cx3' '   ' 'Cx2' '   ' 'Px3'")
-
-
-    #         ]
-    #     )
-
     def test_calculate_word_value_board(self):
         board = Board()
         word = Word()
@@ -378,6 +372,8 @@ class TestBoard(unittest.TestCase):
         board.grid[7][3].add_letter(Tile('N',1,12))
 
         board.grid[4][3].row
+
+        print()
 
         self.assertEqual(board.validate_connected_word3([board.grid[3][3],board.grid[4][3],board.grid[5][3],board.grid[6][3],board.grid[7][3]])
                         , True)
@@ -439,6 +435,15 @@ class TestScrabbleGame(unittest.TestCase):
             3,
         )
         self.assertIsNotNone(scrabble_game.bag)
+
+    # def test_game_over(self):
+    #     scrabble_game = ScrabbleGame(players_count=3)
+    #     bag = BagTiles()
+
+    #     scrabble_game.player.player_estado == "terminado"
+
+    #     scrabble_game.end_game()
+    #     self.assertEqual(scrabble_game.game_state, "over")
 
     def test_next_turn_when_game_is_starting(self):
         scrabble_game = ScrabbleGame(players_count=3)
@@ -564,6 +569,7 @@ class TestMain(unittest.TestCase):
 
 
 class TestWord(unittest.TestCase):
+
     def test_word_value_con_multiplier_letter(self):
         board = Board()
         cell = Cell(2,5)

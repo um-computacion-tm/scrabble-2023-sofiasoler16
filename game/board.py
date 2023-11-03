@@ -23,6 +23,7 @@ class Board:
                   )
         
 
+
     def validate_word_inside_board(self, word, location, orientation):
         position_x = location[0]
         position_y = location[1]
@@ -38,11 +39,13 @@ class Board:
             else:
                 return True
             
-    def validate_empty_board(self, center_cell:Cell):
-        #if center_cell == Cell(7,7):
+    def validate_empty_board(self, cell):
 
-        if center_cell.letter != None:
-            self.status = "not empty"
+        if cell == self.grid[7][7] and self.grid[7][7].valueletter == None:
+            return True
+        else:
+            return False
+                
 
     def validate_connected_word3(board, word: list[Cell]):
         
@@ -62,7 +65,8 @@ class Board:
                     return True
                 
         return False
-                
+
+
     def calculate_cell_value(self, usecell:Cell):
  #Mismo problema que player, no puedo llamar a un atributo que sea otra celda dentro de Cell?
         celldouble = [Cell(4,1), Cell(12,1), Cell(1, 4),Cell(8, 4),Cell(15, 4),Cell(3, 7), Cell(7, 7), Cell(9, 7), 
@@ -76,17 +80,17 @@ class Board:
                     if liscell.row == usecell.row and liscell.column == usecell.column:
                         usecell.value = 2 * usecell.letter.value
                         usecell.used = True
-                        if usecell.used == True:
-                            break
+                        break
                     else:
                         #Casillas de triple letra
                         for cell in celltriple:
                             if cell.row == usecell.row and cell.column == usecell.column:
                                 usecell.value = 3 * usecell.letter.value
                                 usecell.used = True
-                                if usecell.used == True:
-                                    break  
+                                break  
                         else:
                             usecell.value = usecell.letter.value
             else:
                 usecell.value = usecell.letter.value
+
+

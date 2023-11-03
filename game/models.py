@@ -5,19 +5,20 @@ from game.tile import *
 from game.cell import *
 from game.word import *
 from game.board import *
-from game.player import *
+from game.player import Player
 
 class YaHaySuficientes(Exception):
     pass
 
         
-class Cli():
-    def __init__(self):
-        pass
+# class Cli():
+#     def __init__(self):
+#         pass
 
 
 class ScrabbleGame():
     def __init__(self, players_count):
+        self.word = Word()
         self.board = Board()
         self.bag = BagTiles()
         self.player = Player(self.bag)
@@ -46,6 +47,14 @@ class ScrabbleGame():
         if self.player.player_estado == "terminado":
             self.game_state = "over"
 
+    def put_first_word_first_player(self, word, row, column):
+        if self.board.validate_empty_board() is False:
+            self.next_turn()
+
+            current_player = self.players[self.player_index]
+            current_player.put_word(self.board, self.bag)
+            #Necesito poder usar la lista word que me devuelve put_word
+            self.word.calculate_word_value()
 
 
 class Main(): #Te deja entrar cantidad de jugadores y verifica que sea bueno

@@ -94,5 +94,7 @@ FIxed validate_connected_word
 Created function to start game
 Fixed function to verify if player has letters
 Fixed some error of maintenbility 
+# 2/11/23
+Made teh function has_letters to be able to remove the letters from the player bag
 
 
