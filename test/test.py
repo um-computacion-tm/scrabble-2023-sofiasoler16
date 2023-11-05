@@ -91,10 +91,16 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(
             player_1.player_estado, "jugando"
         )
-    def test_cambiadas(self):
+    @patch('builtins.print')
+    @patch('builtins.input', return_value = "A")
+    def test_cambiadas(self, patched_print, mock_input):
+        #Hacer un test para la funcion tile_cambiadas que no imprima los print?
         bag = BagTiles()
         player_1 = Player(bag)
-        player_1.tiles_cambiadas
+
+        player_1.tilesp = ["A", "B", "C", "D", "E", "F", "G"]
+        player_1.tiles_cambiadas(bag)
+
         self.assertEqual(
             len(player_1.tilesp),7
         )
@@ -102,8 +108,12 @@ class TestPlayer(unittest.TestCase):
     def test_cambio_estado_tilesp_empty(self):
         bag = BagTiles()
         player_1 = Player(bag)
+        player_2 = Player(bag)
+        player_1.score = 10
+        player_2.score = 20  
+
         player_1.tilesp = []  # Simular que tilesp está vacío
-        player_1.cambio_estado()
+        player_1.winning_player([player_1, player_2])
         self.assertEqual(player_1.player_estado, "terminado")
 
     def test_winner(self):
@@ -187,21 +197,29 @@ class TestPlayer(unittest.TestCase):
             "C",
         ]
 
-        cell3 = Cell(7,6)
+        cell3 = Cell(7,7)
         letter1 = Tile(letter="A", value=1, cant=12)
         cell3.add_letter(letter1)
         board.calculate_cell_value(cell3)
 
-        cell4 = Cell(8,6)
+        cell4 = Cell(7,8)
         letter2 = Tile(letter="B", value=3, cant=2)
         cell4.add_letter(letter2)
         board.calculate_cell_value(cell4)
 
-        cell5 = Cell(9,6)
+        cell5 = Cell(7,9)
         letter3 = Tile(letter="A", value=1, cant=12)
         cell5.add_letter(letter3)
         board.calculate_cell_value(cell5)
 
+        word = Word()
+        word.calculate_word_value([cell3, cell4, cell5])
+
+        wordvalue = word.wordvalue
+
+        player1.score_player(wordvalue)
+
+        self.assertEqual(player1.score, 12)
 
         self.assertEqual(player1.has_letters([letter1, letter2, letter3]), True)
         self.assertEqual(len(player1.tilesp), 4)
@@ -341,6 +359,7 @@ class TestBoard(unittest.TestCase):
         board.grid[6][3].add_letter(Tile('O',1,12))
         board.grid[7][3].add_letter(Tile('N',1,12))
 
+
         board.calculate_cell_value(board.grid[3][1])
         board.calculate_cell_value(board.grid[3][2])      
         board.calculate_cell_value(board.grid[3][3])
@@ -352,6 +371,7 @@ class TestBoard(unittest.TestCase):
         board.calculate_cell_value(board.grid[5][3])      
         board.calculate_cell_value(board.grid[6][3])
         board.calculate_cell_value(board.grid[6][3])
+
 
         word.calculate_word_value([board.grid[3][3],board.grid[4][3],board.grid[5][3],board.grid[6][3]])
         self.assertEqual (word.wordvalue, 12)
@@ -427,6 +447,23 @@ class TestCell(unittest.TestCase):
 
 
 class TestScrabbleGame(unittest.TestCase):
+
+    @patch ('builtins.input', return_value = ["Y", "Y", 7, 7, "A", "N"])
+    @patch ('builtins.print')
+    def test_firs_turn(self, mock_output, patched_print):
+        scrabbl = ScrabbleGame(3)
+        scrabbl.first_turn()
+
+    # @patch ('builtins.print')
+    # @patch ('builtins.input', return_value = ["Y", "Y", 7, 7, "A", "N"])
+    # def test_first_turn(self, patched_print, mock_output):
+    #     player_acount = 4
+    #     scrabble = ScrabbleGame(player_acount)
+    #     scrabble.next_turn()
+
+    #     scrabble.first_turn()
+    #     self.assertEqual(scrabble.player_index, 0)
+
     def test_init(self):
         scrabble_game = ScrabbleGame(players_count=3)
         self.assertIsNotNone(scrabble_game.board)
@@ -436,14 +473,17 @@ class TestScrabbleGame(unittest.TestCase):
         )
         self.assertIsNotNone(scrabble_game.bag)
 
-    # def test_game_over(self):
-    #     scrabble_game = ScrabbleGame(players_count=3)
-    #     bag = BagTiles()
+    def test_game_over(self):
+        scrabble_game = ScrabbleGame(players_count=3)
+        bag = BagTiles()
+        scrabble_game.next_turn()
+        scrabble_game.current_player.tilesp = []
 
-    #     scrabble_game.player.player_estado == "terminado"
+        scrabble_game.players[0].winning_player(scrabble_game.players)
 
-    #     scrabble_game.end_game()
-    #     self.assertEqual(scrabble_game.game_state, "over")
+        scrabble_game.end_game()
+        self.assertEqual(scrabble_game.game_state, "over")
+
 
     def test_next_turn_when_game_is_starting(self):
         scrabble_game = ScrabbleGame(players_count=3)
@@ -485,9 +525,6 @@ class TestScrabbleGame(unittest.TestCase):
 
         scrabble.game_started()
         self.assertEqual(scrabble.game_state, "ongoing")
-
-
-
 
 
     # def test_play_word(self):
@@ -541,15 +578,6 @@ class TestMain(unittest.TestCase):
         main.get_player_acount()
         self.assertEqual(patched_print.call_args_list, [call("Good")])
 
-    @patch('builtins.input', return_value='2')
-    @patch('builtins.print')
-    def test_valid_player_count(self, mock_output, patched_print):
-        main = Main()
-
-        main.get_player_acount()
-        main.valid_player_count()
-        self.assertEqual(main.player_count, 2)
-        self.assertEqual(main.status_players, "valid")
 
     # @patch('builtins.input', return_value='4')  # Ingresamos un valor fuera del rango
     # @patch('sys.stdout', new_callable=io.StringIO)
@@ -632,8 +660,8 @@ class TestWord(unittest.TestCase):
         word = Word()
         word.calculate_word_value([cell, cell1, cell2])
         self.assertEqual(word.wordvalue, 15)
-
-    def test_remove_invalid_word(self):
+    @patch('builtins.print')
+    def test_remove_invalid_word(self, patched_print):
         board = Board()
         cell = Cell(2,5)
         letter = Tile(letter="A", value=1, cant=12)

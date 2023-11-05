@@ -7,7 +7,7 @@ from game.tile import *
 
 class Board:
     def __init__(self):
-        self.status = "empty"
+        self.status = "is empty"
         self.grid = [
             [Cell(column=row, row=column) #Esta al revez porque si no lo imprime al revez
             for row in range(15) ]
@@ -44,6 +44,7 @@ class Board:
         if cell == self.grid[7][7] and self.grid[7][7].valueletter == None:
             return True
         else:
+            self.status = "not empty"
             return False
                 
 

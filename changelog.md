@@ -96,5 +96,10 @@ Fixed function to verify if player has letters
 Fixed some error of maintenbility 
 # 2/11/23
 Made teh function has_letters to be able to remove the letters from the player bag
+# 4/11/23
+Fixed tiles_cambiadas
+Added functions to first_turn 
+Added the score function to the current turn
+Added Cli Class and a function to play the game 
 
 

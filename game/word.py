@@ -34,10 +34,13 @@ class Word():
             for cell in wordplace:
                 wordcell.append(cell.value)
         else: #Si palabra no en diccionario, remueve la palabra
+            print("-----  PALABRA NO EXISTE. Su palabra no fue asignada al tablero -----")
             for cell in wordplace:
                 cell.remove_letter()
+            
 
         self.wordvalue = (sum(wordcell))*self.multiplier
+        return self.wordvalue
         
 
 #Intentar arreglar la vieja para poder automatizar el proceso

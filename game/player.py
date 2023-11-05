@@ -13,43 +13,63 @@ class Player():
         self.name = ""
         self.score = 0
         self.player_estado = "jugando"
+        self.current_word_value = 0
         for _ in range(7):
             self.tilesp.append(self.bag.take())
 #Como testeo que resta la cantidad de letras tambien para el siguiente jugador?
         self.current_player = None
 
-    def tiles_cambiadas(self, letterchoice:Tile):
-        letter = letterchoice #Que no sea random choice, que sea una letra elegida por usuario
-        self.tilesp.pop(self.bag.put_in_bag(letter))
-        self.tilesp.append(self.bag.take())
-
-    def cambio_estado(self):
-        if len(self.tilesp) == 0:
-            self.player_estado = "terminado"
+    def tiles_cambiadas(self, tile:BagTiles):
+        print(self.tilesp)
+        a = True
+        while a == True:
+            try:
+                letterchoice = str(input("Ingrese letra para devolver (en mayuscula): "))
+                if letterchoice in self.tilesp:
+                    self.tilesp.remove(letterchoice)
+                    self.bag.put_in_bag(letterchoice)
+                    self.tilesp.append(self.bag.take())
+                    a = False
+                else:
+                    raise ValueError("No puede intercambiar letras que no tiene")
+            except ValueError as error:
+                print("NO puede intercambiar letras que no tiene")
+        print("Sus nuevas letras son: ", self.tilesp)
 
     def winning_player(self,all_players):
+
         for player in all_players:
+            if len(self.tilesp) == 0:
+                self.player_estado = "terminado"
+                
             player:Player
             if self.score > player.score:
                 self.player_estado = "ganando"
             elif self.score < player.score: #No marca que esta perdiendo, lo deja en jugando
                 player.player_estado = "perdiendo"
 
-    def put_word(self, board:Board, bag:BagTiles):
+    def put_word(self, board:Board, bag:BagTiles, word:Word):
+        board.show_board()
+
         si = str(input("Quiere agregar letra? Y/N: "))
-        word = list[Cell]
+        self.wordlist = []
+        self.current_word_value = 0
+
         while si == "Y":
             row = input("Ingrese fila: ")
-            column = input("Ingrse columna: ")
+            column = input("Ingrese columna: ")
             letter = input("Ingrese letra a agregar: ")
             bag.tiles[letter]
             board.grid[int(row)][int(column)].add_letter(bag.tiles[letter])
-            print(board.grid[int(row)][int(column)].valueletter)
-            word.append(board.grid[int(row)][int(column)])
+            self.wordlist.append(board.grid[int(row)][int(column)])
             board.calculate_cell_value(board.grid[int(row)][int(column)])
-            #Hacer a word una lista de celdas para poder calculate word value
             si = str(input("Quiere agregar letra? Y/N: "))
-        return word
+
+        self.current_word_value= word.calculate_word_value(self.wordlist)
+        print("el valor de la palabra es: ", self.current_word_value)
+        board.validate_empty_board(board.grid[7][7])
+        
+
 
     def show_tiles(self):
         return self.tilesp

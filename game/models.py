@@ -10,10 +10,16 @@ from game.player import Player
 class YaHaySuficientes(Exception):
     pass
 
-        
-# class Cli():
-#     def __init__(self):
-#         pass
+class Cli():
+    def __init__(self):
+        main = Main()
+        main.get_player_acount()
+
+        self.scrabble = ScrabbleGame(main.player_count)
+    def play(self):
+        self.scrabble.game_started()
+        while self.scrabble.game_state == "ongoing":
+            self.scrabble.first_turn()
 
 
 class ScrabbleGame():
@@ -21,14 +27,15 @@ class ScrabbleGame():
         self.word = Word()
         self.board = Board()
         self.bag = BagTiles()
-        self.player = Player(self.bag)
         self.players = []
         self.current_player = None
         self.player_index = 0
         self.game_state = None
+        self.turn_number = 0
 
         for _ in range(players_count):
             self.players.append(Player(bag=self.bag))
+
 
     def next_turn(self):
         if self.current_player == None:
@@ -39,22 +46,84 @@ class ScrabbleGame():
         else:
             self.player_index += 1
             self.current_player = self.players[self.player_index]
+        self.turn_number += 1
 
     def game_started(self):
         self.game_state = 'ongoing'
     
     def end_game(self):
-        if self.player.player_estado == "terminado":
+        if self.current_player.player_estado == "terminado":
             self.game_state = "over"
+        else:
+            self.game_state = "ongoing"
+            
+    # def assign_name_current_player(self):
+    #     name = input("Escriba nombre del jugador ", self.current_player)
+    #     self.current_player
 
-    def put_first_word_first_player(self, word, row, column):
-        if self.board.validate_empty_board() is False:
+    def first_turn(self):
+        if self.board.validate_empty_board(self.board.grid[7][7]) is True:
             self.next_turn()
 
-            current_player = self.players[self.player_index]
-            current_player.put_word(self.board, self.bag)
-            #Necesito poder usar la lista word que me devuelve put_word
-            self.word.calculate_word_value()
+            print("ESTA JUGANDO EL JUGADOR: ", self.player_index)
+            self.new_word()
+
+            self.current_player.score_player(self.current_player.current_word_value)
+            print("EL SCORE DEL JUGADOR ES: ", self.current_player.score)
+            print("OK, siguiente turno")
+            self.end_game()
+            
+        else:
+            self.next_turn()
+
+            print("ESTA JUGANDO EL JUGADOR: ", self.player_index)
+            self.new_word()
+
+            print("EL SCORE DEL JUGADOR ES: ", self.current_player.score)
+            print("OK, siguiente turno")
+            self.end_game()
+            self.next_turn()
+
+
+    # def all_turn(self):
+    #     self.next_turn()
+
+    #     print("ESTA JUGANDO EL JUGADOR: ", self.player_index)
+    #     self.new_word()
+
+    #     self.current_player.score_player(self.current_player.current_word_value)
+    #     print("EL SCORE DEL JUGADOR ES: ", self.current_player.score)
+    #     print("OK, siguiente turno")
+    #     self.next_turn()
+    
+
+    
+    def new_word(self):
+        b = True
+        while b == True:
+            pregunta = str(input("Va a agregar palabra? Y/N (Si elije no saltea el turno)"))
+            pregunta
+            if pregunta != "Y":
+                b == False
+                break
+            a = self.current_player.put_word(self.board, self.bag, self.word)
+            a
+#Si no se valida la palabra pregunte si quiere saltear y si si quiere termine
+                
+            if self.board.status == "not empty":
+                b = False
+            elif self.board.status != "not empty":
+                    print("ERROR: No hay letras en la posicion (7,7)")
+            elif self.turn_number != 0: #No valida si estan conectadas 
+                if self.board.validate_connected_word3(self.current_player.wordlist):
+                    self.current_player.score_player(self.current_player.current_word_value)
+                else:
+                    print("La palabra no esta conectada")
+            
+            pregunta
+            if pregunta != "Y":
+                b == False
+                
 
 
 class Main(): #Te deja entrar cantidad de jugadores y verifica que sea bueno
@@ -77,13 +146,10 @@ class Main(): #Te deja entrar cantidad de jugadores y verifica que sea bueno
             except ValueError as error:
                 print("Error, enter a valid number between 1 and 4")
 
-    def valid_player_count(self):
-        if self.player_count <= 1 or self.player_count > 4:
-            self.status_players = "invalid"  
-        self.status_players = "valid"
 
+# cli = Cli()
+# cli.play()
 
-# Arreglar el Maintanbility
 
 
 

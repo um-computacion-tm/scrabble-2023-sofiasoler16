@@ -38,7 +38,6 @@ class Cell:
         
     def add_letter(self, letter:Tile):
         self.letter = letter
-        self.show = letter.letter
         self.valueletter = letter.letter
     
     def remove_letter(self):
