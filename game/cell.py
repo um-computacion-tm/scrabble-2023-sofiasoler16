@@ -44,20 +44,3 @@ class Cell:
         self.letter = None
         self.valueletter = None
     
-
-    # def multiplier_value(self):
-    #     if self.letter != None:
-    #         if self.used == False:
-    #             if self.row == 4 and self.column == 1:
-    #                 self.value = 2 * self.letter.value
-    #                 self.used = True  
-    #             else:
-    #                 self.value = self.letter.value
-    #         else:
-    #             self.value = self.letter.value
-
-
-        # def multiplier_value(self, column, row):
-        #     if column==0 and row==0:
-        #         self.multiplier_type='letter'
-        #         self.value=2

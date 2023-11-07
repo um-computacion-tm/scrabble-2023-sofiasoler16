@@ -5,6 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog],
 and this project adheres to [Semantic Versioning].
 
+## --- CUARTO SPRINT ----
+
+# 25/9/23 2do
+Fixed function that calculate the word value just if it is in the dictionary
+
+# 25/9/23 1ro
+Try to make a function to check if the calculated word is in the dictionary
+
+# 24/9/23
+Add a function to calculate the player score
+
+# 23/9/23
+Made a function to check if the board is empty
+
+# 22/9/23 2do
+Made a new function to calculate the value of a word to fix the old one
+
+# 22/9/23  1ro
+Add the posibility to the cell of not having any value
+(Try to fix the calculate_word_value funcion)
+
+# 13/9/23
+Created function to check if the words are inside the board 
+
+## --- TERCER SPRINT ---
+
+# 11/9/23 
+Fixed the multiplier_value function
+Made a function to calculate the value of a word
+
+# 11/9/23 
+Created a word class and added a function that calculate the word value
+
 ## [0.10] - 09-09-2023
 Added a dictionary and created a function that returns if the word is valid
 

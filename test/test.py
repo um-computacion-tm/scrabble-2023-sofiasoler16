@@ -99,7 +99,7 @@ class TestPlayer(unittest.TestCase):
         player_1 = Player(bag)
 
         player_1.tilesp = ["A", "B", "C", "D", "E", "F", "G"]
-        player_1.tiles_cambiadas(bag)
+        player_1.tiles_cambiadas()
 
         self.assertEqual(
             len(player_1.tilesp),7
@@ -186,6 +186,7 @@ class TestPlayer(unittest.TestCase):
     def test_validate_letter(self):
         bag = BagTiles()
         player1 = Player(bag)
+        scrabble = ScrabbleGame(4)
         board = Board()
         player1.tilesp = [
             "H",
@@ -211,7 +212,7 @@ class TestPlayer(unittest.TestCase):
         letter3 = Tile(letter="A", value=1, cant=12)
         cell5.add_letter(letter3)
         board.calculate_cell_value(cell5)
-
+        scrabble.already_board_cell = [cell3, cell4, cell5]
         word = Word()
         word.calculate_word_value([cell3, cell4, cell5])
 
@@ -221,8 +222,8 @@ class TestPlayer(unittest.TestCase):
 
         self.assertEqual(player1.score, 12)
 
-        self.assertEqual(player1.has_letters([letter1, letter2, letter3]), True)
-        self.assertEqual(len(player1.tilesp), 4)
+        self.assertEqual(player1.has_letters_always([letter1, letter2, letter3], scrabble), True)
+        
 
 
 class TestBoard(unittest.TestCase):
@@ -397,8 +398,9 @@ class TestBoard(unittest.TestCase):
 
         self.assertEqual(board.validate_connected_word3([board.grid[3][3],board.grid[4][3],board.grid[5][3],board.grid[6][3],board.grid[7][3]])
                         , True)
-        
-    def test_adyacent_word_false(self):
+    
+    @patch ('builtins.print')
+    def test_adyacent_word_false(self, patched_print):
         board = Board()
 
         board.grid[3][1].add_letter(Tile('A',1,12))
@@ -411,6 +413,7 @@ class TestBoard(unittest.TestCase):
 
         self.assertEqual(board.validate_connected_word3([board.grid[3][1],board.grid[3][2],board.grid[3][3]])
                         , False)
+        self.assertEqual(board.grid[3][2].valueletter, None)
 
 
 
@@ -445,6 +448,13 @@ class TestCell(unittest.TestCase):
             cell1.value, 0
         )
 
+class TestCli(unittest.TestCase):
+    @patch('builtins.input', return_value="2")  # Simulo la entrada de usuario
+    def test_init(self, mock_input):
+        cli = Cli()
+        
+        self.assertIsNotNone(cli.scrabble)
+
 
 class TestScrabbleGame(unittest.TestCase):
 
@@ -452,7 +462,7 @@ class TestScrabbleGame(unittest.TestCase):
     @patch ('builtins.print')
     def test_firs_turn(self, mock_output, patched_print):
         scrabbl = ScrabbleGame(3)
-        scrabbl.first_turn()
+        scrabbl.iniciate_turn()
 
     # @patch ('builtins.print')
     # @patch ('builtins.input', return_value = ["Y", "Y", 7, 7, "A", "N"])

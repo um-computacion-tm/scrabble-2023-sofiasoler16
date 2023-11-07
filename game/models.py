@@ -14,12 +14,13 @@ class Cli():
     def __init__(self):
         main = Main()
         main.get_player_acount()
-
+        
         self.scrabble = ScrabbleGame(main.player_count)
+
     def play(self):
         self.scrabble.game_started()
         while self.scrabble.game_state == "ongoing":
-            self.scrabble.first_turn()
+            self.scrabble.iniciate_turn()
 
 
 class ScrabbleGame():
@@ -32,6 +33,7 @@ class ScrabbleGame():
         self.player_index = 0
         self.game_state = None
         self.turn_number = 0
+        self.already_board_cell = []
 
         for _ in range(players_count):
             self.players.append(Player(bag=self.bag))
@@ -61,67 +63,56 @@ class ScrabbleGame():
     #     name = input("Escriba nombre del jugador ", self.current_player)
     #     self.current_player
 
-    def first_turn(self):
+    def iniciate_turn(self):
         if self.board.validate_empty_board(self.board.grid[7][7]) is True:
-            self.next_turn()
-
-            print("ESTA JUGANDO EL JUGADOR: ", self.player_index)
-            self.new_word()
-
-            self.current_player.score_player(self.current_player.current_word_value)
-            print("EL SCORE DEL JUGADOR ES: ", self.current_player.score)
-            print("OK, siguiente turno")
-            self.end_game()
+            self.turnt()
             
         else:
+            self.turnt()
+            
+    def turnt(self):
             self.next_turn()
 
             print("ESTA JUGANDO EL JUGADOR: ", self.player_index)
-            self.new_word()
+            print("Las tiles del jugador ", self.player_index, "son ", self.current_player.tilesp)
+            
+            elecc = input("MENU: 1. Cambiar letras 2. Anadir palabra, (Puede usar su turno para 1 opcion)")
+            if elecc == "1":
+                self.current_player.tiles_cambiadas()
+            elif elecc == "2":
+                self.new_word()
+
+            self.current_player.score_player(self.current_player.current_word_value)
+            if elecc == "2" and self.board.status == "not empty":
+                for cell in self.current_player.cell_wordlist:
+                    self.already_board_cell.append(cell)
+            
 
             print("EL SCORE DEL JUGADOR ES: ", self.current_player.score)
             print("OK, siguiente turno")
+            
             self.end_game()
-            self.next_turn()
 
-
-    # def all_turn(self):
-    #     self.next_turn()
-
-    #     print("ESTA JUGANDO EL JUGADOR: ", self.player_index)
-    #     self.new_word()
-
-    #     self.current_player.score_player(self.current_player.current_word_value)
-    #     print("EL SCORE DEL JUGADOR ES: ", self.current_player.score)
-    #     print("OK, siguiente turno")
-    #     self.next_turn()
-    
-
-    
     def new_word(self):
         b = True
         while b == True:
-            pregunta = str(input("Va a agregar palabra? Y/N (Si elije no saltea el turno)"))
-            pregunta
-            if pregunta != "Y":
+            self.pregunta = str(input("Va a agregar palabra? Y/N (Si elije no saltea el turno)")) #Si no se valida la palabra pregunte si quiere saltear y si si quiere termine
+            self.pregunta
+            if self.pregunta != "Y":
                 b == False
                 break
-            a = self.current_player.put_word(self.board, self.bag, self.word)
-            a
-#Si no se valida la palabra pregunte si quiere saltear y si si quiere termine
-                
-            if self.board.status == "not empty":
-                b = False
-            elif self.board.status != "not empty":
+            if self.board.validate_empty_board(self.board.grid[7][7]) is True:
+                a = self.current_player.put_word_first(self.board, self.bag, self.word, self)
+                a
+                if self.board.status == "not empty":
+                    b = False
+                elif self.board.status != "not empty":
                     print("ERROR: No hay letras en la posicion (7,7)")
-            elif self.turn_number != 0: #No valida si estan conectadas 
-                if self.board.validate_connected_word3(self.current_player.wordlist):
-                    self.current_player.score_player(self.current_player.current_word_value)
-                else:
-                    print("La palabra no esta conectada")
+            else:
+                self.current_player.put_not_first_word(self.board, self.bag, self.word, self)
             
-            pregunta
-            if pregunta != "Y":
+            self.pregunta
+            if self.pregunta != "Y":
                 b == False
                 
 

@@ -64,7 +64,10 @@ class Board:
 
                 if adj.valueletter != None and adj not in word :
                     return True
-                
+
+        
+        for cell in word:
+            cell.remove_letter()        
         return False
 
 
