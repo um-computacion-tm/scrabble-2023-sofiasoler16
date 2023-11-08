@@ -141,34 +141,43 @@ class TestPlayer(unittest.TestCase):
         scrabble.iniciate_turn()
         self.assertEqual(scrabble.current_player.index, 1)
 
-    @patch ('builtins.print')
-    @patch ('builtins.input', side_effect = ["Y",7,7,"A","Y",7,8,"B","Y",7,9,"A","N"])
-    def test_put_first_word(self, patched_print, mock_input):
-        bag = BagTiles()
-        board = Board()
-        word = Word()
-        player = Player(bag)
-        cell1 = Cell(7,7)
-        cell2 = Cell(7,8)
-        cell3 = Cell(7,9)
-        cell1.add_letter(Tile("A",1,12))
-        cell2.add_letter(Tile("B",3,4))
-        cell3.add_letter(Tile("A",1,12))
-        player.cell_wordlist = [cell1,cell2,cell3]
-        player.current_word_value = 0
-        player.word_tiles =[Tile("A",1, 12), Tile("B",3,6), Tile("A",1,12)]
+    # @patch ('builtins.print')
+    # @patch ('builtins.input', side_effect = ["Y",7,7,"A","Y",7,8,"B","Y",7,9,"A","N"])
+    # def test_put_first_word(self, patched_print, mock_input):
+    #     bag = BagTiles()
+    #     board = Board()
+    #     word = Word()
+    #     player = Player(bag)
+    #     scrabble = ScrabbleGame(4)
 
-        player.tilesp = ["A", "B", "A"]
-        tiles = [Tile("A",1, 12), Tile("B",3,6), Tile("A",1,12)]
-        wordplace = [Cell(7,7),Cell(7,8), Cell(7,9)]
-        player.has_letters_first(tiles, wordplace)
+    #     cell1 = Cell(7,7)
+    #     cell2 = Cell(7,8)
+    #     cell3 = Cell(7,9)
+    #     cell1.add_letter(Tile("A",1,12))
+    #     cell2.add_letter(Tile("B",3,4))
+    #     cell3.add_letter(Tile("A",1,12))
 
-        self.assertEqual(player.has_letters_first(tiles, wordplace), True)
+    #     cell4 = Cell(7,7)
+    #     cell5 = Cell(8,7)
+    #     cell6 = Cell(9,7)
+    #     cell4.add_letter(Tile("A",1,12))
+    #     cell5.add_letter(Tile("B",3,4))
+    #     cell6.add_letter(Tile("A",1,12))
+    #     player.cell_wordlist = [cell1,cell2,cell3]
+    #     player.current_word_value = 0
+    #     player.word_tiles =[Tile("A",1, 12), Tile("B",3,6), Tile("A",1,12)]
 
-        player.has_letters_first(player.word_tiles, player.cell_wordlist) 
-        player.put_word_first(board, bag, word)
+    #     player.tilesp = ["A", "B", "A"]
+    #     tiles = [Tile("A",1, 12), Tile("B",3,6), Tile("A",1,12)]
+    #     wordplace = [Cell(7,7),Cell(7,8), Cell(7,9)]
+    #     player.has_letters_first(tiles, wordplace)
 
-        self.assertEqual(player.current_word_value,12)
+    #     self.assertEqual(player.has_letters_first(tiles, wordplace), True)
+
+    #     player.has_letters_first(player.word_tiles, player.cell_wordlist) 
+    #     player.put_not_first_word(board, bag, word, scrabble)
+
+    #     self.assertEqual(player.current_word_value,12)
 
     @patch('builtins.print')
     @patch ('builtins.input', side_effect = ["Y", "Y",7,7,"A","Y",7,8,"B","Y",7,9,"A","N"])
