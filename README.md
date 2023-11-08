@@ -13,7 +13,9 @@ Sofia Soler
 # Maintenability
 [![Maintainability](https://api.codeclimate.com/v1/badges/cca1f4b69e1cf5212778/maintainability)](https://codeclimate.com/github/sofiasoler16/clase_2023-23-ago/maintainability)
 
-## SCRABBLE GAME
+## --- SCRABBLE GAME ---
+Made by Sofia Soler 
+Scrabble is a word game in which two to four players score points by placing tiles, each bearing a single letter, onto a game board divided into a 15×15 grid of squares. The tiles must form words that, in crossword fashion, read left to right in rows or downward in columns and are included in a standard dictionary or lexicon.
 
 ## HOW TO PLAY
 It is very importan to Play using Capital Letters
@@ -37,3 +39,9 @@ The Spanish-language games use these 98 tiles:
 10 points: Z×1
 
 There are Cells where the word the players put it is multiplied x2 or x3
+
+## How to run the game
+Execute the following commands in a Command Line Interface (CLI):
+
+docker build --no-cache -t game_name .
+docker run -it game_name
