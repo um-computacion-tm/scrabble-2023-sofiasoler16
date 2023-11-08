@@ -128,16 +128,18 @@ class TestPlayer(unittest.TestCase):
         scrabble = ScrabbleGame(2)
         scrabble.turnt()
         self.assertEqual(scrabble.current_player.index, 0)
-
-    # def test_iniciate_turn_new(self):
-    #     bag = BagTiles()
-    #     board = Board()
-    #     word = Word()
-    #     scrabble = ScrabbleGame(2)
-    #     scrabble.board.grid[7][7].valueletter = None
-    #     scrabble.iniciate_turn()
-    #     self.assertEqual(scrabble.current_player.index, 0)
-    
+        
+    @patch('builtins.print')
+    @patch ('builtins.input', side_effect = [2, "N", 2, "N"])
+    def test_iniciate_turn_new(self, patched_print, mock_input):
+        bag = BagTiles()
+        board = Board()
+        word = Word()
+        scrabble = ScrabbleGame(2)
+        scrabble.board.grid[7][7].valueletter = None
+        scrabble.iniciate_turn()
+        scrabble.iniciate_turn()
+        self.assertEqual(scrabble.current_player.index, 1)
 
     @patch ('builtins.print')
     @patch ('builtins.input', side_effect = ["Y",7,7,"A","Y",7,8,"B","Y",7,9,"A","N"])
@@ -167,6 +169,7 @@ class TestPlayer(unittest.TestCase):
         player.put_word_first(board, bag, word)
 
         self.assertEqual(player.current_word_value,12)
+
     @patch('builtins.print')
     @patch ('builtins.input', side_effect = ["Y", "Y",7,7,"A","Y",7,8,"B","Y",7,9,"A","N"])
     def test_new_word(self,patched_print, mock_input):
@@ -197,26 +200,6 @@ class TestPlayer(unittest.TestCase):
 
         
 
-
-
-        
-    # @patch('builtins.print')
-    # @patch('builtins.input', return_value = "H")
-    # def test_tiles_no_cambiadas(self, patched_print, mock_input):
-    #     #Hacer un test para la funcion tile_cambiadas que no imprima los print?
-    #     bag = BagTiles()
-    #     player_1 = Player(bag)
-
-    #     player_1.tilesp = ["A", "B", "C", "D", "E", "F", "G"]
-
-    #     from io import StringIO
-    #     import sys
-    #     sys.stdin = StringIO("X\n")
-
-    #     with self.assertRaises(ValueError) as context:
-    #         player_1.tiles_cambiadas()
-
-    #     self.assertTrue("No puede intercambiar letras que no tiene")
 
     def test_cambio_estado_tilesp_empty(self):
         bag = BagTiles()
@@ -513,7 +496,6 @@ class TestBoard(unittest.TestCase):
                         , True)
 
 
-
     def test_adyacent_word_false(self):
         board = Board()
         scrabble = ScrabbleGame(4)
@@ -568,6 +550,13 @@ class TestCell(unittest.TestCase):
         self.assertEqual(
             cell1.value, 0
         )
+    def test_show_tiles(self):
+        bag = BagTiles()
+        player = Player(bag)
+        player.tilesp = ["A", "B"]
+        player.show_tiles()
+
+        self.assertEqual(player.show_tiles(), ["A", "B"])
 
 class TestCli(unittest.TestCase):
     @patch ('builtins.print')
@@ -577,35 +566,9 @@ class TestCli(unittest.TestCase):
         
         self.assertIsNotNone(cli.scrabble)
     
-    # @patch ('builtins.input', side_effect = [4, 1, "V"])
-    # def test_play(self, mock_output):
-    #     cli = Cli()
-        
-    #     cli.scrabble.game_started()
-    #     cli.scrabble.game_state = "ongoing"
-
-    #     cli.play()
-
-    #     self.assertEqual(cli.inplay, "yes")
-
-    #     cli.scrabble.current_player.tilesp = []
-
-    #     self.assertEqual(cli.inplay, "no")
 
 class TestScrabbleGame(unittest.TestCase):
 
-    # @patch ('builtins.input', return_value = ["Y", "Y", 7, 7, "A", "Y", 7, 8, "B", 7, 9, "A"])
-    # @patch ('builtins.print')
-    # def test_firs_turn(self, mock_output, patched_print):
-    #     scrabbl = ScrabbleGame(3)
-    #     scrabbl.iniciate_turn()
-        
-    # @patch ('builtins.print')
-    # @patch ('builtins.input', side_effect=["1", "A"])
-    # def test_turnt(self, patched_print, mock_output):
-    #     scrabble = ScrabbleGame(2)
-    #     scrabble.turnt()
-    #     self.assertEqual(scrabble.elecc, "1")
 
     def test_has_lettes(self):
         bag = BagTiles()
@@ -629,9 +592,25 @@ class TestScrabbleGame(unittest.TestCase):
         wordplace = [Cell(3,5),Cell(3,6), Cell(3,7)]
         scrabble.already_board_cell = [Cell(3,6)]
 
-        player.has_letters_always(tiles, wordplace, scrabble)
+        scrabble.current_player.has_letters_always(tiles, wordplace, scrabble)
 
-        self.assertEqual(player.has_letters_first(tiles, wordplace), False)
+        self.assertEqual(scrabble.current_player.has_letters_first(tiles, wordplace), True)
+
+    @patch ('builtins.print')
+    def test_has_lettes(self, patched_print):
+        bag = BagTiles()
+        player = Player(bag)
+        scrabble = ScrabbleGame(2)
+
+        scrabble.next_turn()
+        scrabble.current_player.tilesp = ["R", "R"]
+        tiles = [Tile("A",1, 12), Tile("B",3,6), Tile("A",1,12)]
+        wordplace = [Cell(3,5),Cell(3,6), Cell(3,7)]
+        scrabble.already_board_cell = [Cell(3,6)]
+
+        scrabble.current_player.has_letters_always(tiles, wordplace, scrabble)
+
+        self.assertEqual(scrabble.current_player.has_letters_first(tiles, wordplace), False)
 
     @patch ('builtins.print')
     def test_has_not_lettes(self, patched_print):
