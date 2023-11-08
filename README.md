@@ -18,7 +18,8 @@ Made by Sofia Soler
 Scrabble is a word game in which two to four players score points by placing tiles, each bearing a single letter, onto a game board divided into a 15×15 grid of squares. The tiles must form words that, in crossword fashion, read left to right in rows or downward in columns and are included in a standard dictionary or lexicon.
 
 ## HOW TO PLAY
-It is very importan to Play using Capital Letters
+It is very importan to Play using Capital Letters.
+
 When the game starts, the player has to enter the number of players that are gona play. 
 Once this is done, it will start the game in player number 1 (0, in the game). Each player can choose whether to exchange a letter thar they got or start adding word to the board. 
 Every time the players wants to add a letter it will be asked if they in fact want to add a letter whith the question: "Quiere agregar una letra? Y/N" They have to choose "Y" until thw word is over. Also when adds the letter it has to say where is the letter wanted, adding the row and the collumn when its asked.
