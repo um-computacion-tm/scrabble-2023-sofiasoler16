@@ -8,57 +8,50 @@ class Word():
         self.wordvalue = 0
         self.multiplier = 1
         self.multiplier_used = False
+        self.existing_word = None
     
     def calculate_word_value(self, wordplace: list[Cell]): #Suma el puntaje de una palabra
-        wordcell = []
-        listpalabra = []
-        doubleword = [Cell(1, 1), Cell(8, 1), Cell(15, 1), Cell(2, 2), Cell(14, 2), Cell(3, 3), Cell(13, 3), Cell(4, 4), 
+        self.wordcell = []
+        self.listpalabra = []
+        self.doubleword = [Cell(1, 1), Cell(8, 1), Cell(15, 1), Cell(2, 2), Cell(14, 2), Cell(3, 3), Cell(13, 3), Cell(4, 4), 
                       Cell(12, 4), Cell(7, 7), Cell(11, 7), Cell(4, 12), Cell(12, 12), Cell(1, 15), Cell(8, 15), Cell(15, 15)]
-        tripleword = [Cell(1, 1), Cell(8, 1)]
+        self.tripleword = [Cell(1, 2), Cell(8, 1), Cell(0, 0), Cell(7, 0), Cell(14, 0), Cell(0, 7), Cell(14, 7), Cell(0, 14), Cell(7, 14), Cell(14, 14)]
 
-        for cell in wordplace: 
-            listpalabra.append(cell.valueletter)
-            for doublecell in doubleword:
-                if cell.row == doublecell.row and cell.column == doublecell.column:
-                    self.multiplier = 2
-                else:
-                    for triplecell in tripleword:
-                        if cell.row == triplecell.row and cell.column == triplecell.column:
-                            self.multiplier = 3
+        self.multi(wordplace)
 
-        palabramayus = "".join(listpalabra) #Se fija si la palabra existe antes de sumar puntaje
+        palabramayus = "".join(self.listpalabra) #Se fija si la palabra existe antes de sumar puntaje
         palabraminus = palabramayus.lower()
         dictionary = Dictionary("dictionaries/dictionary .txt") #Hasta aca verifica
 
         if palabraminus in dictionary.words:
             for cell in wordplace:
-                wordcell.append(cell.value)
+                self.wordcell.append(cell.value)
+            self.existing_word = True
         else: #Si palabra no en diccionario, remueve la palabra
+            print("-----  PALABRA NO EXISTE. Su palabra no fue asignada al tablero -----")
             for cell in wordplace:
                 cell.remove_letter()
+                self.existing_word = False
+            
 
-        self.wordvalue = (sum(wordcell))*self.multiplier
-        
+        self.wordvalue = (sum(self.wordcell))*self.multiplier
+        return self.wordvalue
+    
+    def multi(self, wordplace: list[Cell]):
+        for cell in wordplace:
+            self.listpalabra.append(cell.valueletter)
+            self.calculate_multiplier(cell)
 
-#Intentar arreglar la vieja para poder automatizar el proceso
-"""
-    def calculate_word_value(self, cell:Cell):
-        wordcell = []
+    def calculate_multiplier(self, cell: Cell):
+        for doublecell in self.doubleword:
+            if cell.row == doublecell.row and cell.column == doublecell.column:
+                self.multiplier = 2
+                return  # Una vez que se encuentra un multiplicador, no es necesario seguir buscando
+
+        for triplecell in self.tripleword:
+            if cell.row == triplecell.row and cell.column == triplecell.column:
+                self.multiplier = 3
+                return  
+
         
-        while cell.value != 0:
-            print(cell.value)
-            wordcell.append(cell.value)
-            print(cell.column)
-            cell.column = (cell.column + 1)
-            print(cell.column)
-            print(cell.row, cell.column)
-            print(cell.value)
-            if cell.value == 0:
-                break
-        if len(wordcell) > 0:
-            self.wordvalue = sum(wordcell)
-            return self.wordvalue 
-        else: 
-            return self.wordvalue
-"""
-        
+    

@@ -12,33 +12,31 @@ class Cell:
         
 
     def get_value_for_board(self):
-        celldouble = [(4,1), (12,1), (1, 4),(8, 4),(15, 4),(3, 7), (7, 7), (9, 7), 
+        self.celldouble = [(4,1), (12,1), (1, 4),(8, 4),(15, 4),(3, 7), (7, 7), (9, 7), 
                      (13, 7),(4, 10),(12, 10), (0, 12), (7, 12), (14, 12), (3, 15), (11, 15)]
-        celltriple = [(6,2),(10,2), (6, 6), (10, 6), (14, 6), (1, 8), (5, 8), 
+        self.celltriple = [(6,2),(10,2), (6, 6), (10, 6), (14, 6), (1, 8), (5, 8), 
                       (9, 8), (13, 8), (2, 10), (6, 10), (10, 10), (14, 10), (6, 14), (10, 14)]
-        doubleword = [(1, 1), (8, 1), (15, 1), (2, 2), (14, 2), (3, 3), (13, 3), (4, 4), 
+        self.doublewords = [(1, 1), (8, 1), (15, 1), (2, 2), (14, 2), (3, 3), (13, 3), (4, 4), 
                       (12, 4), (7, 7), (11, 7), (4, 12), (12, 12), (1, 15), (8, 15), (15, 15)]
-        tripleword = [(0, 0), (7, 0), (14, 0), (0, 7), (14, 7), (0, 14), (7, 14), (14, 14)]
+        self.triplewords = [(0, 0), (7, 0), (14, 0), (0, 7), (14, 7), (0, 14), (7, 14), (14, 14)]
+        
         
         if self.letter is not None:
             return " " + self.letter.letter + " "
 
-        if (self.row, self.column) in celldouble:
+        if (self.row, self.column) in self.celldouble:
             return "Cx2"
         
-        if (self.row, self.column) in celltriple:
+        if (self.row, self.column) in self.celltriple:
             return "Cx3"
         
-        if (self.row, self.column) in doubleword:
-            return "Px2"
-        
-        if (self.row, self.column) in tripleword:
-            return "Px3"
+
         return "   "
+    
         
     def add_letter(self, letter:Tile):
         self.letter = letter
-        self.show = letter.letter
+
         self.valueletter = letter.letter
     
     def remove_letter(self):
