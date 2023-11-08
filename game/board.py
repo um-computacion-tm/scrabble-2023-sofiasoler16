@@ -18,6 +18,7 @@ class Board:
 
         
         for row_index, row in enumerate(board.grid):
+            
             print( str(row_index).rjust(2) + "  | " + 
                 " ".join([repr(cell.get_value_for_board()) for cell in row])
                   )

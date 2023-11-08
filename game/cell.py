@@ -30,11 +30,7 @@ class Cell:
         if (self.row, self.column) in self.celltriple:
             return "Cx3"
         
-        if (self.row, self.column) in self.doublewords:
-            return "Px2"
-        
-        if (self.row, self.column) in self.triplewords:
-            return "Px3"
+
         return "   "
     
         
