@@ -102,7 +102,6 @@ class Player():
             board.calculate_cell_value(board.grid[int(row)][int(column)])
             si = str(input("Quiere agregar letra? Y/N: "))
         
-
     def show_tiles(self):
         return self.tilesp
 
