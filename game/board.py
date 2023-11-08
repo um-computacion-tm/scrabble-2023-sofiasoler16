@@ -48,7 +48,7 @@ class Board:
             return False
                 
 
-    def validate_connected_word3(board, word: list[Cell]):
+    def validate_connected_word3(self, word: list[Cell], scrabble):
         
         for cell in word:
 
@@ -60,40 +60,45 @@ class Board:
         ]
             for pos in adjacent_cells:
                 J,K = pos
-                adj = board.grid[int(J)][int(K)]
+                adj = self.grid[int(J)][int(K)]
 
                 if adj.valueletter != None and adj not in word :
                     return True
 
-        
+
         for cell in word:
-            cell.remove_letter()        
+            for already_cell in scrabble.already_board_cell:
+                if cell in word and already_cell != cell:
+                    cell.remove_letter()
         return False
 
 
     def calculate_cell_value(self, usecell:Cell):
- #Mismo problema que player, no puedo llamar a un atributo que sea otra celda dentro de Cell?
-        celldouble = [Cell(4,1), Cell(12,1), Cell(1, 4),Cell(8, 4),Cell(15, 4),Cell(3, 7), Cell(7, 7), Cell(9, 7), 
+        self.celldoubles = [Cell(4,1), Cell(12,1), Cell(1, 4),Cell(8, 4),Cell(15, 4),Cell(3, 7), Cell(7, 7), Cell(9, 7), 
                      Cell(13, 7),Cell(4, 10),Cell(12, 10), Cell(0, 12), Cell(7, 12), Cell(14, 12), Cell(3, 15), Cell(11, 15)]
-        celltriple = [Cell(6,2),Cell(10,2), Cell(2, 6), Cell(6, 6), Cell(10, 6), Cell(14, 6), Cell(1, 8), Cell(5, 8), 
+        self.celltriples = [Cell(6,2),Cell(10,2), Cell(2, 6), Cell(6, 6), Cell(10, 6), Cell(14, 6), Cell(1, 8), Cell(5, 8), 
                       Cell(9, 8), Cell(13, 8), Cell(2, 10), Cell(6, 10), Cell(10, 10), Cell(14, 10), Cell(6, 14), Cell(10, 14)]
-        if usecell.letter != None: #No puedo hacer una lista de lugares para usarlos en las posibles casillas?
+        if usecell.letter != None: #Lista de lugares para usarlos en las posibles casillas
             if usecell.used == False:
                 #Casillas de doble letra
-                for liscell in celldouble:
+                for liscell in self.celldoubles:
                     if liscell.row == usecell.row and liscell.column == usecell.column:
                         usecell.value = 2 * usecell.letter.value
                         usecell.used = True
                         break
                     else:
+                        self.multi3(usecell)
                         #Casillas de triple letra
-                        for cell in celltriple:
-                            if cell.row == usecell.row and cell.column == usecell.column:
-                                usecell.value = 3 * usecell.letter.value
-                                usecell.used = True
-                                break  
-                        else:
-                            usecell.value = usecell.letter.value
+
+            else:
+                usecell.value = usecell.letter.value
+
+    def multi3(self, usecell:Cell):
+        for cell in self.celltriples:
+            if cell.row == usecell.row and cell.column == usecell.column:
+                usecell.value = 3 * usecell.letter.value
+                usecell.used = True
+                break  
             else:
                 usecell.value = usecell.letter.value
 

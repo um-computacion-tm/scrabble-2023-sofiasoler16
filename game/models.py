@@ -7,11 +7,14 @@ from game.word import *
 from game.board import *
 from game.player import Player
 
+
+
 class YaHaySuficientes(Exception):
     pass
 
 class Cli():
     def __init__(self):
+        self.inplay = None
         main = Main()
         main.get_player_acount()
         
@@ -20,7 +23,15 @@ class Cli():
     def play(self):
         self.scrabble.game_started()
         while self.scrabble.game_state == "ongoing":
+            
             self.scrabble.iniciate_turn()
+            self.inplay = "yes"
+        self.inplay = "no"
+        for win in self.scrabble.players:
+            if win.player_estado == "ganando":
+                winner = win.index
+
+                print("El ganador es: Player", winner)
 
 
 class ScrabbleGame():
@@ -70,20 +81,24 @@ class ScrabbleGame():
         else:
             self.turnt()
             
+            
     def turnt(self):
             self.next_turn()
+            self.current_player.index = self.player_index
 
             print("ESTA JUGANDO EL JUGADOR: ", self.player_index)
             print("Las tiles del jugador ", self.player_index, "son ", self.current_player.tilesp)
             
-            elecc = input("MENU: 1. Cambiar letras 2. Anadir palabra, (Puede usar su turno para 1 opcion)")
-            if elecc == "1":
+            self.elecc = input("MENU: 1. Cambiar letras 2. Anadir palabra, (Puede usar su turno para 1 opcion)")
+            if self.elecc == "1":
                 self.current_player.tiles_cambiadas()
-            elif elecc == "2":
+                
+            elif self.elecc == "2":
                 self.new_word()
+                
 
             self.current_player.score_player(self.current_player.current_word_value)
-            if elecc == "2" and self.board.status == "not empty":
+            if self.elecc == "2" and self.board.status == "not empty":
                 for cell in self.current_player.cell_wordlist:
                     self.already_board_cell.append(cell)
             
@@ -102,7 +117,7 @@ class ScrabbleGame():
                 b == False
                 break
             if self.board.validate_empty_board(self.board.grid[7][7]) is True:
-                a = self.current_player.put_word_first(self.board, self.bag, self.word, self)
+                a = self.current_player.put_word_first(self.board, self.bag, self.word)
                 a
                 if self.board.status == "not empty":
                     b = False
@@ -140,10 +155,5 @@ class Main(): #Te deja entrar cantidad de jugadores y verifica que sea bueno
 
 # cli = Cli()
 # cli.play()
-
-
-
-
-
 
 
