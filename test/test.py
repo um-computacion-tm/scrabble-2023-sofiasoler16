@@ -568,6 +568,13 @@ class TestCell(unittest.TestCase):
         self.assertEqual(
             cell1.value, 0
         )
+    def test_show_tiles(self):
+        bag = BagTiles()
+        player = Player(bag)
+        player.tilesp = ["A", "B"]
+        player.show_tiles()
+
+        self.assertEqual(player.show_tiles(), ["A", "B"])
 
 class TestCli(unittest.TestCase):
     @patch ('builtins.print')
