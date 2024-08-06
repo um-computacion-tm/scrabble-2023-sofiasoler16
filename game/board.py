@@ -1,9 +1,6 @@
 
-from game.cell import *
-from game.word import *
-from game.models import *
-from game.dictionary import *
-from game.tile import *
+from game.cell import Cell
+
 
 class Board:
     def __init__(self):

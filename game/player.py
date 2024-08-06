@@ -1,8 +1,8 @@
 
 from game.tile import BagTiles, Tile
-from game.models import *
 from game.board import Board
 from game.word import Word
+from game.cell import Cell
 
 class Not_Letters_Exception(Exception):
     pass

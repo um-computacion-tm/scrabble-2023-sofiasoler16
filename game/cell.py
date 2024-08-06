@@ -1,5 +1,4 @@
-from game.tile import *
-from game.models import *
+from game.tile import Tile
 
 class Cell:
     def __init__(self, row, column):

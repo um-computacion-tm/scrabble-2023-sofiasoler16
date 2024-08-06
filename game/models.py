@@ -1,10 +1,14 @@
 import random
 
-from game.dictionary import *
-from game.tile import *
-from game.cell import *
-from game.word import *
-from game.board import *
+#Para que enceuntre el modulo game
+import sys 
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))) 
+
+from game.tile import Tile, BagTiles
+from game.cell import Cell
+from game.word import Word
+from game.board import Board
 from game.player import Player
 
 
@@ -152,6 +156,10 @@ class Main(): #Te deja entrar cantidad de jugadores y verifica que sea bueno
             except ValueError as error:
                 print("Error, enter a valid number between 1 and 4")
 
+cli = Cli()
+
+if __name__ == '__main__':
+    cli.play()
 
 # cli = Cli()
 # cli.play()

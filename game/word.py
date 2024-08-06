@@ -1,7 +1,7 @@
 
 from game.cell import Cell
 from game.dictionary import Dictionary
-from game.board import Board
+
 #NO puedo hacer commit
 class Word():
     def __init__(self):

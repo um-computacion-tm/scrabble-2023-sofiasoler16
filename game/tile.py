@@ -1,4 +1,5 @@
 import random
+
 class Tile:
     def __init__(self, letter, value, cant):
         self.letter = letter
